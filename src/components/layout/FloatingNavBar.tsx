@@ -42,7 +42,8 @@ function AppIcon({ mouseX, href, Icon, label }: { mouseX: any; href: string; Ico
     return val - bounds.x - bounds.width / 2;
   });
 
-  let scale = useTransform(distance, [-150, 0, 150], [1, 1.5, 1]);
+  // The '37.5' here controls the responsive area. A smaller number makes it more focused.
+  let scale = useTransform(distance, [-37.5, 0, 37.5], [1, 1.5, 1]);
   let d = useSpring(scale, {
     damping: 15,
     stiffness: 200,
@@ -50,7 +51,7 @@ function AppIcon({ mouseX, href, Icon, label }: { mouseX: any; href: string; Ico
   });
 
   return (
-    <div ref={ref} className="group relative flex flex-col items-center p-2">
+    <div ref={ref} className="group relative flex flex-col items-center">
       <Link href={href}>
         <motion.div
           className="aspect-square w-10 flex items-center justify-center rounded-full bg-secondary/0 group-hover:bg-secondary transition-colors"
