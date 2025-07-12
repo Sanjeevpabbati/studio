@@ -63,7 +63,7 @@ const FloatingNavBar: React.FC = () => {
         </nav>
 
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-            <div className='p-2 bg-background rounded-full'>
+            <div className='rounded-full'>
               <Button 
                 variant="default" 
                 className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full h-16 w-16 font-bold text-lg shadow-[0_0_12px_hsl(var(--accent))] shimmer-button"
