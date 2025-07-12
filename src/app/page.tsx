@@ -1,19 +1,19 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Cube from '@/components/cube/Cube';
-import type { CubeShapes } from '@/lib/types';
+import type { CubeShapes, ShapeDef } from '@/lib/types';
 import { motion } from 'framer-motion';
+import { getAdForHint } from '@/services/ads';
 
 const initialShapes: CubeShapes = {
-  front: { name: 'front', type: 'circle', color: '', imageUrl: 'https://placehold.co/200x200.png', aiHint: 'brand logo' },
-  back: { name: 'back', type: 'square', color: '', imageUrl: 'https://placehold.co/200x200.png', aiHint: 'brand logo' },
-  right: { name: 'right', type: 'triangle', color: '', imageUrl: 'https://placehold.co/200x200.png', aiHint: 'brand logo' },
-  left: { name: 'left', type: 'diamond', color: '', imageUrl: 'https://placehold.co/200x200.png', aiHint: 'brand logo' },
-  top: { name: 'top', type: 'plus', color: '', imageUrl: 'https://placehold.co/200x200.png', aiHint: 'brand logo' },
-  bottom: { name: 'bottom', type: 'star', color: '', imageUrl: 'https://placehold.co/200x200.png', aiHint: 'brand logo' },
+  front: { name: 'front', type: 'circle', color: '', imageUrl: '', aiHint: 'brand logo' },
+  back: { name: 'back', type: 'square', color: '', imageUrl: '', aiHint: 'sports drink' },
+  right: { name: 'right', type: 'triangle', color: '', imageUrl: '', aiHint: 'tech company' },
+  left: { name: 'left', type: 'diamond', color: '', imageUrl: '', aiHint: 'fashion brand' },
+  top: { name: 'top', type: 'plus', color: '', imageUrl: '', aiHint: 'food delivery' },
+  bottom: { name: 'bottom', type: 'star', color: '', imageUrl: '', aiHint: 'travel agency' },
 };
 
-// Simplified and clear sequence of face rotations
 const faceRotations = [
   { x: 0, y: 0 },    // Front
   { x: -90, y: 0 },   // Top
@@ -50,11 +50,29 @@ const title = 'indcric';
 
 export default function Home() {
   const [rotation, setRotation] = useState({ x: 0, y: 0 });
-  const [shapes] = useState<CubeShapes>(initialShapes);
+  const [shapes, setShapes] = useState<CubeShapes>(initialShapes);
   
   useEffect(() => {
+    const fetchAds = async () => {
+      const newShapes = { ...initialShapes };
+      for (const key in newShapes) {
+        const face = newShapes[key as keyof CubeShapes];
+        const adUrl = await getAdForHint(face.aiHint || '');
+        if (adUrl) {
+          face.imageUrl = adUrl;
+        } else {
+          // Fallback to a default placeholder if no ad is found
+          face.imageUrl = 'https://placehold.co/200x200.png';
+        }
+      }
+      setShapes(newShapes);
+    };
+
+    fetchAds();
+  }, []);
+
+  useEffect(() => {
     const interval = setInterval(() => {
-      // Use a functional update to get the next rotation in the sequence
       setRotation(prevRotation => {
         const currentIndex = faceRotations.findIndex(
           r => r.x === prevRotation.x && r.y === prevRotation.y
