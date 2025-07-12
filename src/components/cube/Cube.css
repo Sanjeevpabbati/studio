@@ -1,3 +1,15 @@
+@keyframes gradient-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .scene {
   width: 200px;
   height: 200px;
@@ -21,7 +33,27 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
+  overflow: hidden; /* Keep the gradient inside the face */
 }
+
+.cube-face::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 3px solid transparent;
+  background: linear-gradient(45deg, hsl(var(--accent)), hsl(var(--accent) / 0.4), hsl(var(--accent))) border-box;
+  background-size: 200% 200%;
+  animation: gradient-flow 4s ease infinite;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+}
+
 
 .cube-face-front {
   transform: rotateY(0deg) translateZ(100px);
