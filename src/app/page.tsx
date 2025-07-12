@@ -23,7 +23,7 @@ export default function Home() {
           <span className="text-accent">Indcric</span>
         </h1>
         <p className="mt-4 text-lg text-muted-foreground sm:text-xl">
-          Win <strong className="text-accent font-bold">100</strong> rupees in <strong className="text-accent font-bold">100</strong> seconds
+          Win <strong className="text-white font-bold">100</strong> rupees in <strong className="text-white font-bold">100</strong> seconds
         </p>
       </div>
       <div 
