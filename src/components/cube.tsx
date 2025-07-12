@@ -1,13 +1,11 @@
+
 "use client";
 
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import * as THREE from 'three';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight, RotateCw } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { useToast } from "@/hooks/use-toast";
 
 const CUBE_STORAGE_KEY = 'indcric-cube-images';
@@ -21,8 +19,6 @@ export default function Cube() {
     const rendererRef = useRef<THREE.WebGLRenderer>();
     const cubeRef = useRef<THREE.Mesh>();
     const animationFrameId = useRef<number>();
-    const isAutoRotating = useRef(true);
-    const autoRotateTimeout = useRef<NodeJS.Timeout>();
 
     const [faceImages, setFaceImages] = useState<string[]>(initialFaceImages);
     const { toast } = useToast();
@@ -107,8 +103,7 @@ export default function Cube() {
 
         const animate = () => {
             animationFrameId.current = requestAnimationFrame(animate);
-            if (isAutoRotating.current && cubeRef.current) {
-                const rotationSpeed = (2 * Math.PI) / (4 * 60); // Full rotation in 4 seconds at 60fps
+            if (cubeRef.current) {
                 cubeRef.current.rotation.y += 0.005;
                 cubeRef.current.rotation.x += 0.002;
             }
@@ -130,7 +125,6 @@ export default function Cube() {
 
         return () => {
             if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
-            if (autoRotateTimeout.current) clearTimeout(autoRotateTimeout.current);
             window.removeEventListener('resize', handleResize);
             if(rendererRef.current) currentMount.removeChild(rendererRef.current.domElement);
             // Dispose Three.js objects to prevent memory leaks
@@ -141,35 +135,6 @@ export default function Cube() {
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    const handleManualAction = (action: () => void) => {
-        action();
-        isAutoRotating.current = false;
-        if (autoRotateTimeout.current) clearTimeout(autoRotateTimeout.current);
-        autoRotateTimeout.current = setTimeout(() => {
-            isAutoRotating.current = true;
-        }, 4000);
-    };
-
-    const handleRotation = (axis: 'x' | 'y', direction: number) => {
-        handleManualAction(() => {
-            if (cubeRef.current) {
-                const rotationAmount = Math.PI / 4;
-                cubeRef.current.rotation[axis] += rotationAmount * direction;
-            }
-        });
-    };
-    
-    const resetRotation = () => {
-        handleManualAction(() => {
-            if (cubeRef.current) {
-                cubeRef.current.rotation.set(0, 0, 0);
-            }
-        });
-        // Instantly resume auto-rotation after reset
-        if (autoRotateTimeout.current) clearTimeout(autoRotateTimeout.current);
-        isAutoRotating.current = true;
-    };
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
         const file = e.target.files?.[0];
@@ -193,34 +158,8 @@ export default function Cube() {
                 <div ref={mountRef} className="w-full h-full" data-ai-hint="3d render"></div>
             </Card>
 
-            <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8">
-                 <Card className="bg-card/80 backdrop-blur-sm">
-                    <CardHeader>
-                        <CardTitle>Manual Controls</CardTitle>
-                        <CardDescription>Rotate the cube or reset its position.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex items-center justify-center gap-4">
-                        <Button variant="outline" size="icon" aria-label="Rotate Left" onClick={() => handleRotation('y', 1)}>
-                            <ArrowLeft className="h-5 w-5" />
-                        </Button>
-                        <div className="flex flex-col gap-2">
-                             <Button variant="outline" size="icon" aria-label="Rotate Up" onClick={() => handleRotation('x', 1)}>
-                                <ArrowUp className="h-5 w-5" />
-                            </Button>
-                             <Button variant="outline" size="icon" aria-label="Rotate Down" onClick={() => handleRotation('x', -1)}>
-                                <ArrowDown className="h-5 w-5" />
-                            </Button>
-                        </div>
-                        <Button variant="outline" size="icon" aria-label="Rotate Right" onClick={() => handleRotation('y', -1)}>
-                            <ArrowRight className="h-5 w-5" />
-                        </Button>
-                        <Button variant="ghost" size="icon" aria-label="Reset Rotation" onClick={resetRotation}>
-                            <RotateCw className="h-5 w-5 text-accent" />
-                        </Button>
-                    </CardContent>
-                </Card>
-
-                <Card className="bg-card/80 backdrop-blur-sm">
+            <div className="w-full flex justify-center">
+                 <Card className="bg-card/80 backdrop-blur-sm w-full lg:max-w-md">
                     <CardHeader>
                         <CardTitle>Customize Faces</CardTitle>
                         <CardDescription>Upload an image for each face of the cube.</CardDescription>
