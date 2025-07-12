@@ -45,7 +45,7 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center bg-background p-4 md:p-8">
-      <div className="text-center py-4 font-headline mb-12">
+      <div className="text-center py-4 font-headline mb-8">
         <h1 className="text-5xl font-bold text-primary-foreground tracking-tight sm:text-6xl md:text-7xl">
           <span className="text-white font-bold">indcric</span>
         </h1>
