@@ -3,7 +3,6 @@
 import { Home, User, Trophy, PieChart } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
@@ -33,13 +32,8 @@ const NavLink = ({ href, icon: Icon, label }: { href: string; icon: React.Elemen
         )}
       />
       {isActive && (
-        <motion.div
-          layoutId="active-underline"
+        <div
           className="absolute bottom-1 h-1 w-4 bg-accent rounded-full"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 25 }}
         />
       )}
       <span className="sr-only">{label}</span>

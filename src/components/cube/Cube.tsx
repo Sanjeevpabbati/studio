@@ -2,7 +2,6 @@
 import React from 'react';
 import type { CubeShapes } from '@/lib/types';
 import './Cube.css';
-import { motion } from 'framer-motion';
 import CubeFaceContent from './CubeFaceContent';
 
 interface CubeProps {
@@ -13,13 +12,12 @@ interface CubeProps {
 const Cube: React.FC<CubeProps> = ({ rotation, shapes }) => {
   return (
     <div className="scene">
-      <motion.div
+      <div
         className="cube"
-        animate={{
-          rotateX: rotation.x,
-          rotateY: rotation.y,
+        style={{
+          transform: `translateZ(-100px) rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`,
+          transition: 'transform 1s linear',
         }}
-        transition={{ type: 'spring', stiffness: 50, damping: 15 }}
       >
         <div className="cube-face cube-face-front">
           <CubeFaceContent face={shapes.front} />
@@ -39,7 +37,7 @@ const Cube: React.FC<CubeProps> = ({ rotation, shapes }) => {
         <div className="cube-face cube-face-bottom">
           <CubeFaceContent face={shapes.bottom} />
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };
