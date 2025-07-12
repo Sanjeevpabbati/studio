@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, User, BarChart2, Trophy, Rocket } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
 
 const navItems = [
   { href: '/', icon: Home, label: 'Home' },
@@ -23,10 +24,32 @@ const FloatingNavBar: React.FC = () => {
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
-              <Link key={item.href} href={item.href} className={cn('nav-link p-2 rounded-full', isActive && 'active')}>
-                <item.icon className="w-6 h-6" />
-                <span className="sr-only">{item.label}</span>
-              </Link>
+              <motion.div
+                key={item.href}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                className="relative"
+              >
+                <Link
+                  href={item.href}
+                  className={cn(
+                    'nav-link p-3 rounded-full flex items-center justify-center transition-colors',
+                    isActive ? 'text-accent' : 'text-muted-foreground hover:text-foreground'
+                  )}
+                >
+                  <item.icon className="w-6 h-6" />
+                  <span className="sr-only">{item.label}</span>
+                  {isActive && (
+                    <motion.div
+                      layoutId="active-nav-indicator"
+                      className="absolute inset-0 bg-accent/20 rounded-full -z-10"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    />
+                  )}
+                </Link>
+              </motion.div>
             );
           })}
         </div>
