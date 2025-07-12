@@ -3,7 +3,6 @@
 import { Home, User, Trophy, PieChart } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
@@ -33,8 +32,7 @@ const NavLink = ({ href, icon: Icon, label }: { href: string; icon: React.Elemen
         )}
       />
       {isActive && (
-        <motion.div
-          layoutId="underline"
+        <div
           className="absolute bottom-1 h-1 w-4 bg-accent rounded-full"
         />
       )}
