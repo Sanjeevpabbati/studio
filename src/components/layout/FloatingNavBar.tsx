@@ -30,7 +30,7 @@ const FloatingNavBar: React.FC = () => {
             );
           })}
 
-          <Button asChild variant="default" size="lg" className="h-14 w-24 bg-accent rounded-full shadow-lg -translate-y-4 hover:bg-accent/90 font-bold text-lg">
+          <Button asChild variant="default" size="lg" className="h-16 w-16 bg-accent rounded-full shadow-lg -translate-y-4 hover:bg-accent/90 font-bold text-lg">
             <Link href="/start">
                 Start
             </Link>
