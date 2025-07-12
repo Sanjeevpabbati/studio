@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Cube from '@/components/cube/Cube';
-import type { CubeShapes, ShapeDef } from '@/lib/types';
+import type { CubeShapes } from '@/lib/types';
 import { motion } from 'framer-motion';
 import { getAdForHint } from '@/services/ads';
 
@@ -54,17 +54,19 @@ export default function Home() {
   
   useEffect(() => {
     const fetchAds = async () => {
+      const faceKeys = Object.keys(initialShapes) as (keyof CubeShapes)[];
+      
+      const adPromises = faceKeys.map(key => 
+        getAdForHint(initialShapes[key].aiHint || '')
+      );
+      
+      const adUrls = await Promise.all(adPromises);
+      
       const newShapes = { ...initialShapes };
-      for (const key in newShapes) {
-        const face = newShapes[key as keyof CubeShapes];
-        const adUrl = await getAdForHint(face.aiHint || '');
-        if (adUrl) {
-          face.imageUrl = adUrl;
-        } else {
-          // Fallback to a default placeholder if no ad is found
-          face.imageUrl = 'https://placehold.co/200x200.png';
-        }
-      }
+      faceKeys.forEach((key, index) => {
+        newShapes[key].imageUrl = adUrls[index] || 'https://placehold.co/200x200.png';
+      });
+
       setShapes(newShapes);
     };
 
