@@ -56,6 +56,9 @@ const Cube: React.FC<CubeProps> = ({ rotation, shapes }) => {
         <div className="cube-face cube-face-bottom">
           <CubeFaceContent face={shapes.bottom} />
         </div>
+        {/* Inner faces to make the cube look solid */}
+        <div className="cube-face cube-face-inner-left"></div>
+        <div className="cube-face cube-face-inner-right"></div>
       </motion.div>
     </div>
   );
