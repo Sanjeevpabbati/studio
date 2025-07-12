@@ -12,20 +12,22 @@ interface CubeProps {
 }
 
 const CubeFaceContent: React.FC<{ face: ShapeDef }> = ({ face }) => {
-  if (face.imageUrl) {
-    return (
-      <Image
-        src={face.imageUrl}
-        alt={`${face.name} logo`}
-        fill
-        className="object-cover"
-        data-ai-hint={face.aiHint}
-      />
-    );
-  }
-  return <Shape type={face.type} color={face.color} className="w-full h-full" />;
+  return (
+    <div className="cube-face-content">
+      {face.imageUrl ? (
+        <Image
+          src={face.imageUrl}
+          alt={`${face.name} logo`}
+          fill
+          className="object-cover"
+          data-ai-hint={face.aiHint}
+        />
+      ) : (
+        <Shape type={face.type} color={face.color} className="w-full h-full" />
+      )}
+    </div>
+  );
 };
-
 
 const Cube: React.FC<CubeProps> = ({ rotation, shapes }) => {
   return (
