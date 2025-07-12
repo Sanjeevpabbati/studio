@@ -1,7 +1,7 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Cube from '@/components/cube/Cube';
-import type { CubeShapes, FaceName } from '@/lib/types';
+import type { CubeShapes } from '@/lib/types';
 
 const initialShapes: CubeShapes = {
   front: { name: 'front', type: 'circle', color: '#ef4444', aiHint: 'circle' },
@@ -16,19 +16,21 @@ export default function Home() {
   const [rotation, setRotation] = useState({ x: -20, y: 30 });
   const [shapes] = useState<CubeShapes>(initialShapes);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const { clientX, clientY, currentTarget } = e;
-    const { offsetWidth, offsetHeight } = currentTarget;
-    const x = ((clientX / offsetWidth) * 2 - 1) * 30;
-    const y = ((clientY / offsetHeight) * 2 - 1) * -30;
-    setRotation({ x: y, y: x });
-  };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRotation(prev => ({
+        x: prev.x + 0.5,
+        y: prev.y + 0.5,
+      }));
+    }, 50);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-background p-4 md:p-8">
       <div 
         className="w-full h-full flex items-center justify-center min-h-[400px] lg:min-h-screen"
-        onMouseMove={handleMouseMove}
       >
         <Cube rotation={rotation} shapes={shapes} />
       </div>
