@@ -3,6 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import TouchAnimation from '@/components/animations/TouchAnimation';
 import PageTransition from '@/components/animations/PageTransition';
+import FloatingNavBar from '@/components/layout/FloatingNavBar';
 
 export const metadata: Metadata = {
   title: 'Indcric',
@@ -32,11 +33,12 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <TouchAnimation />
-        <main>
+        <main className="pb-24">
           <PageTransition>
             {children}
           </PageTransition>
         </main>
+        <FloatingNavBar />
         <Toaster />
       </body>
     </html>
