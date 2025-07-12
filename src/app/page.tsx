@@ -5,6 +5,7 @@ import type { CubeShapes, ShapeDef } from '@/lib/types';
 import { motion } from 'framer-motion';
 import { getAdForHint } from '@/services/ads';
 
+// HINTS ARE DEFINED HERE
 const initialShapes: CubeShapes = {
   front: { name: 'front', type: 'circle', color: '', imageUrl: '', aiHint: 'brand logo' },
   back: { name: 'back', type: 'square', color: '', imageUrl: '', aiHint: 'sports drink' },
