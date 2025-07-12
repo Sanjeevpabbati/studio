@@ -12,31 +12,29 @@ const initialShapes: CubeShapes = {
   bottom: { name: 'bottom', type: 'star', color: '', imageUrl: 'https://placehold.co/200x200.png', aiHint: 'brand logo' },
 };
 
+// Simplified and clear sequence of face rotations
 const faceRotations = [
-  { x: 0, y: 0 },      // Front
-  { x: -90, y: 0 },    // Top
-  { x: 0, y: 90 },     // Right
-  { x: 90, y: 0 },     // Bottom
-  { x: 0, y: 180 },    // Back
-  { x: 0, y: -90 },    // Left
-  { x: 0, y: 180 },    // Back
-  { x: 90, y: 0 },     // Bottom
-  { x: 0, y: 90 },     // Right
-  { x: -90, y: 0 },    // Top
-  { x: 0, y: 0 },      // Front
+  { x: 0, y: 0 },    // Front
+  { x: -90, y: 0 },   // Top
+  { x: 0, y: 90 },    // Right
+  { x: 90, y: 0 },    // Bottom
+  { x: 0, y: 180 },   // Back
+  { x: 0, y: -90 },   // Left
 ];
 
 export default function Home() {
   const [rotation, setRotation] = useState({ x: 0, y: 0 });
   const [shapes] = useState<CubeShapes>(initialShapes);
-  const [faceIndex, setFaceIndex] = useState(0);
-
+  
   useEffect(() => {
     const interval = setInterval(() => {
-      setFaceIndex((prevIndex) => {
-        const nextIndex = (prevIndex + 1) % faceRotations.length;
-        setRotation(faceRotations[nextIndex]);
-        return nextIndex;
+      // Use a functional update to get the next rotation in the sequence
+      setRotation(prevRotation => {
+        const currentIndex = faceRotations.findIndex(
+          r => r.x === prevRotation.x && r.y === prevRotation.y
+        );
+        const nextIndex = (currentIndex + 1) % faceRotations.length;
+        return faceRotations[nextIndex];
       });
     }, 4000);
 

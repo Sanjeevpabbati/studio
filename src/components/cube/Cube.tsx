@@ -1,33 +1,14 @@
 'use client';
 import React from 'react';
-import type { CubeShapes, ShapeDef } from '@/lib/types';
-import Shape from './Shape';
+import type { CubeShapes } from '@/lib/types';
 import './Cube.css';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
+import CubeFaceContent from './CubeFaceContent';
 
 interface CubeProps {
   rotation: { x: number; y: number };
   shapes: CubeShapes;
 }
-
-const CubeFaceContent: React.FC<{ face: ShapeDef }> = ({ face }) => {
-  return (
-    <div className="cube-face-content">
-      {face.imageUrl ? (
-        <Image
-          src={face.imageUrl}
-          alt={`${face.name} logo`}
-          fill
-          className="object-cover"
-          data-ai-hint={face.aiHint}
-        />
-      ) : (
-        <Shape type={face.type} color={face.color} className="w-full h-full" />
-      )}
-    </div>
-  );
-};
 
 const Cube: React.FC<CubeProps> = ({ rotation, shapes }) => {
   return (
@@ -63,4 +44,4 @@ const Cube: React.FC<CubeProps> = ({ rotation, shapes }) => {
   );
 };
 
-export default Cube;
+export default React.memo(Cube);
