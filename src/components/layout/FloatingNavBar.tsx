@@ -1,10 +1,10 @@
 'use client';
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, User, BarChart2, Trophy, Rocket } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 
 const navItems = [
   { href: '/', icon: Home, label: 'Home' },
@@ -15,43 +15,62 @@ const navItems = [
 ];
 
 const FloatingNavBar: React.FC = () => {
-  const pathname = usePathname();
+  const mouseX = useMotionValue(Infinity);
 
   return (
-    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[90%] max-w-md z-50">
-      <nav className="bg-card/90 backdrop-blur-lg border border-border rounded-full p-2 shadow-lg">
-        <div className="flex justify-around items-center">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link href={item.href} key={item.href} className="relative">
-                <motion.div
-                  className="p-3"
-                  whileTap={{ scale: 0.9 }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-                >
-                  <item.icon
-                    className={cn(
-                      'w-6 h-6 transition-colors',
-                      isActive ? 'text-accent-foreground' : 'text-muted-foreground'
-                    )}
-                  />
-                  <span className="sr-only">{item.label}</span>
-                </motion.div>
-                {isActive && (
-                  <motion.div
-                    layoutId="active-nav-indicator"
-                    className="absolute inset-0 bg-accent rounded-full -z-10"
-                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                  />
-                )}
-              </Link>
-            );
-          })}
-        </div>
-      </nav>
+    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
+      <motion.div
+        onMouseMove={(e) => mouseX.set(e.nativeEvent.x)}
+        onMouseLeave={() => mouseX.set(Infinity)}
+        className="mx-auto flex h-16 items-end gap-4 rounded-2xl bg-card/90 px-4 pb-3 backdrop-blur-lg border border-border shadow-lg"
+      >
+        {navItems.map(({ href, icon: Icon, label }) => (
+          <AppIcon mouseX={mouseX} href={href} Icon={Icon} label={label} key={label} />
+        ))}
+      </motion.div>
     </div>
   );
 };
+
+function AppIcon({ mouseX, href, Icon, label }: { mouseX: any; href: string; Icon: React.ElementType; label: string; }) {
+  const pathname = usePathname();
+  const isActive = pathname === href;
+  const ref = useRef<HTMLDivElement>(null);
+
+  const distance = useTransform(mouseX, (val) => {
+    const bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
+    return val - bounds.x - bounds.width / 2;
+  });
+
+  const widthSync = useTransform(distance, [-100, 0, 100], [40, 80, 40]);
+  const width = useSpring(widthSync, { mass: 0.1, stiffness: 150, damping: 12 });
+
+  return (
+    <div ref={ref} className="group relative flex flex-col items-center">
+      <motion.div
+        style={{ width }}
+        className="aspect-square w-10 flex items-center justify-center rounded-full bg-secondary/0 group-hover:bg-secondary transition-colors"
+      >
+        <Link href={href}>
+            <Icon
+              className={cn(
+                'w-6 h-6 transition-colors',
+                isActive ? 'text-accent-foreground' : 'text-muted-foreground group-hover:text-foreground'
+              )}
+            />
+            <span className="sr-only">{label}</span>
+        </Link>
+      </motion.div>
+      {isActive && (
+        <motion.div
+          layoutId="active-nav-dot"
+          className="absolute bottom-[-8px] h-1.5 w-1.5 rounded-full bg-accent"
+          transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+        />
+      )}
+    </div>
+  );
+}
+
 
 export default FloatingNavBar;
