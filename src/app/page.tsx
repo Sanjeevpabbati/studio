@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import Cube from '@/components/cube/Cube';
 import type { CubeShapes } from '@/lib/types';
 import { motion } from 'framer-motion';
-import { getAdForHint } from '@/services/ads';
 
 const initialShapes: CubeShapes = {
   front: { name: 'front', type: 'circle', color: '', imageUrl: '', aiHint: 'brand logo' },
@@ -50,29 +49,8 @@ const title = 'indcric';
 
 export default function Home() {
   const [rotation, setRotation] = useState({ x: 0, y: 0 });
-  const [shapes, setShapes] = useState<CubeShapes>(initialShapes);
+  const [shapes] = useState<CubeShapes>(initialShapes);
   
-  useEffect(() => {
-    const fetchAds = async () => {
-      const faceKeys = Object.keys(initialShapes) as (keyof CubeShapes)[];
-      
-      const adPromises = faceKeys.map(key => 
-        getAdForHint(initialShapes[key].aiHint || '')
-      );
-      
-      const adUrls = await Promise.all(adPromises);
-      
-      const newShapes = { ...initialShapes };
-      faceKeys.forEach((key, index) => {
-        newShapes[key].imageUrl = adUrls[index] || 'https://placehold.co/200x200.png';
-      });
-
-      setShapes(newShapes);
-    };
-
-    fetchAds();
-  }, []);
-
   useEffect(() => {
     const interval = setInterval(() => {
       setRotation(prevRotation => {

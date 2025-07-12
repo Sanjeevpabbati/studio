@@ -2,7 +2,6 @@
 import React from 'react';
 import Image from 'next/image';
 import type { ShapeDef } from '@/lib/types';
-import Shape from './Shape';
 
 interface CubeFaceContentProps {
   face: ShapeDef;
@@ -11,7 +10,7 @@ interface CubeFaceContentProps {
 const CubeFaceContent: React.FC<CubeFaceContentProps> = ({ face }) => {
   return (
     <div className="cube-face-content">
-      {face.imageUrl ? (
+      {face.imageUrl && (
         <Image
           src={face.imageUrl}
           alt={`${face.name} logo`}
@@ -20,8 +19,6 @@ const CubeFaceContent: React.FC<CubeFaceContentProps> = ({ face }) => {
           data-ai-hint={face.aiHint}
           priority={face.name === 'front'} // Prioritize loading the first visible image
         />
-      ) : (
-        <Shape type={face.type} color={face.color} className="w-full h-full" />
       )}
     </div>
   );
