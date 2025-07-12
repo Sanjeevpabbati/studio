@@ -36,7 +36,6 @@ const Cube: React.FC<CubeProps> = ({ rotation, shapes }) => {
           rotateX: rotation.x,
           rotateY: rotation.y,
         }}
-        whileHover={{ scale: 1.1 }}
         transition={{ type: 'spring', stiffness: 50, damping: 15 }}
       >
         <div className="cube-face cube-face-front">
