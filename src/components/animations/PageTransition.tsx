@@ -11,25 +11,12 @@ const PageTransition = ({ children }: { children: React.ReactNode }) => {
     <AnimatePresence mode="wait">
       <motion.div
         key={pathname}
-        initial="initialState"
-        animate="animateState"
-        exit="exitState"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
         transition={{
-          duration: 0.3,
-        }}
-        variants={{
-          initialState: {
-            opacity: 0,
-            clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)',
-          },
-          animateState: {
-            opacity: 1,
-            clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)',
-          },
-          exitState: {
-            opacity: 0,
-            clipPath: 'polygon(50% 0, 50% 0, 50% 100%, 50% 100%)',
-          },
+          duration: 0.2,
+          ease: 'easeInOut',
         }}
       >
         {children}
