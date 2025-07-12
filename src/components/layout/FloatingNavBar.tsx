@@ -47,35 +47,33 @@ const NavLink = ({ href, icon: Icon, label }: { href: string; icon: React.Elemen
 const FloatingNavBar: React.FC = () => {
   return (
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
-      <nav className="relative flex items-center gap-2 rounded-full bg-card/80 backdrop-blur-md p-2 border border-border shadow-lg">
-        {navItems.map((item) => (
-          <NavLink key={item.href} {...item} />
-        ))}
+      <div className="relative">
+        <nav className="relative flex items-center justify-between gap-8 rounded-full bg-card/80 backdrop-blur-md p-2 border border-border shadow-lg">
+          <div className="flex gap-2">
+            {navItems.map((item) => (
+              <NavLink key={item.href} {...item} />
+            ))}
+          </div>
+          
+          <div className="flex gap-2">
+            {rightNavItems.map((item) => (
+              <NavLink key={item.href} {...item} />
+            ))}
+          </div>
+        </nav>
 
-        <motion.div
-          animate={{
-            scale: [1, 1.05, 1],
-          }}
-          transition={{
-            duration: 1.5,
-            repeat: Infinity,
-            repeatType: 'mirror',
-            ease: 'easeInOut',
-          }}
-        >
-          <Button 
-            variant="default" 
-            className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full h-14 w-14 font-bold text-lg shadow-[0_0_12px_hsl(var(--accent))]"
-            asChild
-          >
-            <Link href="/start">Start</Link>
-          </Button>
-        </motion.div>
-        
-        {rightNavItems.map((item) => (
-          <NavLink key={item.href} {...item} />
-        ))}
-      </nav>
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+            <div className='p-2 bg-background rounded-full'>
+              <Button 
+                variant="default" 
+                className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full h-16 w-16 font-bold text-lg shadow-[0_0_12px_hsl(var(--accent))] shimmer-button"
+                asChild
+              >
+                <Link href="/start">Start</Link>
+              </Button>
+            </div>
+        </div>
+      </div>
     </div>
   );
 };

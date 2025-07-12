@@ -8,7 +8,7 @@ body {
 
 @layer base {
   :root {
-    --background: 220 40% 11.6%;
+    --background: 0 0% 0%;
     --foreground: 0 0% 98%;
     --card: 220 40% 11.6%;
     --card-foreground: 0 0% 98%;
@@ -77,6 +77,38 @@ body {
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
+
+@layer utilities {
+  .shimmer-button {
+    position: relative;
+    overflow: hidden;
+  }
+  .shimmer-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      100deg,
+      rgba(255, 255, 255, 0) 20%,
+      rgba(255, 255, 255, 0.25) 50%,
+      rgba(255, 255, 255, 0) 80%
+    );
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(200%);
+    }
+  }
+}
+
 
 @layer base {
   * {
