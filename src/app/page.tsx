@@ -13,12 +13,17 @@ const initialShapes: CubeShapes = {
 };
 
 const faceRotations = [
-  { x: 0, y: 0 },    // Front
-  { x: -90, y: 0 },   // Top
-  { x: 0, y: -90 },   // Right
-  { x: 90, y: 0 },    // Bottom
-  { x: 0, y: -180 },  // Back
-  { x: 0, y: -270 },  // Left
+  { x: 0, y: 0 },      // Front
+  { x: -90, y: 0 },     // Top
+  { x: 0, y: -90 },     // Right
+  { x: 90, y: 0 },      // Bottom
+  { x: 0, y: -180 },    // Back
+  { x: 0, y: -270 },    // Left
+  { x: 0, y: -180 },    // Back
+  { x: 90, y: 0 },      // Bottom
+  { x: 0, y: -90 },     // Right
+  { x: -90, y: 0 },     // Top
+  { x: 0, y: 0 },      // Front
 ];
 
 export default function Home() {
