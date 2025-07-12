@@ -13,12 +13,6 @@ const navItems = [
   { href: '/profile', icon: User, label: 'Profile' },
 ];
 
-const StartIcon = () => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M5 20V4L19 12L5 20Z" fill="white"/>
-    </svg>
-)
-
 const FloatingNavBar: React.FC = () => {
   const pathname = usePathname();
 
@@ -36,10 +30,9 @@ const FloatingNavBar: React.FC = () => {
             );
           })}
 
-          <Button asChild variant="default" size="icon" className="h-14 w-14 bg-accent rounded-full shadow-lg -translate-y-4 hover:bg-accent/90">
+          <Button asChild variant="default" size="lg" className="h-14 w-24 bg-accent rounded-full shadow-lg -translate-y-4 hover:bg-accent/90 font-bold text-lg">
             <Link href="/start">
-                <StartIcon />
-                <span className="sr-only">Start</span>
+                Start
             </Link>
           </Button>
 
