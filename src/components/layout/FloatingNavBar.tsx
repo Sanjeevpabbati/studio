@@ -23,21 +23,23 @@ const NavLink = ({ href, icon: Icon, label }: { href: string; icon: React.Elemen
 
   return (
     <Link href={href} legacyBehavior passHref>
-      <a className="relative flex items-center justify-center w-12 h-12 rounded-full cursor-pointer transition-colors duration-300 hover:bg-accent/50">
-        {isActive && (
-          <motion.div
-            layoutId="active-pill"
-            className="absolute inset-0 bg-accent rounded-full"
-            style={{ borderRadius: 9999 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-          />
-        )}
+      <a className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 hover:text-accent group">
         <Icon
           className={cn(
             'relative z-10 transition-colors',
-            isActive ? 'text-accent-foreground' : 'text-muted-foreground'
+            isActive ? 'text-accent' : 'text-muted-foreground group-hover:text-accent'
           )}
         />
+        {isActive && (
+          <motion.div
+            layoutId="active-underline"
+            className="absolute bottom-1 h-1 w-6 bg-accent rounded-full"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+          />
+        )}
         <span className="sr-only">{label}</span>
       </a>
     </Link>
