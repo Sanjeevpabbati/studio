@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import './TouchAnimation.css';
 
 interface Ripple {
   x: number;
@@ -34,14 +33,15 @@ const TouchAnimation: React.FC = () => {
   };
 
   return (
-    <div className="touch-animation-container">
+    <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-[9999]">
       {ripples.map(ripple => (
         <span
           key={ripple.id}
-          className="ripple"
+          className="absolute rounded-full bg-white/50 animate-ripple"
           style={{
             left: `${ripple.x}px`,
             top: `${ripple.y}px`,
+            transform: 'translate(-50%, -50%)',
           }}
           onAnimationEnd={() => handleAnimationEnd(ripple.id)}
         />
