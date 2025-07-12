@@ -66,7 +66,7 @@ const FloatingNavBar: React.FC = () => {
             <div className='rounded-full'>
               <Button 
                 variant="default" 
-                className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full h-16 w-16 font-bold text-lg shadow-[0_0_12px_hsl(var(--accent))] shimmer-button"
+                className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full h-20 w-20 font-bold text-xl shadow-[0_0_12px_hsl(var(--accent))] shimmer-button"
                 asChild
               >
                 <Link href="/start">Start</Link>
