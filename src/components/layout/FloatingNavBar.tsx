@@ -17,46 +17,54 @@ const navItems = [
 
 const FloatingNavBar: React.FC = () => {
   const pathname = usePathname();
+  const activeIndex = navItems.findIndex(item => item.href === pathname);
 
   return (
-    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
-      <nav className="relative flex h-16 items-center gap-2 rounded-2xl bg-card/90 p-2 backdrop-blur-lg border border-border shadow-lg">
-        {navItems.map(({ href, icon: Icon, label }) => {
-          const isActive = pathname === href;
-          return (
-            <Link
-              href={href}
-              key={label}
-              className={cn(
-                'relative z-10 w-12 h-12 flex items-center justify-center rounded-xl',
-                'transition-colors'
-              )}
-            >
-              {isActive && (
-                <motion.div
-                  layoutId="active-ripple"
-                  className="absolute inset-0 z-0 bg-accent rounded-full"
-                  initial={{ scale: 0.5, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.5, opacity: 0 }}
-                  transition={{
-                    type: 'spring',
-                    stiffness: 300,
-                    damping: 25,
-                  }}
-                />
-              )}
-              <motion.div
-                animate={{
-                  scale: isActive ? 0.95 : 1,
-                  y: isActive ? 2 : 0,
-                }}
-                transition={{
-                  type: 'spring',
-                  stiffness: 500,
-                  damping: 30,
-                }}
-                whileTap={{ scale: 0.9, y: 2 }}
+    <>
+      <svg width="0" height="0" className="absolute">
+        <defs>
+          <filter id="goo">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+            <feColorMatrix
+              in="blur"
+              mode="matrix"
+              values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"
+              result="goo"
+            />
+            <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+          </filter>
+        </defs>
+      </svg>
+      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
+        <nav
+          className="relative flex h-16 items-center gap-x-2 rounded-2xl bg-card/90 p-2 backdrop-blur-lg border border-border shadow-lg"
+          style={{ filter: 'url(#goo)' }}
+        >
+          {activeIndex !== -1 && (
+            <motion.div
+              className="absolute top-2 w-12 h-12 bg-accent rounded-full"
+              initial={false}
+              animate={{
+                x: activeIndex * (48 + 8), // 48px icon width + 8px gap
+              }}
+              transition={{
+                type: 'spring',
+                stiffness: 400,
+                damping: 30,
+              }}
+            />
+          )}
+
+          {navItems.map(({ href, icon: Icon, label }) => {
+            const isActive = pathname === href;
+            return (
+              <Link
+                href={href}
+                key={label}
+                className={cn(
+                  'relative z-10 w-12 h-12 flex items-center justify-center rounded-full',
+                  'transition-colors duration-300'
+                )}
               >
                 <Icon
                   className={cn(
@@ -64,13 +72,13 @@ const FloatingNavBar: React.FC = () => {
                     isActive ? 'text-accent-foreground' : 'text-muted-foreground'
                   )}
                 />
-              </motion.div>
-              <span className="sr-only">{label}</span>
-            </Link>
-          );
-        })}
-      </nav>
-    </div>
+                <span className="sr-only">{label}</span>
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
+    </>
   );
 };
 
