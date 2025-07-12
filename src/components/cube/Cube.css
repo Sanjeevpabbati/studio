@@ -17,13 +17,10 @@
   width: 200px;
   height: 200px;
   border: 2px solid hsl(var(--border));
-  background: hsl(var(--card));
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-size: 2rem;
-  padding: 20px;
   box-sizing: border-box;
 }
 
