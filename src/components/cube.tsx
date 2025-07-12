@@ -3,9 +3,7 @@
 
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import * as THREE from 'three';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Card } from '@/components/ui/card';
 import { useToast } from "@/hooks/use-toast";
 
 const CUBE_STORAGE_KEY = 'indcric-cube-images';
@@ -135,53 +133,12 @@ export default function Cube() {
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                const imageUrl = event.target?.result as string;
-                setFaceImages(prev => {
-                    const newImages = [...prev];
-                    newImages[index] = imageUrl;
-                    return newImages;
-                });
-            };
-            reader.readAsDataURL(file);
-        }
-    };
     
     return (
         <div className="flex flex-col items-center gap-8">
             <Card className="w-full h-[300px] sm:h-[400px] md:h-[500px] p-0 overflow-hidden bg-primary/20 border-primary shadow-2xl shadow-accent/10">
                 <div ref={mountRef} className="w-full h-full" data-ai-hint="3d render"></div>
             </Card>
-
-            <div className="w-full flex justify-center">
-                 <Card className="bg-card/80 backdrop-blur-sm w-full lg:max-w-md">
-                    <CardHeader>
-                        <CardTitle>Customize Faces</CardTitle>
-                        <CardDescription>Upload an image for each face of the cube.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                        {Array.from({ length: 6 }).map((_, index) => (
-                            <div key={index} className="space-y-2">
-                                <Label htmlFor={`face-upload-${index}`} className="text-sm font-medium text-center block">
-                                    Face {index + 1}
-                                </Label>
-                                <Input 
-                                    id={`face-upload-${index}`} 
-                                    type="file" 
-                                    accept="image/*"
-                                    onChange={(e) => handleImageChange(e, index)}
-                                    className="text-xs file:text-white file:bg-accent/80 file:hover:bg-accent file:rounded-md file:border-0 file:px-2 file:py-1 file:text-xs"
-                                />
-                            </div>
-                        ))}
-                    </CardContent>
-                </Card>
-            </div>
         </div>
     );
 }
