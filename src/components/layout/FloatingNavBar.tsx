@@ -1,6 +1,6 @@
 'use client';
 
-import { Home, User } from 'lucide-react';
+import { Home, User, Trophy } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 
 const navItems = [
   { href: '/', icon: Home, label: 'Home' },
+  { href: '/rewards', icon: Trophy, label: 'Rewards' },
   { href: '/profile', icon: User, label: 'Profile' },
 ];
 
