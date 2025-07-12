@@ -18,6 +18,14 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-background p-4 md:p-8">
+      <div className="text-center mb-12">
+        <h1 className="text-5xl font-bold text-primary-foreground tracking-tight sm:text-6xl md:text-7xl">
+          <span className="text-accent">Indcric</span>
+        </h1>
+        <p className="mt-4 text-lg text-muted-foreground sm:text-xl">
+          Win <strong className="text-accent font-bold">100</strong> rupees in <strong className="text-accent font-bold">100</strong> seconds
+        </p>
+      </div>
       <div 
         className="w-full h-full flex items-center justify-center min-h-[400px] lg:min-h-screen"
       >
