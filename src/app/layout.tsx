@@ -1,6 +1,7 @@
 import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
+import TouchAnimation from '@/components/animations/TouchAnimation';
 
 export const metadata: Metadata = {
   title: 'Indcric',
@@ -28,6 +29,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#1E1E1E" />
       </head>
       <body className="font-body antialiased">
+        <TouchAnimation />
         {children}
         <Toaster />
       </body>
