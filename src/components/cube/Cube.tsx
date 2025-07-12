@@ -16,7 +16,7 @@ const Cube: React.FC<CubeProps> = ({ rotation, shapes }) => {
         className="cube"
         style={{
           transform: `translateZ(-100px) rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`,
-          transition: 'transform 1s ease-in-out',
+          transition: 'transform 0.5s ease-in-out',
         }}
       >
         <div className="cube-face cube-face-front">
