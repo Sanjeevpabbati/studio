@@ -10,12 +10,12 @@
 // A simple in-memory "database" of ad placements.
 // You can replace these placeholder URLs with your actual ad creatives.
 const adCatalog: Record<string, string> = {
-  'brand logo': 'https://placehold.co/200x200/353535/ffffff?text=Brand+A',
-  'sports drink': 'https://placehold.co/200x200/E34444/ffffff?text=Drink+Co',
-  'tech company': 'https://placehold.co/200x200/4476E3/ffffff?text=Tech+Inc',
-  'fashion brand': 'https://placehold.co/200x200/A344E3/ffffff?text=Style+Hub',
-  'food delivery': 'https://placehold.co/200x200/E3A044/ffffff?text=QuickEats',
-  'travel agency': 'https://placehold.co/200x200/44E370/ffffff?text=GoThere',
+  'brand logo': 'https://placehold.co/200x200/353535/ffffff',
+  'sports drink': 'https://placehold.co/200x200/E34444/ffffff',
+  'tech company': 'https://placehold.co/200x200/4476E3/ffffff',
+  'fashion brand': 'https://placehold.co/200x200/A344E3/ffffff',
+  'food delivery': 'https://placehold.co/200x200/E3A044/ffffff',
+  'travel agency': 'https://placehold.co/200x200/44E370/ffffff',
 };
 
 /**
