@@ -37,7 +37,7 @@ const TouchAnimation: React.FC = () => {
       {ripples.map(ripple => (
         <span
           key={ripple.id}
-          className="absolute rounded-full bg-white/50 animate-ripple"
+          className="absolute rounded-full bg-accent/50 animate-ripple"
           style={{
             left: `${ripple.x}px`,
             top: `${ripple.y}px`,
