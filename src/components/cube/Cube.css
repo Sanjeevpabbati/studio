@@ -43,10 +43,10 @@
 }
 
 .cube-face-inner-left {
-  transform: rotateY(-90deg) translateZ(0px);
-  background-color: hsl(var(--card));
+  transform: rotateY(-90deg) translateZ(100px);
+  background-color: transparent;
 }
 .cube-face-inner-right {
-  transform: rotateY(90deg) translateZ(0px);
-  background-color: hsl(var(--card));
+  transform: rotateY(90deg) translateZ(100px);
+  background-color: transparent;
 }
