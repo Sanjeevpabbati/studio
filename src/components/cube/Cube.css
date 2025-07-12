@@ -10,7 +10,6 @@
   position: relative;
   transform-style: preserve-3d;
   transform: translateZ(-100px);
-  background-color: transparent;
 }
 
 .cube-face {
@@ -41,13 +40,4 @@
 }
 .cube-face-bottom {
   transform: rotateX(-90deg) translateZ(100px);
-}
-
-.cube-face-inner-left {
-  transform: rotateY(-90deg) translateZ(100px);
-  background-color: transparent;
-}
-.cube-face-inner-right {
-  transform: rotateY(90deg) translateZ(100px);
-  background-color: transparent;
 }
