@@ -17,8 +17,8 @@ export default function Home() {
   const [shapes] = useState<CubeShapes>(initialShapes);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-background p-4 md:p-8">
-      <div className="text-center mb-12">
+    <main className="flex min-h-screen flex-col items-center bg-background p-4 md:p-8">
+      <div className="text-center py-12">
         <h1 className="text-5xl font-bold text-primary-foreground tracking-tight sm:text-6xl md:text-7xl">
           <span className="text-white font-bold">indcric</span>
         </h1>
@@ -27,7 +27,7 @@ export default function Home() {
         </p>
       </div>
       <div 
-        className="w-full h-full flex items-center justify-center min-h-[400px] lg:min-h-screen"
+        className="w-full flex-grow flex items-center justify-center min-h-[400px]"
       >
         <Cube rotation={rotation} shapes={shapes} />
       </div>
