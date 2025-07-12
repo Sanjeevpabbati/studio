@@ -2,6 +2,7 @@ import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import TouchAnimation from '@/components/animations/TouchAnimation';
+import FloatingNavBar from '@/components/layout/FloatingNavBar';
 
 export const metadata: Metadata = {
   title: 'Indcric',
@@ -31,7 +32,10 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <TouchAnimation />
-        {children}
+        <main className="pb-24">
+          {children}
+        </main>
+        <FloatingNavBar />
         <Toaster />
       </body>
     </html>

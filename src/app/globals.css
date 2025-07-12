@@ -86,3 +86,12 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .nav-link {
+    @apply flex flex-col items-center justify-center text-muted-foreground transition-colors hover:text-accent-foreground;
+  }
+  .nav-link.active {
+    @apply text-accent-foreground;
+  }
+}
