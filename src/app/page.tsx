@@ -20,7 +20,7 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-center bg-background p-4 md:p-8">
       <div className="text-center mb-12">
         <h1 className="text-5xl font-bold text-primary-foreground tracking-tight sm:text-6xl md:text-7xl">
-          <span className="text-accent">Indcric</span>
+          <span className="text-white">Indcric</span>
         </h1>
         <p className="mt-4 text-lg text-muted-foreground sm:text-xl">
           Win <strong className="text-white font-bold">100</strong> rupees in <strong className="text-white font-bold">100</strong> seconds
