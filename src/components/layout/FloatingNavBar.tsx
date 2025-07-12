@@ -34,17 +34,30 @@ const FloatingNavBar: React.FC = () => {
             >
               {isActive && (
                 <motion.div
-                  layoutId="active-pill"
-                  className="absolute inset-0 z-0 bg-accent"
-                  style={{ borderRadius: 12 }}
+                  layoutId="active-ripple"
+                  className="absolute inset-0 z-0 bg-accent rounded-full"
+                  initial={{ scale: 0.5, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.5, opacity: 0 }}
                   transition={{
                     type: 'spring',
-                    stiffness: 380,
-                    damping: 30,
+                    stiffness: 300,
+                    damping: 25,
                   }}
                 />
               )}
-              <motion.div whileTap={{ scale: 0.9 }}>
+              <motion.div
+                animate={{
+                  scale: isActive ? 0.95 : 1,
+                  y: isActive ? 2 : 0,
+                }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 500,
+                  damping: 30,
+                }}
+                whileTap={{ scale: 0.9, y: 2 }}
+              >
                 <Icon
                   className={cn(
                     'w-6 h-6 transition-colors',
