@@ -2,7 +2,6 @@ import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import TouchAnimation from '@/components/animations/TouchAnimation';
-import FloatingNavBar from '@/components/layout/FloatingNavBar';
 import PageTransition from '@/components/animations/PageTransition';
 
 export const metadata: Metadata = {
@@ -33,12 +32,11 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <TouchAnimation />
-        <main className="pb-24">
+        <main>
           <PageTransition>
             {children}
           </PageTransition>
         </main>
-        <FloatingNavBar />
         <Toaster />
       </body>
     </html>
