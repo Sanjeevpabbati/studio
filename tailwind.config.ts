@@ -88,15 +88,13 @@ export default {
             height: '0',
           },
         },
-        'ripple': {
+        'sparkle': {
           '0%': {
-            width: '0',
-            height: '0',
+            transform: 'scale(0) rotate(var(--angle)) translateX(0)',
             opacity: '1',
           },
           '100%': {
-            width: '100px',
-            height: '100px',
+            transform: 'scale(1) rotate(var(--angle)) translateX(var(--distance))',
             opacity: '0',
           },
         },
@@ -104,7 +102,7 @@ export default {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        'ripple': 'ripple 0.6s linear',
+        'sparkle': 'sparkle 0.8s ease-out forwards',
       },
     },
   },

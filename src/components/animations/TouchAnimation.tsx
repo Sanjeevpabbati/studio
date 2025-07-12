@@ -2,49 +2,79 @@
 
 import React, { useState, useEffect } from 'react';
 
-interface Ripple {
+interface Sparkle {
+  id: number;
   x: number;
   y: number;
-  id: number;
+  angle: number;
+  distance: number;
+  size: number;
 }
 
+interface SparkleBurst {
+  id: number;
+  x: number;
+  y: number;
+  sparkles: Sparkle[];
+}
+
+const SPARKLE_COUNT = 8;
+const random = (min: number, max: number) => Math.random() * (max - min) + min;
+
 const TouchAnimation: React.FC = () => {
-  const [ripples, setRipples] = useState<Ripple[]>([]);
+  const [bursts, setBursts] = useState<SparkleBurst[]>([]);
 
   useEffect(() => {
-    const addRipple = (event: MouseEvent) => {
-      const newRipple: Ripple = {
+    const addSparkleBurst = (event: MouseEvent) => {
+      const newBurst: SparkleBurst = {
+        id: Date.now(),
         x: event.clientX,
         y: event.clientY,
-        id: Date.now(),
+        sparkles: Array.from({ length: SPARKLE_COUNT }).map((_, i) => ({
+          id: i,
+          x: 0,
+          y: 0,
+          angle: random(0, 360),
+          distance: random(20, 70),
+          size: random(4, 8),
+        })),
       };
-      setRipples(prevRipples => [...prevRipples, newRipple]);
+      setBursts(prevBursts => [...prevBursts, newBurst]);
     };
 
-    document.addEventListener('mousedown', addRipple);
+    document.addEventListener('mousedown', addSparkleBurst);
 
     return () => {
-      document.removeEventListener('mousedown', addRipple);
+      document.removeEventListener('mousedown', addSparkleBurst);
     };
   }, []);
 
   const handleAnimationEnd = (id: number) => {
-    setRipples(prevRipples => prevRipples.filter(ripple => ripple.id !== id));
+    setBursts(prevBursts => prevBursts.filter(burst => burst.id !== id));
   };
 
   return (
     <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-[9999]">
-      {ripples.map(ripple => (
-        <span
-          key={ripple.id}
-          className="absolute rounded-full bg-accent/50 animate-ripple"
-          style={{
-            left: `${ripple.x}px`,
-            top: `${ripple.y}px`,
-            transform: 'translate(-50%, -50%)',
-          }}
-          onAnimationEnd={() => handleAnimationEnd(ripple.id)}
-        />
+      {bursts.map(burst => (
+        <div
+          key={burst.id}
+          className="absolute"
+          style={{ left: burst.x, top: burst.y }}
+          onAnimationEnd={() => handleAnimationEnd(burst.id)}
+        >
+          {burst.sparkles.map(sparkle => (
+            <span
+              key={sparkle.id}
+              className="absolute bg-accent rounded-full animate-sparkle"
+              style={{
+                width: `${sparkle.size}px`,
+                height: `${sparkle.size}px`,
+                '--angle': `${sparkle.angle}deg`,
+                '--distance': `${sparkle.distance}px`,
+              } as React.CSSProperties}
+            />
+          ))}
+        </div>
       ))}
     </div>
   );
