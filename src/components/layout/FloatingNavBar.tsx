@@ -52,13 +52,25 @@ const FloatingNavBar: React.FC = () => {
           <NavLink key={item.href} {...item} />
         ))}
 
-        <Button 
-          variant="default" 
-          className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full h-14 w-14 font-bold text-lg"
-          asChild
+        <motion.div
+          animate={{
+            scale: [1, 1.05, 1],
+          }}
+          transition={{
+            duration: 1.5,
+            repeat: Infinity,
+            repeatType: 'mirror',
+            ease: 'easeInOut',
+          }}
         >
-          <Link href="/start">Start</Link>
-        </Button>
+          <Button 
+            variant="default" 
+            className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full h-14 w-14 font-bold text-lg shadow-[0_0_12px_hsl(var(--accent))]"
+            asChild
+          >
+            <Link href="/start">Start</Link>
+          </Button>
+        </motion.div>
         
         {rightNavItems.map((item) => (
           <NavLink key={item.href} {...item} />
