@@ -1,0 +1,23 @@
+{
+  "name": "Indcric",
+  "short_name": "Indcric",
+  "description": "A 3D cube customizer PWA.",
+  "icons": [
+    {
+      "src": "https://placehold.co/192x192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://placehold.co/512x512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1E1E1E",
+  "theme_color": "#353535"
+}
