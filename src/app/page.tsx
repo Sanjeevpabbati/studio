@@ -54,7 +54,7 @@ export default function Home() {
         </p>
       </div>
       <div 
-        className="w-full flex-grow flex items-center justify-center min-h-[400px] mt-16"
+        className="w-full flex-grow flex items-center justify-center min-h-[400px] mt-12"
       >
         <Cube rotation={rotation} shapes={shapes} />
       </div>
