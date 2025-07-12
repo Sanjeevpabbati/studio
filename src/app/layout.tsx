@@ -2,8 +2,6 @@ import type {Metadata} from 'next';
 import { Inter, Poppins } from 'next/font/google';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
-import TouchAnimation from '@/components/animations/TouchAnimation';
-import PageTransition from '@/components/animations/PageTransition';
 import FloatingNavBar from '@/components/layout/FloatingNavBar';
 
 const inter = Inter({
@@ -43,11 +41,8 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body className="font-body antialiased">
-        <TouchAnimation />
         <main className="pb-24">
-          <PageTransition>
-            {children}
-          </PageTransition>
+          {children}
         </main>
         <FloatingNavBar />
         <Toaster />
