@@ -5,3 +5,7 @@ runConfig:
   # Increase this value if you'd like to automatically spin up
   # more instances in response to increased traffic.
   maxInstances: 1
+  # You can specify environment variables and secrets for your application.
+  # Secrets are stored securely in Secret Manager.
+  # https://firebase.google.com/docs/app-hosting/configure#set-secrets
+  secrets: [GOOGLE_API_KEY]
