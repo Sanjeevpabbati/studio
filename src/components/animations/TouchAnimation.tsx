@@ -65,7 +65,7 @@ const TouchAnimation: React.FC = () => {
           {burst.sparkles.map(sparkle => (
             <span
               key={sparkle.id}
-              className="absolute bg-accent rounded-full animate-sparkle"
+              className="absolute bg-white rounded-full animate-sparkle"
               style={{
                 width: `${sparkle.size}px`,
                 height: `${sparkle.size}px`,
