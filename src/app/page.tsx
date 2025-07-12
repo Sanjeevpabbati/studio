@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Cube from '@/components/cube/Cube';
 import type { CubeShapes } from '@/lib/types';
 
@@ -12,9 +12,31 @@ const initialShapes: CubeShapes = {
   bottom: { name: 'bottom', type: 'star', color: '#ec4899', aiHint: 'star' },
 };
 
+const faceRotations = [
+  { x: 0, y: 0 },    // Front
+  { x: 0, y: -90 },   // Right
+  { x: 0, y: -180 },  // Back
+  { x: 0, y: -270 },  // Left
+  { x: -90, y: 0 },  // Top
+  { x: 90, y: 0 },   // Bottom
+];
+
 export default function Home() {
-  const [rotation] = useState({ x: 0, y: 0 });
+  const [rotation, setRotation] = useState({ x: 0, y: 0 });
   const [shapes] = useState<CubeShapes>(initialShapes);
+  const [faceIndex, setFaceIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFaceIndex((prevIndex) => {
+        const nextIndex = (prevIndex + 1) % faceRotations.length;
+        setRotation(faceRotations[nextIndex]);
+        return nextIndex;
+      });
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <main className="flex min-h-screen flex-col items-center bg-background p-4 md:p-8">
