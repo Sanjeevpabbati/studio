@@ -23,11 +23,11 @@ export default function Home() {
           <span className="text-white font-bold">indcric</span>
         </h1>
         <p className="mt-4 text-lg text-muted-foreground sm:text-xl">
-          Win <strong className="text-white">100</strong> rupees in <strong className="text-white">100</strong> seconds
+          Win <strong>100</strong> rupees in <strong>100</strong> seconds
         </p>
       </div>
       <div 
-        className="w-full flex-grow flex items-center justify-center min-h-[400px] -mt-28"
+        className="w-full flex-grow flex items-center justify-center min-h-[400px] -mt-36"
       >
         <Cube rotation={rotation} shapes={shapes} />
       </div>
