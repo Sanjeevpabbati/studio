@@ -36,7 +36,7 @@ export default function Home() {
         const nextIndex = (currentIndex + 1) % faceRotations.length;
         return faceRotations[nextIndex];
       });
-    }, 4000);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);
