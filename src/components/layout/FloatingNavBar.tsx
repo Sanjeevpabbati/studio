@@ -24,32 +24,28 @@ const FloatingNavBar: React.FC = () => {
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
-              <motion.div
-                key={item.href}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                className="relative"
-              >
-                <Link
-                  href={item.href}
-                  className={cn(
-                    'nav-link p-3 rounded-full flex items-center justify-center transition-colors',
-                    isActive ? 'text-accent' : 'text-muted-foreground hover:text-foreground'
-                  )}
+              <Link href={item.href} key={item.href} className="relative">
+                <motion.div
+                  className="p-3"
+                  whileTap={{ scale: 0.9 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 15 }}
                 >
-                  <item.icon className="w-6 h-6" />
+                  <item.icon
+                    className={cn(
+                      'w-6 h-6 transition-colors',
+                      isActive ? 'text-accent-foreground' : 'text-muted-foreground'
+                    )}
+                  />
                   <span className="sr-only">{item.label}</span>
-                  {isActive && (
-                    <motion.div
-                      layoutId="active-nav-indicator"
-                      className="absolute inset-0 bg-accent/20 rounded-full -z-10"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                    />
-                  )}
-                </Link>
-              </motion.div>
+                </motion.div>
+                {isActive && (
+                  <motion.div
+                    layoutId="active-nav-indicator"
+                    className="absolute inset-0 bg-accent rounded-full -z-10"
+                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                  />
+                )}
+              </Link>
             );
           })}
         </div>
