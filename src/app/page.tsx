@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Cube from '@/components/cube/Cube';
 import type { CubeShapes } from '@/lib/types';
+import { motion } from 'framer-motion';
 
 const initialShapes: CubeShapes = {
   front: { name: 'front', type: 'circle', color: '', imageUrl: 'https://placehold.co/200x200.png', aiHint: 'brand logo' },
@@ -21,6 +22,31 @@ const faceRotations = [
   { x: 0, y: 180 },   // Back
   { x: 0, y: -90 },   // Left
 ];
+
+const titleVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const letterVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      type: 'spring',
+      stiffness: 120,
+      damping: 12,
+    },
+  },
+};
+
+const title = 'indcric';
 
 export default function Home() {
   const [rotation, setRotation] = useState({ x: 0, y: 0 });
@@ -44,9 +70,23 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center bg-background p-4 md:p-8">
       <div className="text-center py-4 font-headline mb-8">
-        <h1 className="text-5xl font-bold text-primary-foreground tracking-tight sm:text-6xl md:text-7xl">
-          <span className="text-white font-bold">indcric</span>
-        </h1>
+        <motion.h1
+          className="text-5xl font-bold text-primary-foreground tracking-tight sm:text-6xl md:text-7xl text-white"
+          variants={titleVariants}
+          initial="hidden"
+          animate="visible"
+          aria-label={title}
+        >
+          {title.split('').map((char, index) => (
+            <motion.span
+              key={index}
+              className="inline-block"
+              variants={letterVariants}
+            >
+              {char}
+            </motion.span>
+          ))}
+        </motion.h1>
         <p className="mt-4 text-lg text-muted-foreground sm:text-xl">
           Win <strong className="text-white">100</strong> rupees in <strong className="text-white">100</strong> seconds
         </p>
