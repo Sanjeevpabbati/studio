@@ -62,7 +62,7 @@ const initialShapes: CubeShapes = {
   },
 };
 
-const faceOrder: FaceName[] = ['front', 'top', 'right', 'bottom', 'back', 'left'];
+const faceOrder: FaceName[] = ['front', 'top', 'right', 'bottom', 'back', 'left', 'back', 'bottom', 'right', 'top'];
 
 const faceRotations: { [key in FaceName]: { x: number, y: number } } = {
   front: { x: 0, y: 0 },
@@ -177,8 +177,8 @@ export default function Home() {
         <div className="w-full max-w-sm mt-12">
           <Carousel setApi={setApi} className="w-full">
             <CarouselContent>
-              {faceOrder.map((faceName) => (
-                <CarouselItem key={faceName}>
+              {faceOrder.map((faceName, index) => (
+                <CarouselItem key={`${faceName}-${index}`}>
                   <div className="p-1">
                       <div className="flex items-center justify-center gap-3 h-12">
                         <span className="text-xl font-bold text-white tracking-wider">{shapes[faceName].quizFormat}</span>
