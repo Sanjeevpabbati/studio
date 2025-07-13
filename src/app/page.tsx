@@ -20,7 +20,7 @@ const initialShapes: CubeShapes = {
     type: 'plus',
     color: '',
     quizFormat: 'T20',
-    imageUrl: 'https://placehold.co/288x288.png',
+    imageUrl: 'https://placehold.co/260x260.png',
     imageAiHint: 'cricket ball',
     sponsor: { name: 'Pepsi', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'soda brand logo' },
   },
@@ -29,7 +29,7 @@ const initialShapes: CubeShapes = {
     type: 'triangle',
     color: '',
     quizFormat: 'ODI',
-    imageUrl: 'https://placehold.co/288x288.png',
+    imageUrl: 'https://placehold.co/260x260.png',
     imageAiHint: 'cricket bat',
     sponsor: { name: 'Adidas', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'sports apparel logo' },
   },
@@ -38,7 +38,7 @@ const initialShapes: CubeShapes = {
     type: 'star',
     color: '',
     quizFormat: 'WPL',
-    imageUrl: 'https://placehold.co/288x288.png',
+    imageUrl: 'https://placehold.co/260x260.png',
     imageAiHint: 'trophy',
     sponsor: { name: 'My11Circle', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'fantasy sports logo' },
   },
@@ -47,7 +47,7 @@ const initialShapes: CubeShapes = {
     type: 'square',
     color: '',
     quizFormat: 'Test',
-    imageUrl: 'https://placehold.co/288x288.png',
+    imageUrl: 'https://placehold.co/260x260.png',
     imageAiHint: 'team logo',
     sponsor: { name: 'MRF', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'tire company logo' },
   },
@@ -56,7 +56,7 @@ const initialShapes: CubeShapes = {
     type: 'diamond',
     color: '',
     quizFormat: 'Core',
-    imageUrl: 'https://placehold.co/288x288.png',
+    imageUrl: 'https://placehold.co/260x260.png',
     imageAiHint: 'abstract graphic',
     sponsor: { name: 'Puma', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'athletic brand logo' },
   },
@@ -80,18 +80,17 @@ export default function Home() {
   const [shapes] = useState<CubeShapes>(initialShapes);
   const [currentFaceIndex, setCurrentFaceIndex] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
-  const [isInteracting, setIsInteracting] = useState(false);
   const interactionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const autoRotateIntervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  const scrollTo = useCallback((index: number) => {
-    api?.scrollTo(index);
-  }, [api]);
 
   const stopAutoRotate = useCallback(() => {
     if (autoRotateIntervalRef.current) {
       clearInterval(autoRotateIntervalRef.current);
       autoRotateIntervalRef.current = null;
+    }
+    if (interactionTimeoutRef.current) {
+      clearTimeout(interactionTimeoutRef.current);
+      interactionTimeoutRef.current = null;
     }
   }, []);
 
@@ -102,12 +101,22 @@ export default function Home() {
     }, 4000);
   }, [stopAutoRotate]);
 
-  useEffect(() => {
-    if (!isInteracting) {
+  const handleInteraction = useCallback(() => {
+    stopAutoRotate();
+    interactionTimeoutRef.current = setTimeout(() => {
       startAutoRotate();
-    }
-    return () => stopAutoRotate();
-  }, [isInteracting, startAutoRotate, stopAutoRotate]);
+    }, 500); 
+  }, [startAutoRotate, stopAutoRotate]);
+
+  const scrollTo = useCallback((index: number) => {
+    handleInteraction();
+    api?.scrollTo(index);
+  }, [api, handleInteraction]);
+
+  useEffect(() => {
+    startAutoRotate();
+    return stopAutoRotate;
+  }, [startAutoRotate, stopAutoRotate]);
   
   useEffect(() => {
     if (!api) {
@@ -118,36 +127,27 @@ export default function Home() {
       const selectedIndex = api.selectedScrollSnap();
       setCurrentFaceIndex(selectedIndex);
     };
-
-    const onInteraction = () => {
-      setIsInteracting(true);
-      if (interactionTimeoutRef.current) {
-        clearTimeout(interactionTimeoutRef.current);
-      }
-      interactionTimeoutRef.current = setTimeout(() => {
-        setIsInteracting(false);
-      }, 5000); // 5-second delay before auto-rotation resumes
-    };
+    
+    const onSettle = () => {
+      handleInteraction();
+    }
 
     api.on('select', onSelect);
-    api.on('pointerDown', onInteraction);
-    api.on('wheel', onInteraction);
+    api.on('pointerDown', stopAutoRotate);
+    api.on('settle', onSettle);
 
     return () => {
       api.off('select', onSelect);
-      api.off('pointerDown', onInteraction);
-      api.off('wheel', onInteraction);
-      if (interactionTimeoutRef.current) {
-        clearTimeout(interactionTimeoutRef.current);
-      }
+      api.off('pointerDown', stopAutoRotate);
+      api.off('settle', onSettle);
     };
-  }, [api]);
+  }, [api, handleInteraction, stopAutoRotate]);
 
   useEffect(() => {
     const nextFaceName = faceOrder[currentFaceIndex];
     setRotation(faceRotations[nextFaceName]);
     if (api && api.selectedScrollSnap() !== currentFaceIndex) {
-      api.scrollTo(currentFaceIndex, true); // Jump to the correct slide
+      api.scrollTo(currentFaceIndex); 
     }
   }, [currentFaceIndex, api]);
 
