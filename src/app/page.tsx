@@ -63,6 +63,7 @@ const initialShapes: CubeShapes = {
 };
 
 const faceOrder: FaceName[] = ['front', 'top', 'right', 'bottom', 'back', 'left', 'back', 'bottom', 'right', 'top'];
+const uniqueFaceNames: FaceName[] = ['front', 'top', 'right', 'bottom', 'back', 'left'];
 
 const faceRotations: { [key in FaceName]: { x: number, y: number } } = {
   front: { x: 0, y: 0 },
@@ -108,9 +109,12 @@ export default function Home() {
     }, 500); 
   }, [startAutoRotate, stopAutoRotate]);
 
-  const scrollTo = useCallback((index: number) => {
+  const scrollTo = useCallback((faceName: FaceName) => {
     handleInteraction();
-    api?.scrollTo(index);
+    const index = faceOrder.indexOf(faceName);
+    if (index !== -1) {
+      api?.scrollTo(index);
+    }
   }, [api, handleInteraction]);
 
   useEffect(() => {
@@ -150,6 +154,8 @@ export default function Home() {
       api.scrollTo(currentFaceIndex); 
     }
   }, [currentFaceIndex, api]);
+  
+  const currentFaceName = faceOrder[currentFaceIndex];
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-background p-4 md:p-8">
@@ -198,14 +204,14 @@ export default function Home() {
             </CarouselContent>
           </Carousel>
            <div className="flex justify-center gap-2 mt-4">
-            {faceOrder.map((_, index) => (
+            {uniqueFaceNames.map((faceName) => (
               <button
-                key={index}
-                onClick={() => scrollTo(index)}
+                key={faceName}
+                onClick={() => scrollTo(faceName)}
                 className={`w-2 h-2 rounded-full transition-colors ${
-                  index === currentFaceIndex ? 'bg-accent' : 'bg-muted'
+                  faceName === currentFaceName ? 'bg-accent' : 'bg-muted'
                 }`}
-                aria-label={`Go to slide ${index + 1}`}
+                aria-label={`Go to ${shapes[faceName].quizFormat} face`}
               />
             ))}
           </div>
