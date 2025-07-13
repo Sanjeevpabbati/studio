@@ -109,15 +109,15 @@ export default function Home() {
         className="w-full flex flex-col items-center justify-center mt-8"
       >
         <Cube rotation={rotation} shapes={shapes} />
-        <div className="mt-12 h-16 w-full max-w-sm flex items-center justify-center">
+        <div className="mt-12 relative h-16 w-full max-w-sm flex items-center justify-center overflow-hidden">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentFormat.quizFormat}
-              initial={{ opacity: 0, y: 10, filter: 'blur(8px)' }}
+              initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
               animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              exit={{ opacity: 0, y: -10, filter: 'blur(8px)' }}
-              transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-              className="flex items-center justify-center gap-3"
+              exit={{ opacity: 0, y: -20, filter: 'blur(8px)' }}
+              transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+              className="absolute flex items-center justify-center gap-3"
             >
               <span className="text-xl font-bold text-white tracking-wider">{currentFormat.quizFormat}</span>
               <span className="text-sm text-muted-foreground">Sponsored by</span>
