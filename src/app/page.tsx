@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Cube from '@/components/cube/Cube';
 import type { CubeShapes, FaceName } from '@/lib/types';
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
+import { cn } from '@/lib/utils';
 
 const initialShapes: CubeShapes = {
   front: {
@@ -186,7 +187,9 @@ export default function Home() {
               {faceOrder.map((faceName, index) => (
                 <CarouselItem key={`${faceName}-${index}`}>
                   <div className="p-1">
-                      <div className="flex items-center justify-center gap-3 h-12">
+                      <div className={cn("flex items-center justify-center gap-3 h-12 transition-opacity duration-300",
+                        currentFaceIndex === index ? 'opacity-100' : 'opacity-0'
+                      )}>
                         <span className="text-xl font-bold text-white tracking-wider">{shapes[faceName].quizFormat}</span>
                         <span className="text-sm text-muted-foreground">Sponsored by</span>
                         <Image 
