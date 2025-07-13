@@ -6,7 +6,6 @@ import FloatingNavBar from '@/components/layout/FloatingNavBar';
 import { Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import PageTransition from '@/components/animations/PageTransition';
 import TouchAnimation from '@/components/animations/TouchAnimation';
 
 const inter = Inter({
@@ -60,7 +59,7 @@ export default function RootLayout({
           </Button>
         </div>
         <main className="pb-24">
-          <PageTransition>{children}</PageTransition>
+          {children}
         </main>
         <FloatingNavBar />
         <Toaster />
