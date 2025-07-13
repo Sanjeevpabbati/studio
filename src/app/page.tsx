@@ -121,7 +121,7 @@ export default function Home() {
         className="w-full flex flex-col items-center justify-center mt-8"
       >
         <Cube rotation={rotation} shapes={shapes} />
-        <div className="mt-12 relative h-16 w-full max-w-sm flex items-center justify-center overflow-hidden">
+        <div className="mt-8 relative h-16 w-full max-w-sm flex items-center justify-center overflow-hidden">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentFormat.quizFormat}
