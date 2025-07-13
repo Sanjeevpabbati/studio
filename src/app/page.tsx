@@ -174,7 +174,7 @@ export default function Home() {
       
       <div className="w-full flex flex-col items-center justify-center mt-0">
         <Cube rotation={rotation} shapes={shapes} />
-        <div className="w-full max-w-sm mt-8">
+        <div className="w-full max-w-sm mt-12">
           <Carousel setApi={setApi} className="w-full">
             <CarouselContent>
               {faceOrder.map((faceName) => (
