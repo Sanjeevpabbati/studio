@@ -14,6 +14,7 @@ const CubeFaceContent: React.FC<CubeFaceContentProps> = ({ face }) => {
         src={face.imageUrl}
         alt={`${face.quizFormat} quiz format`}
         fill
+        sizes="(max-width: 768px) 100vw, 50vw"
         className="object-cover"
         data-ai-hint={face.imageAiHint}
       />
