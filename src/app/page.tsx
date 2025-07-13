@@ -4,12 +4,12 @@ import Cube from '@/components/cube/Cube';
 import type { CubeShapes } from '@/lib/types';
 
 const initialShapes: CubeShapes = {
-  front: { name: 'front', type: 'circle', color: '', imageUrl: 'https://placehold.co/230x230.png', aiHint: 'brand logo' },
-  back: { name: 'back', type: 'square', color: '', imageUrl: 'https://placehold.co/230x230.png', aiHint: 'sports drink' },
-  right: { name: 'right', type: 'triangle', color: '', imageUrl: 'https://placehold.co/230x230.png', aiHint: 'tech company' },
-  left: { name: 'left', type: 'diamond', color: '', imageUrl: 'https://placehold.co/230x230.png', aiHint: 'fashion brand' },
-  top: { name: 'top', type: 'plus', color: '', imageUrl: 'https://placehold.co/230x230.png', aiHint: 'food delivery' },
-  bottom: { name: 'bottom', type: 'star', color: '', imageUrl: 'https://placehold.co/230x230.png', aiHint: 'travel agency' },
+  front: { name: 'front', type: 'circle', color: '', imageUrl: '', aiHint: 'brand logo' },
+  back: { name: 'back', type: 'square', color: '', imageUrl: '', aiHint: 'sports drink' },
+  right: { name: 'right', type: 'triangle', color: '', imageUrl: '', aiHint: 'tech company' },
+  left: { name: 'left', type: 'diamond', color: '', imageUrl: '', aiHint: 'fashion brand' },
+  top: { name: 'top', type: 'plus', color: '', imageUrl: '', aiHint: 'food delivery' },
+  bottom: { name: 'bottom', type: 'star', color: '', imageUrl: '', aiHint: 'travel agency' },
 };
 
 const faceRotations = [
