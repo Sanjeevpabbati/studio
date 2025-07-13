@@ -6,8 +6,6 @@ export interface ShapeDef {
   name: FaceName;
   type: ShapeType;
   color: string;
-  imageUrl?: string;
-  aiHint?: string;
   quizFormat: QuizFormat;
   sponsor: {
     name: string;
