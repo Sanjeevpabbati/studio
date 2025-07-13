@@ -1,5 +1,6 @@
 export type ShapeType = 'circle' | 'square' | 'triangle' | 'diamond' | 'plus' | 'star';
 export type FaceName = 'front' | 'back' | 'left' | 'right' | 'top' | 'bottom';
+export type QuizFormat = 'T20' | 'ODI' | 'IPL' | 'WPL' | 'Test' | 'Mixed';
 
 export interface ShapeDef {
   name: FaceName;
@@ -7,6 +8,12 @@ export interface ShapeDef {
   color: string;
   imageUrl?: string;
   aiHint?: string;
+  quizFormat: QuizFormat;
+  sponsor: {
+    name: string;
+    logoUrl: string;
+    aiHint: string;
+  };
 }
 
 export type CubeShapes = {
@@ -14,8 +21,6 @@ export type CubeShapes = {
 };
 
 // Quiz Types
-export type QuizFormat = 'T20' | 'ODI' | 'IPL' | 'WPL' | 'Test' | 'Mixed';
-
 export interface Question {
   question: string;
   options: string[];

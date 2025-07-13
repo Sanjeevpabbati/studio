@@ -1,45 +1,100 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import Cube from '@/components/cube/Cube';
-import type { CubeShapes } from '@/lib/types';
+import type { CubeShapes, FaceName, QuizFormat } from '@/lib/types';
 
 const initialShapes: CubeShapes = {
-  front: { name: 'front', type: 'circle', color: '', imageUrl: '', aiHint: 'brand logo' },
-  back: { name: 'back', type: 'square', color: '', imageUrl: '', aiHint: 'sports drink' },
-  right: { name: 'right', type: 'triangle', color: '', imageUrl: '', aiHint: 'tech company' },
-  left: { name: 'left', type: 'diamond', color: '', imageUrl: '', aiHint: 'fashion brand' },
-  top: { name: 'top', type: 'plus', color: '', imageUrl: '', aiHint: 'food delivery' },
-  bottom: { name: 'bottom', type: 'star', color: '', imageUrl: '', aiHint: 'travel agency' },
+  front: {
+    name: 'front',
+    type: 'circle',
+    color: '',
+    imageUrl: 'https://placehold.co/200x200.png',
+    aiHint: 'cricket ball',
+    quizFormat: 'Test',
+    sponsor: { name: 'MRF', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'tire company logo' },
+  },
+  top: {
+    name: 'top',
+    type: 'plus',
+    color: '',
+    imageUrl: 'https://placehold.co/200x200.png',
+    aiHint: 'cricket trophy',
+    quizFormat: 'T20',
+    sponsor: { name: 'Pepsi', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'soda brand logo' },
+  },
+  right: {
+    name: 'right',
+    type: 'triangle',
+    color: '',
+    imageUrl: 'https://placehold.co/200x200.png',
+    aiHint: 'cricket stadium',
+    quizFormat: 'ODI',
+    sponsor: { name: 'Adidas', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'sports apparel logo' },
+  },
+  bottom: {
+    name: 'bottom',
+    type: 'star',
+    color: '',
+    imageUrl: 'https://placehold.co/200x200.png',
+    aiHint: 'glowing cricket stumps',
+    quizFormat: 'IPL',
+    sponsor: { name: 'Tata', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'conglomerate logo' },
+  },
+  back: {
+    name: 'back',
+    type: 'square',
+    color: '',
+    imageUrl: 'https://placehold.co/200x200.png',
+    aiHint: 'cricket player silhouette',
+    quizFormat: 'WPL',
+    sponsor: { name: 'My11Circle', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'fantasy sports logo' },
+  },
+  left: {
+    name: 'left',
+    type: 'diamond',
+    color: '',
+    imageUrl: 'https://placehold.co/200x200.png',
+    aiHint: 'abstract cricket art',
+    quizFormat: 'Mixed',
+    sponsor: { name: 'Puma', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'athletic brand logo' },
+  },
 };
 
-const faceRotations = [
-  { x: 0, y: 0 },    // Front
-  { x: -90, y: 0 },   // Top
-  { x: 0, y: 90 },    // Right
-  { x: 90, y: 0 },    // Bottom
-  { x: 0, y: 180 },   // Back
-  { x: 0, y: -90 },   // Left
-];
+// Order of faces for rotation
+const faceOrder: FaceName[] = ['front', 'top', 'right', 'bottom', 'back', 'left'];
+
+const faceRotations: { [key in FaceName]: { x: number, y: number } } = {
+  front: { x: 0, y: 0 },
+  top: { x: -90, y: 0 },
+  right: { x: 0, y: 90 },
+  bottom: { x: 90, y: 0 },
+  back: { x: 0, y: 180 },
+  left: { x: 0, y: -90 },
+};
 
 const title = 'indcric';
 
 export default function Home() {
-  const [rotation, setRotation] = useState({ x: 0, y: 0 });
+  const [rotation, setRotation] = useState(faceRotations.front);
   const [shapes] = useState<CubeShapes>(initialShapes);
-  
+  const [currentFaceIndex, setCurrentFaceIndex] = useState(0);
+
   useEffect(() => {
     const interval = setInterval(() => {
-      setRotation(prevRotation => {
-        const currentIndex = faceRotations.findIndex(
-          r => r.x === prevRotation.x && r.y === prevRotation.y
-        );
-        const nextIndex = (currentIndex + 1) % faceRotations.length;
-        return faceRotations[nextIndex];
-      });
+      setCurrentFaceIndex(prevIndex => (prevIndex + 1) % faceOrder.length);
     }, 3000);
 
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    const nextFaceName = faceOrder[currentFaceIndex];
+    setRotation(faceRotations[nextFaceName]);
+  }, [currentFaceIndex]);
+
+  const currentFaceName = faceOrder[currentFaceIndex];
+  const currentFormat = shapes[currentFaceName];
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-background p-4 md:p-8">
@@ -62,9 +117,27 @@ export default function Home() {
         </p>
       </div>
       <div 
-        className="w-full flex items-center justify-center mt-8"
+        className="w-full flex flex-col items-center justify-center mt-8"
       >
         <Cube rotation={rotation} shapes={shapes} />
+        <div className="mt-8 text-center h-10">
+            <div
+              key={currentFormat.quizFormat}
+              className="flex items-center justify-center gap-2 animate-in fade-in duration-500"
+            >
+              <p className="text-lg text-muted-foreground">
+                <span className="font-bold text-white">{currentFormat.quizFormat}</span> Sponsored by
+              </p>
+              <Image 
+                src={currentFormat.sponsor.logoUrl} 
+                alt={`${currentFormat.sponsor.name} logo`}
+                width={24}
+                height={24}
+                className="object-contain"
+                data-ai-hint={currentFormat.sponsor.aiHint}
+              />
+            </div>
+        </div>
       </div>
     </div>
   );
