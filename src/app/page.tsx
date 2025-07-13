@@ -117,7 +117,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5, ease: 'easeInOut' }}
-              className="relative flex items-center justify-center gap-3 rounded-full bg-card/50 backdrop-blur-sm px-6 py-3 border border-white/10 shadow-lg"
+              className="flex items-center justify-center gap-3"
             >
               <span className="text-xl font-bold text-white tracking-wider">{currentFormat.quizFormat}</span>
               <span className="text-sm text-muted-foreground">Sponsored by</span>
