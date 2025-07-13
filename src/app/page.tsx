@@ -11,7 +11,7 @@ const initialShapes: CubeShapes = {
     type: 'circle',
     color: '',
     quizFormat: 'Test',
-    imageUrl: 'https://placehold.co/200x200.png',
+    imageUrl: 'https://i.ibb.co/d4FBpHT7/129663845-3387788141330000-4041207386765952109-n.jpg',
     imageAiHint: 'cricket stadium',
     sponsor: { name: 'MRF', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'tire company logo' },
   },
