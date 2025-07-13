@@ -46,8 +46,12 @@ export default function RootLayout({
       <body className="font-body antialiased">
         <div className="fixed top-10 right-4 z-50">
           <Button variant="ghost" size="icon" asChild>
-            <Link href="#">
+            <Link href="#" className="relative">
               <Bell className="h-6 w-6 text-white" />
+              <span className="absolute top-1 right-1 flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+              </span>
               <span className="sr-only">Notifications</span>
             </Link>
           </Button>
