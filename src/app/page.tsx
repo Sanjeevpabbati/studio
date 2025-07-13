@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Cube from '@/components/cube/Cube';
 import type { CubeShapes, FaceName, QuizFormat } from '@/lib/types';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const initialShapes: CubeShapes = {
   front: {
@@ -71,7 +72,7 @@ export default function Home() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentFaceIndex(prevIndex => (prevIndex + 1) % faceOrder.length);
-    }, 3000);
+    }, 4000); // Changed to 4 seconds per requirement
 
     return () => clearInterval(interval);
   }, []);
@@ -108,23 +109,28 @@ export default function Home() {
         className="w-full flex flex-col items-center justify-center mt-8"
       >
         <Cube rotation={rotation} shapes={shapes} />
-        <div className="mt-8 text-center h-10">
-            <div
+        <div className="mt-12 h-16 w-full max-w-sm flex items-center justify-center">
+          <AnimatePresence mode="wait">
+            <motion.div
               key={currentFormat.quizFormat}
-              className="flex items-center justify-center gap-2 animate-in fade-in duration-500"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, ease: 'easeInOut' }}
+              className="relative flex items-center justify-center gap-3 rounded-full bg-card/50 backdrop-blur-sm px-6 py-3 border border-white/10 shadow-lg"
             >
-              <p className="text-lg text-muted-foreground">
-                <span className="font-bold text-white">{currentFormat.quizFormat}</span> Sponsored by
-              </p>
+              <span className="text-xl font-bold text-white tracking-wider">{currentFormat.quizFormat}</span>
+              <span className="text-sm text-muted-foreground">Sponsored by</span>
               <Image 
                 src={currentFormat.sponsor.logoUrl} 
                 alt={`${currentFormat.sponsor.name} logo`}
-                width={24}
-                height={24}
-                className="object-contain"
+                width={28}
+                height={28}
+                className="object-contain rounded-full bg-white p-0.5"
                 data-ai-hint={currentFormat.sponsor.aiHint}
               />
-            </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
     </div>
