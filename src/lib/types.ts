@@ -1,6 +1,6 @@
 export type ShapeType = 'circle' | 'square' | 'triangle' | 'diamond' | 'plus' | 'star';
 export type FaceName = 'front' | 'back' | 'left' | 'right' | 'top' | 'bottom';
-export type QuizFormat = 'T20' | 'ODI' | 'IPL' | 'WPL' | 'Test' | 'Mixed';
+export type QuizFormat = 'T20' | 'ODI' | 'IPL' | 'WPL' | 'Test' | 'Core';
 
 export interface ShapeDef {
   name: FaceName;
