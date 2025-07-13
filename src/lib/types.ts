@@ -12,3 +12,18 @@ export interface ShapeDef {
 export type CubeShapes = {
   [key in FaceName]: ShapeDef;
 };
+
+// Quiz Types
+export type QuizFormat = 'T20' | 'ODI' | 'IPL' | 'WPL' | 'Test' | 'Mixed';
+
+export interface Question {
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  hint: string;
+}
+
+export interface Quiz {
+  format: QuizFormat;
+  questions: Question[];
+}
