@@ -7,6 +7,8 @@ export interface ShapeDef {
   type: ShapeType;
   color: string;
   quizFormat: QuizFormat;
+  imageUrl: string;
+  imageAiHint: string;
   sponsor: {
     name: string;
     logoUrl: string;

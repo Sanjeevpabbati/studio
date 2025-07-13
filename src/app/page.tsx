@@ -11,6 +11,8 @@ const initialShapes: CubeShapes = {
     type: 'circle',
     color: '',
     quizFormat: 'Test',
+    imageUrl: 'https://placehold.co/200x200.png',
+    imageAiHint: 'cricket stadium',
     sponsor: { name: 'MRF', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'tire company logo' },
   },
   top: {
@@ -18,6 +20,8 @@ const initialShapes: CubeShapes = {
     type: 'plus',
     color: '',
     quizFormat: 'T20',
+    imageUrl: 'https://placehold.co/200x200.png',
+    imageAiHint: 'cricket ball',
     sponsor: { name: 'Pepsi', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'soda brand logo' },
   },
   right: {
@@ -25,6 +29,8 @@ const initialShapes: CubeShapes = {
     type: 'triangle',
     color: '',
     quizFormat: 'ODI',
+    imageUrl: 'https://placehold.co/200x200.png',
+    imageAiHint: 'cricket bat',
     sponsor: { name: 'Adidas', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'sports apparel logo' },
   },
   bottom: {
@@ -32,6 +38,8 @@ const initialShapes: CubeShapes = {
     type: 'star',
     color: '',
     quizFormat: 'IPL',
+    imageUrl: 'https://placehold.co/200x200.png',
+    imageAiHint: 'trophy',
     sponsor: { name: 'Tata', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'conglomerate logo' },
   },
   back: {
@@ -39,6 +47,8 @@ const initialShapes: CubeShapes = {
     type: 'square',
     color: '',
     quizFormat: 'WPL',
+    imageUrl: 'https://placehold.co/200x200.png',
+    imageAiHint: 'team logo',
     sponsor: { name: 'My11Circle', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'fantasy sports logo' },
   },
   left: {
@@ -46,6 +56,8 @@ const initialShapes: CubeShapes = {
     type: 'diamond',
     color: '',
     quizFormat: 'Mixed',
+    imageUrl: 'https://placehold.co/200x200.png',
+    imageAiHint: 'quiz graphic',
     sponsor: { name: 'Puma', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'athletic brand logo' },
   },
 };
