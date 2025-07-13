@@ -113,10 +113,10 @@ export default function Home() {
           <AnimatePresence mode="wait">
             <motion.div
               key={currentFormat.quizFormat}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5, ease: 'easeInOut' }}
+              initial={{ opacity: 0, y: 10, filter: 'blur(8px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              exit={{ opacity: 0, y: -10, filter: 'blur(8px)' }}
+              transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
               className="flex items-center justify-center gap-3"
             >
               <span className="text-xl font-bold text-white tracking-wider">{currentFormat.quizFormat}</span>
