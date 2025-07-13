@@ -3,6 +3,9 @@ import { Inter, Poppins } from 'next/font/google';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import FloatingNavBar from '@/components/layout/FloatingNavBar';
+import { Bell } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -41,6 +44,14 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body className="font-body antialiased">
+        <div className="fixed top-4 right-4 z-50">
+          <Button variant="ghost" size="icon" asChild>
+            <Link href="#">
+              <Bell className="h-6 w-6 text-white" />
+              <span className="sr-only">Notifications</span>
+            </Link>
+          </Button>
+        </div>
         <main className="pb-24">
           {children}
         </main>
