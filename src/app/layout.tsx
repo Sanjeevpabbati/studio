@@ -6,7 +6,6 @@ import FloatingNavBar from '@/components/layout/FloatingNavBar';
 import { Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import TouchAnimation from '@/components/animations/TouchAnimation';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -45,7 +44,6 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body className="font-body antialiased">
-        <TouchAnimation />
         <div className="fixed top-10 right-4 z-50">
           <Button variant="ghost" size="icon" asChild>
             <Link href="/notifications" className="relative">
