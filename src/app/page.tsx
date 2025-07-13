@@ -1,9 +1,9 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import Cube from '@/components/cube/Cube';
-import type { CubeShapes, FaceName, QuizFormat } from '@/lib/types';
-import { AnimatePresence, motion } from 'framer-motion';
+import type { CubeShapes, FaceName } from '@/lib/types';
+import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 
 const initialShapes: CubeShapes = {
   front: {
@@ -62,7 +62,6 @@ const initialShapes: CubeShapes = {
   },
 };
 
-// Order of faces for rotation
 const faceOrder: FaceName[] = ['front', 'top', 'right', 'bottom', 'back', 'left'];
 
 const faceRotations: { [key in FaceName]: { x: number, y: number } } = {
@@ -80,22 +79,77 @@ export default function Home() {
   const [rotation, setRotation] = useState(faceRotations.front);
   const [shapes] = useState<CubeShapes>(initialShapes);
   const [currentFaceIndex, setCurrentFaceIndex] = useState(0);
+  const [api, setApi] = useState<CarouselApi>();
+  const [isInteracting, setIsInteracting] = useState(false);
+  const interactionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const autoRotateIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const scrollTo = useCallback((index: number) => {
+    api?.scrollTo(index);
+  }, [api]);
+
+  const stopAutoRotate = useCallback(() => {
+    if (autoRotateIntervalRef.current) {
+      clearInterval(autoRotateIntervalRef.current);
+      autoRotateIntervalRef.current = null;
+    }
+  }, []);
+
+  const startAutoRotate = useCallback(() => {
+    stopAutoRotate();
+    autoRotateIntervalRef.current = setInterval(() => {
+      setCurrentFaceIndex(prevIndex => (prevIndex + 1) % faceOrder.length);
+    }, 4000);
+  }, [stopAutoRotate]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentFaceIndex(prevIndex => (prevIndex + 1) % faceOrder.length);
-    }, 4000); // Changed to 4 seconds per requirement
+    if (!isInteracting) {
+      startAutoRotate();
+    }
+    return () => stopAutoRotate();
+  }, [isInteracting, startAutoRotate, stopAutoRotate]);
+  
+  useEffect(() => {
+    if (!api) {
+      return;
+    }
 
-    return () => clearInterval(interval);
-  }, []);
+    const onSelect = () => {
+      const selectedIndex = api.selectedScrollSnap();
+      setCurrentFaceIndex(selectedIndex);
+    };
+
+    const onInteraction = () => {
+      setIsInteracting(true);
+      if (interactionTimeoutRef.current) {
+        clearTimeout(interactionTimeoutRef.current);
+      }
+      interactionTimeoutRef.current = setTimeout(() => {
+        setIsInteracting(false);
+      }, 5000); // 5-second delay before auto-rotation resumes
+    };
+
+    api.on('select', onSelect);
+    api.on('pointerDown', onInteraction);
+    api.on('wheel', onInteraction);
+
+    return () => {
+      api.off('select', onSelect);
+      api.off('pointerDown', onInteraction);
+      api.off('wheel', onInteraction);
+      if (interactionTimeoutRef.current) {
+        clearTimeout(interactionTimeoutRef.current);
+      }
+    };
+  }, [api]);
 
   useEffect(() => {
     const nextFaceName = faceOrder[currentFaceIndex];
     setRotation(faceRotations[nextFaceName]);
-  }, [currentFaceIndex]);
-
-  const currentFaceName = faceOrder[currentFaceIndex];
-  const currentFormat = shapes[currentFaceName];
+    if (api && api.selectedScrollSnap() !== currentFaceIndex) {
+      api.scrollTo(currentFaceIndex, true); // Jump to the correct slide
+    }
+  }, [currentFaceIndex, api]);
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-background p-4 md:p-8">
@@ -117,32 +171,44 @@ export default function Home() {
           Win <strong className="text-white">100</strong> rupees in <strong className="text-white">100</strong> seconds
         </p>
       </div>
-      <div 
-        className="w-full flex flex-col items-center justify-center mt-8"
-      >
+      
+      <div className="w-full flex flex-col items-center justify-center mt-0">
         <Cube rotation={rotation} shapes={shapes} />
-        <div className="mt-8 relative h-16 w-full max-w-sm flex items-center justify-center overflow-hidden">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentFormat.quizFormat}
-              initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              exit={{ opacity: 0, y: -20, filter: 'blur(8px)' }}
-              transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-              className="absolute flex items-center justify-center gap-3"
-            >
-              <span className="text-xl font-bold text-white tracking-wider">{currentFormat.quizFormat}</span>
-              <span className="text-sm text-muted-foreground">Sponsored by</span>
-              <Image 
-                src={currentFormat.sponsor.logoUrl} 
-                alt={`${currentFormat.sponsor.name} logo`}
-                width={28}
-                height={28}
-                className="object-contain rounded-full bg-white p-0.5"
-                data-ai-hint={currentFormat.sponsor.aiHint}
+        <div className="w-full max-w-sm mt-8">
+          <Carousel setApi={setApi} className="w-full">
+            <CarouselContent>
+              {faceOrder.map((faceName) => (
+                <CarouselItem key={faceName}>
+                  <div className="p-1">
+                      <div className="flex items-center justify-center gap-3 h-12">
+                        <span className="text-xl font-bold text-white tracking-wider">{shapes[faceName].quizFormat}</span>
+                        <span className="text-sm text-muted-foreground">Sponsored by</span>
+                        <Image 
+                          src={shapes[faceName].sponsor.logoUrl} 
+                          alt={`${shapes[faceName].sponsor.name} logo`}
+                          width={28}
+                          height={28}
+                          className="object-contain rounded-full bg-white p-0.5"
+                          data-ai-hint={shapes[faceName].sponsor.aiHint}
+                        />
+                      </div>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+           <div className="flex justify-center gap-2 mt-4">
+            {faceOrder.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => scrollTo(index)}
+                className={`w-2 h-2 rounded-full transition-colors ${
+                  index === currentFaceIndex ? 'bg-accent' : 'bg-muted'
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
               />
-            </motion.div>
-          </AnimatePresence>
+            ))}
+          </div>
         </div>
       </div>
     </div>
