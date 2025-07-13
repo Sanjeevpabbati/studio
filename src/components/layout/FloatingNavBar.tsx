@@ -46,13 +46,13 @@ const FloatingNavBar: React.FC = () => {
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
       <div className="relative">
         <nav className="relative flex items-center justify-between gap-32 rounded-full bg-card/80 backdrop-blur-md p-2 shadow-lg">
-          <div className="flex gap-4">
+          <div className="flex gap-2">
             {navItems.map((item) => (
               <NavLink key={item.href} {...item} />
             ))}
           </div>
           
-          <div className="flex gap-4">
+          <div className="flex gap-2">
             {rightNavItems.map((item) => (
               <NavLink key={item.href} {...item} />
             ))}
