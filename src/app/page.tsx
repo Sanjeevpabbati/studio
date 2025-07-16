@@ -267,8 +267,7 @@ export default function Home() {
             <div className="mb-6">
                 <QuizTimer initialMinutes={15} />
             </div>
-            <h2 className="text-2xl font-bold text-center text-white mb-6">Promoted Products</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full mt-6">
                 {promotedProducts.map((product) => (
                     <Card key={product.id} className="overflow-hidden bg-card/50 border-border/20">
                          <div className="aspect-video relative">
