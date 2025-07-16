@@ -184,9 +184,6 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-background p-4 md:p-8">
-      <div className="fixed top-4 left-4 z-50">
-          <QuizTimer initialMinutes={15} />
-      </div>
       <div className="fixed top-4 right-4 z-50">
         <Button variant="ghost" size="icon" asChild>
           <Link href="/notifications" className="relative">
@@ -265,10 +262,13 @@ export default function Home() {
             ))}
           </div>
         </div>
-
-        <div className="w-full max-w-4xl mt-16">
+        
+        <div className="w-full max-w-4xl mt-16 flex flex-col items-center">
+            <div className="mb-6">
+                <QuizTimer initialMinutes={15} />
+            </div>
             <h2 className="text-2xl font-bold text-center text-white mb-6">Promoted Products</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full">
                 {promotedProducts.map((product) => (
                     <Card key={product.id} className="overflow-hidden bg-card/50 border-border/20">
                          <div className="aspect-video relative">
