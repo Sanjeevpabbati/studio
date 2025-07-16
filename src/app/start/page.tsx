@@ -181,16 +181,6 @@ function QuizComponent() {
     router.push('/');
   };
   
-  const getOptionClasses = (optionIndex: number) => {
-    if (!isAnswered || !currentQuestion) return '';
-    const isCorrect = optionIndex === currentQuestion.correctAnswer;
-    const isSelected = optionIndex === selectedAnswer;
-
-    if (isCorrect) return 'bg-green-500/80 hover:bg-green-500/90 border-green-500';
-    if (isSelected) return 'bg-red-500/80 hover:bg-red-500/90 border-red-500';
-    return 'opacity-50';
-  };
-  
   if (isLoadingAd) {
       return <InterstitialAd onAdComplete={() => setIsLoadingAd(false)} />;
   }
@@ -244,13 +234,11 @@ function QuizComponent() {
                  key={index}
                  variant="outline"
                  size="lg"
-                 className={`h-auto min-h-16 whitespace-normal justify-start text-left relative transition-all duration-300 ${getOptionClasses(index)}`}
+                 className={`h-auto min-h-16 whitespace-normal justify-start text-left relative transition-all duration-300`}
                  onClick={() => handleAnswerSelect(index)}
                  disabled={isAnswered}
                >
                  {option}
-                 {isAnswered && index === currentQuestion.correctAnswer && <CheckCircle className="w-5 h-5 absolute right-4" />}
-                 {isAnswered && selectedAnswer === index && index !== currentQuestion.correctAnswer && <XCircle className="w-5 h-5 absolute right-4" />}
                </Button>
              ))}
            </div>
