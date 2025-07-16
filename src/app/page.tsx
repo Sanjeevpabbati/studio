@@ -1,10 +1,13 @@
 'use client';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import Cube from '@/components/cube/Cube';
 import type { CubeShapes, FaceName } from '@/lib/types';
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Bell } from 'lucide-react';
 
 const initialShapes: CubeShapes = {
   front: {
@@ -160,6 +163,19 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-background p-4 md:p-8">
+      <div className="fixed top-10 right-4 z-50">
+        <Button variant="ghost" size="icon" asChild>
+          <Link href="/notifications" className="relative">
+            <Bell className="h-6 w-6 text-white" />
+            <span className="absolute top-1 right-1 flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+            </span>
+            <span className="sr-only">Notifications</span>
+          </Link>
+        </Button>
+      </div>
+
       <div className="text-center py-4 font-headline mb-8">
         <h1
           className="text-5xl font-bold text-primary-foreground tracking-tight sm:text-6xl md:text-7xl text-white"
