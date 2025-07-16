@@ -66,8 +66,7 @@ const initialShapes: CubeShapes = {
   },
 };
 
-const faceOrder: FaceName[] = ['front', 'top', 'right', 'bottom', 'back', 'left', 'back', 'bottom', 'right', 'top'];
-const uniqueFaceNames: FaceName[] = ['front', 'top', 'right', 'bottom', 'back', 'left'];
+const faceOrder: FaceName[] = ['front', 'top', 'right', 'bottom', 'back', 'left'];
 
 const faceRotations: { [key in FaceName]: { x: number, y: number } } = {
   front: { x: 0, y: 0 },
@@ -102,22 +101,22 @@ export default function Home() {
   const startAutoRotate = useCallback(() => {
     stopAutoRotate();
     autoRotateIntervalRef.current = setInterval(() => {
-      setCurrentFaceIndex(prevIndex => (prevIndex + 1) % faceOrder.length);
+      api?.scrollNext();
     }, 4000);
-  }, [stopAutoRotate]);
+  }, [api, stopAutoRotate]);
 
   const handleInteraction = useCallback(() => {
     stopAutoRotate();
     interactionTimeoutRef.current = setTimeout(() => {
       startAutoRotate();
-    }, 500); 
+    }, 5000); // 5 seconds
   }, [startAutoRotate, stopAutoRotate]);
 
   const scrollTo = useCallback((faceName: FaceName) => {
     handleInteraction();
     const index = faceOrder.indexOf(faceName);
-    if (index !== -1) {
-      api?.scrollTo(index);
+    if (api && index !== -1) {
+      api.scrollTo(index);
     }
   }, [api, handleInteraction]);
 
@@ -136,28 +135,21 @@ export default function Home() {
       setCurrentFaceIndex(selectedIndex);
     };
     
-    const onSettle = () => {
-      handleInteraction();
-    }
-
     api.on('select', onSelect);
-    api.on('pointerDown', stopAutoRotate);
-    api.on('settle', onSettle);
+    api.on('pointerDown', handleInteraction);
+    api.on('settle', handleInteraction);
 
     return () => {
       api.off('select', onSelect);
-      api.off('pointerDown', stopAutoRotate);
-      api.off('settle', onSettle);
+      api.off('pointerDown', handleInteraction);
+      api.off('settle', handleInteraction);
     };
-  }, [api, handleInteraction, stopAutoRotate]);
+  }, [api, handleInteraction]);
 
   useEffect(() => {
     const nextFaceName = faceOrder[currentFaceIndex];
     setRotation(faceRotations[nextFaceName]);
-    if (api && api.selectedScrollSnap() !== currentFaceIndex) {
-      api.scrollTo(currentFaceIndex); 
-    }
-  }, [currentFaceIndex, api]);
+  }, [currentFaceIndex]);
   
   const currentFaceName = faceOrder[currentFaceIndex];
 
@@ -198,7 +190,13 @@ export default function Home() {
       <div className="w-full flex flex-col items-center justify-center mt-0">
         <Cube rotation={rotation} shapes={shapes} />
         <div className="w-full max-w-sm mt-12">
-          <Carousel setApi={setApi} className="w-full">
+          <Carousel 
+            setApi={setApi} 
+            className="w-full"
+            opts={{
+              loop: true,
+            }}
+          >
             <CarouselContent>
               {faceOrder.map((faceName, index) => (
                 <CarouselItem key={`${faceName}-${index}`}>
@@ -223,7 +221,7 @@ export default function Home() {
             </CarouselContent>
           </Carousel>
            <div className="flex justify-center gap-2 mt-4">
-            {uniqueFaceNames.map((faceName) => (
+            {faceOrder.map((faceName) => (
               <button
                 key={faceName}
                 onClick={() => scrollTo(faceName)}
