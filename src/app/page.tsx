@@ -8,6 +8,7 @@ import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/com
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Bell, Home as HomeIcon, Trophy, PieChart, User } from 'lucide-react';
+import QuizTimer from '@/components/quiz/QuizTimer';
 
 const initialShapes: CubeShapes = {
   front: {
@@ -156,7 +157,10 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-background p-4 md:p-8">
-      <div className="fixed top-10 right-4 z-50">
+      <div className="fixed top-4 left-4 z-50">
+          <QuizTimer initialMinutes={15} />
+      </div>
+      <div className="fixed top-4 right-4 z-50">
         <Button variant="ghost" size="icon" asChild>
           <Link href="/notifications" className="relative">
             <Bell className="h-6 w-6 text-white" />
@@ -169,7 +173,7 @@ export default function Home() {
         </Button>
       </div>
 
-      <div className="text-center py-4 font-headline mb-8">
+      <div className="text-center py-4 font-headline mt-12 mb-8">
         <h1
           className="text-5xl font-bold text-primary-foreground tracking-tight sm:text-6xl md:text-7xl text-white"
           aria-label={title}
