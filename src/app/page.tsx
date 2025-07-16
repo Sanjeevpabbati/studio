@@ -7,7 +7,7 @@ import type { CubeShapes, FaceName } from '@/lib/types';
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Bell } from 'lucide-react';
+import { Bell, Home as HomeIcon, Trophy, PieChart, User } from 'lucide-react';
 
 const initialShapes: CubeShapes = {
   front: {
@@ -66,7 +66,7 @@ const initialShapes: CubeShapes = {
   },
 };
 
-const faceOrder: FaceName[] = ['front', 'top', 'right', 'bottom', 'back', 'left'];
+const faceOrder: FaceName[] = ['front', 'right', 'back', 'left', 'top', 'bottom'];
 
 const faceRotations: { [key in FaceName]: { x: number, y: number } } = {
   front: { x: 0, y: 0 },
@@ -152,6 +152,7 @@ export default function Home() {
   }, [currentFaceIndex]);
   
   const currentFaceName = faceOrder[currentFaceIndex];
+  const currentQuizFormat = shapes[currentFaceName].quizFormat;
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-background p-4 md:p-8">
@@ -198,11 +199,11 @@ export default function Home() {
             }}
           >
             <CarouselContent>
-              {faceOrder.map((faceName, index) => (
-                <CarouselItem key={`${faceName}-${index}`}>
+              {faceOrder.map((faceName) => (
+                <CarouselItem key={faceName}>
                   <div className="p-1">
                       <div className={cn("flex items-center justify-center gap-3 h-12 transition-opacity duration-300",
-                        currentFaceIndex === index ? 'opacity-100' : 'opacity-0'
+                        currentFaceName === faceName ? 'opacity-100' : 'opacity-0'
                       )}>
                         <span className="text-xl font-bold text-white tracking-wider">{shapes[faceName].quizFormat}</span>
                         <span className="text-sm text-muted-foreground">Sponsored by</span>
@@ -234,6 +235,46 @@ export default function Home() {
           </div>
         </div>
       </div>
+       <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
+          <div className="relative">
+            <nav className="relative flex items-center justify-between gap-32 rounded-full bg-card/80 backdrop-blur-md p-2 shadow-lg">
+              <div className="flex gap-2">
+                <Link href="/" className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-accent group">
+                  <HomeIcon className="relative z-10" />
+                  <div className="absolute bottom-1 h-1 w-4 bg-accent rounded-full" />
+                  <span className="sr-only">Home</span>
+                </Link>
+                <Link href="/rewards" className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-muted-foreground hover:text-accent group">
+                  <Trophy className="relative z-10" />
+                  <span className="sr-only">Rewards</span>
+                </Link>
+              </div>
+              
+              <div className="flex gap-2">
+                 <Link href="/insights" className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-muted-foreground hover:text-accent group">
+                  <PieChart className="relative z-10" />
+                  <span className="sr-only">Insights</span>
+                </Link>
+                 <Link href="/profile" className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-muted-foreground hover:text-accent group">
+                  <User className="relative z-10" />
+                  <span className="sr-only">Profile</span>
+                </Link>
+              </div>
+            </nav>
+
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                <div className='rounded-full'>
+                  <Button 
+                    variant="default" 
+                    className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full h-20 w-20 font-bold text-xl shadow-[0_0_12px_hsl(var(--accent))] shimmer-button"
+                    asChild
+                  >
+                    <Link href={`/start?format=${currentQuizFormat}`}>Start</Link>
+                  </Button>
+                </div>
+            </div>
+          </div>
+        </div>
     </div>
   );
 }

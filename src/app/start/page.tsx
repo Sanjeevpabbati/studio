@@ -1,17 +1,17 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { sampleQuiz } from '@/lib/quiz-data';
-import type { Question } from '@/lib/types';
+import { getQuiz } from '@/lib/quiz-data';
+import type { Question, Quiz } from '@/lib/types';
 import { CheckCircle, XCircle } from 'lucide-react';
 
-const totalQuestions = sampleQuiz.questions.length;
 const timePerQuestion = 20;
 
-function QuizResults({ score, onRestart }: { score: number, onRestart: () => void }) {
+function QuizResults({ score, totalQuestions, onRestart }: { score: number, totalQuestions: number, onRestart: () => void }) {
   return (
     <Card className="w-full max-w-lg text-center">
       <CardHeader>
@@ -29,23 +29,36 @@ function QuizResults({ score, onRestart }: { score: number, onRestart: () => voi
   );
 }
 
-export default function StartPage() {
+function QuizComponent() {
+  const searchParams = useSearchParams();
+  const quizFormat = searchParams.get('format') || 'Test';
+  const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [timeLeft, setTimeLeft] = useState(timePerQuestion);
   const [isQuizFinished, setIsQuizFinished] = useState(false);
-  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
+    const loadedQuiz = getQuiz(quizFormat);
+    if (loadedQuiz) {
+      setQuiz(loadedQuiz);
+      // Reset state when quiz format changes
+      setCurrentQuestionIndex(0);
+      setScore(0);
+      setSelectedAnswer(null);
+      setIsAnswered(false);
+      setTimeLeft(timePerQuestion);
+      setIsQuizFinished(false);
+    }
+  }, [quizFormat]);
 
-  const currentQuestion: Question = sampleQuiz.questions[currentQuestionIndex];
+  const totalQuestions = quiz?.questions.length ?? 0;
+  const currentQuestion: Question | undefined = quiz?.questions[currentQuestionIndex];
 
   useEffect(() => {
-    if (isAnswered || isQuizFinished) return;
+    if (isAnswered || isQuizFinished || !quiz) return;
 
     const timer = setInterval(() => {
       setTimeLeft((prevTime) => {
@@ -59,10 +72,10 @@ export default function StartPage() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [isAnswered, currentQuestionIndex, isQuizFinished]);
+  }, [isAnswered, currentQuestionIndex, isQuizFinished, quiz]);
 
   const handleAnswerSelect = (optionIndex: number) => {
-    if (isAnswered) return;
+    if (isAnswered || !currentQuestion) return;
 
     setIsAnswered(true);
     setSelectedAnswer(optionIndex);
@@ -88,16 +101,20 @@ export default function StartPage() {
   };
 
   const restartQuiz = () => {
-    setCurrentQuestionIndex(0);
-    setScore(0);
-    setSelectedAnswer(null);
-    setIsAnswered(false);
-    setTimeLeft(timePerQuestion);
-    setIsQuizFinished(false);
+    // For now, this just restarts the current quiz type.
+    // Later, this can be tied to the main quiz flow logic.
+    if (quiz) {
+      setCurrentQuestionIndex(0);
+      setScore(0);
+      setSelectedAnswer(null);
+      setIsAnswered(false);
+      setTimeLeft(timePerQuestion);
+      setIsQuizFinished(false);
+    }
   };
 
   const getOptionClasses = (optionIndex: number) => {
-    if (!isAnswered) return '';
+    if (!isAnswered || !currentQuestion) return '';
     const isCorrect = optionIndex === currentQuestion.correctAnswer;
     const isSelected = optionIndex === selectedAnswer;
 
@@ -105,15 +122,19 @@ export default function StartPage() {
     if (isSelected) return 'bg-red-500/80 hover:bg-red-500/90 border-red-500';
     return 'opacity-50';
   };
-
-  if (!isClient) {
-    return null; // or a loading spinner
+  
+  if (!quiz || !currentQuestion) {
+    return (
+        <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
+            <p>Loading quiz...</p>
+        </div>
+    );
   }
   
   if (isQuizFinished) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
-        <QuizResults score={score} onRestart={restartQuiz} />
+        <QuizResults score={score} totalQuestions={totalQuestions} onRestart={restartQuiz} />
       </div>
     );
   }
@@ -123,7 +144,7 @@ export default function StartPage() {
       <Card className="w-full max-w-2xl">
         <CardHeader className="pb-4">
           <div className="flex justify-between items-center mb-4">
-            <CardTitle>Test Cricket Quiz</CardTitle>
+            <CardTitle>{quiz.format} Quiz</CardTitle>
             <div className="text-lg font-bold text-accent">{timeLeft}s</div>
           </div>
           <Progress value={(timeLeft / timePerQuestion) * 100} className="h-2" />
@@ -154,5 +175,24 @@ export default function StartPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+
+export default function StartPage() {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null; // or a loading spinner
+  }
+
+  return (
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <QuizComponent />
+    </React.Suspense>
   );
 }

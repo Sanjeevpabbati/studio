@@ -23,13 +23,13 @@ const NavLink = ({ href, icon: Icon, label }: { href: string; icon: React.Elemen
   return (
     <Link
       href={href}
-      className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 hover:text-accent group"
+      className={cn(
+        "relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 group",
+        isActive ? 'text-accent' : 'text-muted-foreground hover:text-accent'
+        )}
     >
       <Icon
-        className={cn(
-          'relative z-10 transition-colors',
-          isActive ? 'text-accent' : 'text-muted-foreground group-hover:text-accent'
-        )}
+        className='relative z-10 transition-colors'
       />
       {isActive && (
         <div
@@ -42,6 +42,11 @@ const NavLink = ({ href, icon: Icon, label }: { href: string; icon: React.Elemen
 };
 
 const FloatingNavBar: React.FC = () => {
+    const pathname = usePathname();
+    if (pathname === '/') {
+        return null;
+    }
+
   return (
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
       <div className="relative">
