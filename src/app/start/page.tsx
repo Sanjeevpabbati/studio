@@ -4,11 +4,12 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { getQuiz } from '@/lib/quiz-data';
 import type { Question, Quiz, QuizFormat } from '@/lib/types';
-import { CheckCircle, XCircle } from 'lucide-react';
+import { CheckCircle, XCircle, Lightbulb } from 'lucide-react';
+import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 
 const timePerQuestion = 20;
 
@@ -35,6 +36,57 @@ function QuizResults({ score, totalQuestions, onRestart }: { score: number, tota
   );
 }
 
+function InterstitialAd({ onAdComplete }: { onAdComplete: () => void }) {
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            onAdComplete();
+        }, 1000); // 1-second ad
+        return () => clearTimeout(timer);
+    }, [onAdComplete]);
+
+    return (
+        <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
+            <Card className="w-full max-w-md text-center">
+                <CardContent className="p-6">
+                    <p className="text-lg">Loading Ad...</p>
+                </CardContent>
+            </Card>
+        </div>
+    );
+}
+
+
+function HintPopup({ hint, open, onOpenChange }: { hint: string, open: boolean, onOpenChange: (open: boolean) => void }) {
+    useEffect(() => {
+        if (open) {
+            const timer = setTimeout(() => {
+                onOpenChange(false);
+            }, 3000); // Hint shows for 3 seconds
+            return () => clearTimeout(timer);
+        }
+    }, [open, onOpenChange]);
+
+    if (!open) return null;
+
+    return (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center">
+            <Card className="w-full max-w-sm">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Lightbulb className="text-yellow-400" /> Hint</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-center text-lg">{hint}</p>
+                </CardContent>
+                <CardFooter className="flex-col gap-2 pt-4">
+                     <div className="w-full h-12 bg-muted/50 flex items-center justify-center rounded-lg">
+                        <p className="text-xs text-muted-foreground">Small Banner Ad</p>
+                    </div>
+                </CardFooter>
+            </Card>
+        </div>
+    );
+}
+
 function QuizComponent() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -46,23 +98,24 @@ function QuizComponent() {
   const [isAnswered, setIsAnswered] = useState(false);
   const [timeLeft, setTimeLeft] = useState(timePerQuestion);
   const [isQuizFinished, setIsQuizFinished] = useState(false);
+  const [isLoadingAd, setIsLoadingAd] = useState(true);
+  const [showHint, setShowHint] = useState(false);
 
   useEffect(() => {
     if (!quizFormat) {
-        // Redirect to home if no format is specified
         router.push('/');
         return;
     }
     const loadedQuiz = getQuiz(quizFormat);
     if (loadedQuiz) {
       setQuiz(loadedQuiz);
-      // Reset state when quiz format changes
       setCurrentQuestionIndex(0);
       setScore(0);
       setSelectedAnswer(null);
       setIsAnswered(false);
       setTimeLeft(timePerQuestion);
       setIsQuizFinished(false);
+      setIsLoadingAd(true); // Show ad for each new quiz
     }
   }, [quizFormat, router]);
 
@@ -82,7 +135,7 @@ function QuizComponent() {
   };
 
   useEffect(() => {
-    if (isAnswered || isQuizFinished || !quiz) return;
+    if (isLoadingAd || isAnswered || isQuizFinished || !quiz) return;
 
     const timer = setInterval(() => {
       setTimeLeft((prevTime) => {
@@ -96,7 +149,7 @@ function QuizComponent() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [isAnswered, currentQuestionIndex, isQuizFinished, quiz]);
+  }, [isLoadingAd, isAnswered, currentQuestionIndex, isQuizFinished, quiz]);
 
   const handleAnswerSelect = (optionIndex: number) => {
     if (isAnswered || !currentQuestion) return;
@@ -110,7 +163,7 @@ function QuizComponent() {
 
     setTimeout(() => {
       handleNextQuestion();
-    }, 1500); // Wait 1.5 seconds before showing next question
+    }, 1500);
   };
 
   const handleNextQuestion = () => {
@@ -125,10 +178,9 @@ function QuizComponent() {
   };
 
   const restartQuiz = () => {
-    // This will redirect to home, and the logic there will pick the next quiz
     router.push('/');
   };
-
+  
   const getOptionClasses = (optionIndex: number) => {
     if (!isAnswered || !currentQuestion) return '';
     const isCorrect = optionIndex === currentQuestion.correctAnswer;
@@ -139,6 +191,10 @@ function QuizComponent() {
     return 'opacity-50';
   };
   
+  if (isLoadingAd) {
+      return <InterstitialAd onAdComplete={() => setIsLoadingAd(false)} />;
+  }
+
   if (!quiz || !currentQuestion) {
     return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
@@ -157,43 +213,52 @@ function QuizComponent() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-2xl">
-        <CardHeader className="pb-4">
-          <div className="flex justify-between items-center mb-4">
-            <CardTitle>{quiz.format} Quiz</CardTitle>
-            <div className="text-lg font-bold text-accent">{timeLeft}s</div>
-          </div>
-          <Progress value={(timeLeft / timePerQuestion) * 100} className="h-2" />
-          <p className="text-muted-foreground pt-4 text-center">
-            Question {currentQuestionIndex + 1} of {totalQuestions}
-          </p>
-        </CardHeader>
-        <CardContent>
-          <p className="text-xl font-semibold mb-6 text-center h-20 flex items-center justify-center">
-            {currentQuestion.question}
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {currentQuestion.options.map((option, index) => (
-              <Button
-                key={index}
-                variant="outline"
-                size="lg"
-                className={`h-auto min-h-16 whitespace-normal justify-start text-left relative transition-all duration-300 ${getOptionClasses(index)}`}
-                onClick={() => handleAnswerSelect(index)}
-                disabled={isAnswered}
-              >
-                {option}
-                {isAnswered && index === currentQuestion.correctAnswer && <CheckCircle className="w-5 h-5 absolute right-4" />}
-                {isAnswered && selectedAnswer === index && index !== currentQuestion.correctAnswer && <XCircle className="w-5 h-5 absolute right-4" />}
-              </Button>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+       <HintPopup hint={currentQuestion.hint} open={showHint} onOpenChange={setShowHint} />
+       <Card className="w-full max-w-2xl">
+         <CardHeader className="pb-4">
+           <div className="w-full h-16 bg-muted/50 flex items-center justify-center rounded-lg mb-4">
+              <p className="text-sm text-muted-foreground">Top Banner Ad</p>
+           </div>
+           <div className="flex justify-between items-center mb-4">
+             <CardTitle>{quiz.format} Quiz</CardTitle>
+             <div className="text-lg font-bold text-accent">{timeLeft}s</div>
+           </div>
+           <Progress value={(timeLeft / timePerQuestion) * 100} className="h-2" />
+           <div className="flex justify-between items-center pt-4">
+                <p className="text-muted-foreground text-center">
+                    Question {currentQuestionIndex + 1} of {totalQuestions}
+                </p>
+                <Button variant="outline" size="sm" onClick={() => setShowHint(true)}>
+                    <Lightbulb className="mr-2 h-4 w-4" />
+                    Hint
+                </Button>
+           </div>
+         </CardHeader>
+         <CardContent>
+           <p className="text-xl font-semibold mb-6 text-center h-20 flex items-center justify-center">
+             {currentQuestion.question}
+           </p>
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+             {currentQuestion.options.map((option, index) => (
+               <Button
+                 key={index}
+                 variant="outline"
+                 size="lg"
+                 className={`h-auto min-h-16 whitespace-normal justify-start text-left relative transition-all duration-300 ${getOptionClasses(index)}`}
+                 onClick={() => handleAnswerSelect(index)}
+                 disabled={isAnswered}
+               >
+                 {option}
+                 {isAnswered && index === currentQuestion.correctAnswer && <CheckCircle className="w-5 h-5 absolute right-4" />}
+                 {isAnswered && selectedAnswer === index && index !== currentQuestion.correctAnswer && <XCircle className="w-5 h-5 absolute right-4" />}
+               </Button>
+             ))}
+           </div>
+         </CardContent>
+       </Card>
+     </div>
   );
 }
-
 
 export default function StartPage() {
   const [isClient, setIsClient] = useState(false);
@@ -203,7 +268,7 @@ export default function StartPage() {
   }, []);
 
   if (!isClient) {
-    return null; // or a loading spinner
+    return null;
   }
 
   return (
