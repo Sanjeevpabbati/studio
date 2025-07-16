@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Cube from '@/components/cube/Cube';
 import type { CubeShapes, FaceName, QuizFormat } from '@/lib/types';
-import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Bell, HomeIcon, Trophy, PieChart, User } from 'lucide-react';
@@ -248,19 +248,9 @@ export default function Home() {
                 </CarouselItem>
               ))}
             </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
           </Carousel>
-           <div className="flex justify-center gap-2 mt-4">
-            {faceOrder.map((faceName) => (
-              <button
-                key={faceName}
-                onClick={() => scrollTo(faceName)}
-                className={`w-2 h-2 rounded-full transition-colors ${
-                  faceName === currentFaceName ? 'bg-accent' : 'bg-muted'
-                }`}
-                aria-label={`Go to ${shapes[faceName].quizFormat} face`}
-              />
-            ))}
-          </div>
         </div>
         
         <div className="w-full max-w-4xl mt-16 flex flex-col items-center">
