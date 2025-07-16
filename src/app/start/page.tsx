@@ -94,6 +94,8 @@ function AnswerReview({ quiz, onBack }: { quiz: Quiz, onBack: () => void }) {
 }
 
 function QuizResults({ score, totalQuestions, onRestart, onViewAnswers }: { score: number, totalQuestions: number, onRestart: () => void, onViewAnswers: () => void }) {
+  const isPerfectScore = score === totalQuestions;
+    
   return (
     <Card className="w-full max-w-lg text-center">
       <CardHeader>
@@ -103,10 +105,19 @@ function QuizResults({ score, totalQuestions, onRestart, onViewAnswers }: { scor
         <p className="text-xl mb-4">
           You scored <strong className="text-accent">{score}</strong> out of <strong className="text-accent">{totalQuestions}</strong>
         </p>
+        {isPerfectScore && (
+          <p className="text-green-400 font-bold mb-4">Perfect Score! You've unlocked a reward!</p>
+        )}
         <div className="flex justify-center gap-4 mt-4">
-            <Button onClick={onViewAnswers}>
-              View Answers
-            </Button>
+            {isPerfectScore ? (
+              <Button asChild>
+                <Link href="/reward">Claim Reward</Link>
+              </Button>
+            ) : (
+               <Button onClick={onViewAnswers}>
+                View Answers
+              </Button>
+            )}
             <Button variant="outline" onClick={onRestart}>
               Home Page
             </Button>

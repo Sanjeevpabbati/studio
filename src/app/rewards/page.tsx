@@ -1,5 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Trophy } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function RewardsPage() {
   return (
@@ -10,8 +12,11 @@ export default function RewardsPage() {
           <CardTitle>Rewards</CardTitle>
           <CardDescription>Your rewards and achievements will be displayed here.</CardDescription>
         </CardHeader>
-        <CardContent>
-          <p className="text-center text-muted-foreground">You have no rewards yet. Keep playing to earn some!</p>
+        <CardContent className="text-center space-y-4">
+          <p className="text-muted-foreground">You have no rewards yet. Get a perfect score in a quiz to earn one!</p>
+          <Button asChild variant="secondary">
+            <Link href="/reward">View Sample Reward</Link>
+          </Button>
         </CardContent>
       </Card>
     </div>
