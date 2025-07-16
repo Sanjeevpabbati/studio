@@ -8,12 +8,92 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Progress } from '@/components/ui/progress';
 import { getQuiz } from '@/lib/quiz-data';
 import type { Question, Quiz, QuizFormat } from '@/lib/types';
-import { CheckCircle, XCircle, Lightbulb } from 'lucide-react';
+import { CheckCircle, XCircle, Lightbulb, Tv, Circle, Check } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { cn } from '@/lib/utils';
 
 const timePerQuestion = 20;
 
-function QuizResults({ score, totalQuestions, onRestart }: { score: number, totalQuestions: number, onRestart: () => void }) {
+function VideoAd({ onAdComplete }: { onAdComplete: () => void }) {
+    const [countdown, setCountdown] = useState(10);
+
+    useEffect(() => {
+        if (countdown <= 0) {
+            onAdComplete();
+            return;
+        }
+
+        const timer = setTimeout(() => {
+            setCountdown(prev => prev - 1);
+        }, 1000);
+
+        return () => clearTimeout(timer);
+    }, [countdown, onAdComplete]);
+
+    return (
+        <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
+            <Card className="w-full max-w-lg text-center">
+                <CardHeader>
+                    <CardTitle>Advertisement</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="w-full h-64 bg-muted/50 flex flex-col items-center justify-center rounded-lg mb-4">
+                        <Tv className="w-16 h-16 text-muted-foreground" />
+                        <p className="text-lg mt-4">Your video ad is playing...</p>
+                    </div>
+                    <p className="text-sm text-muted-foreground">You can skip in {countdown} seconds</p>
+                </CardContent>
+            </Card>
+        </div>
+    );
+}
+
+
+function AnswerReview({ quiz, onBack }: { quiz: Quiz, onBack: () => void }) {
+    return (
+        <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
+            <Card className="w-full max-w-2xl">
+                <CardHeader>
+                    <CardTitle>{quiz.format} Quiz - Answers</CardTitle>
+                    <CardDescription>Review the correct answers below.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    {quiz.questions.map((question, qIndex) => (
+                        <div key={qIndex}>
+                            <p className="font-semibold mb-2">{qIndex + 1}. {question.question}</p>
+                            <div className="space-y-2">
+                                {question.options.map((option, oIndex) => {
+                                    const isCorrect = oIndex === question.correctAnswer;
+                                    return (
+                                        <div
+                                            key={oIndex}
+                                            className={cn(
+                                                "flex items-center gap-3 p-3 rounded-md border",
+                                                isCorrect
+                                                    ? "bg-green-500/20 border-green-500/40 text-white"
+                                                    : "bg-card"
+                                            )}
+                                        >
+                                            {isCorrect ? <CheckCircle className="h-5 w-5 text-green-400" /> : <Circle className="h-5 w-5 text-muted-foreground" />}
+                                            <span>{option}</span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    ))}
+                </CardContent>
+                <CardFooter>
+                     <Button onClick={onBack}>
+                        Back to Home
+                    </Button>
+                </CardFooter>
+            </Card>
+        </div>
+    );
+}
+
+function QuizResults({ score, totalQuestions, onRestart, onViewAnswers }: { score: number, totalQuestions: number, onRestart: () => void, onViewAnswers: () => void }) {
   return (
     <Card className="w-full max-w-lg text-center">
       <CardHeader>
@@ -24,11 +104,11 @@ function QuizResults({ score, totalQuestions, onRestart }: { score: number, tota
           You scored <strong className="text-accent">{score}</strong> out of <strong className="text-accent">{totalQuestions}</strong>
         </p>
         <div className="flex justify-center gap-4 mt-4">
-            <Button onClick={onRestart}>
-              Start Next Quiz
+            <Button onClick={onViewAnswers}>
+              View Answers
             </Button>
-            <Button variant="outline" asChild>
-              <Link href="/">Home Page</Link>
+            <Button variant="outline" onClick={onRestart}>
+              Home Page
             </Button>
         </div>
       </CardContent>
@@ -100,6 +180,8 @@ function QuizComponent() {
   const [isQuizFinished, setIsQuizFinished] = useState(false);
   const [isLoadingAd, setIsLoadingAd] = useState(true);
   const [showHint, setShowHint] = useState(false);
+  const [isShowingAnswers, setIsShowingAnswers] = useState(false);
+  const [isShowingVideoAd, setIsShowingVideoAd] = useState(false);
 
   useEffect(() => {
     if (!quizFormat) {
@@ -116,6 +198,8 @@ function QuizComponent() {
       setTimeLeft(timePerQuestion);
       setIsQuizFinished(false);
       setIsLoadingAd(true); // Show ad for each new quiz
+      setIsShowingAnswers(false);
+      setIsShowingVideoAd(false);
     }
   }, [quizFormat, router]);
 
@@ -180,6 +264,15 @@ function QuizComponent() {
   const restartQuiz = () => {
     router.push('/');
   };
+
+  const handleViewAnswers = () => {
+    setIsShowingVideoAd(true);
+  };
+
+  const handleVideoAdComplete = () => {
+    setIsShowingVideoAd(false);
+    setIsShowingAnswers(true);
+  };
   
   if (isLoadingAd) {
       return <InterstitialAd onAdComplete={() => setIsLoadingAd(false)} />;
@@ -192,11 +285,19 @@ function QuizComponent() {
         </div>
     );
   }
+
+  if (isShowingVideoAd) {
+      return <VideoAd onAdComplete={handleVideoAdComplete} />;
+  }
   
+  if (isShowingAnswers) {
+      return <AnswerReview quiz={quiz} onBack={restartQuiz} />;
+  }
+
   if (isQuizFinished) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
-        <QuizResults score={score} totalQuestions={totalQuestions} onRestart={restartQuiz} />
+        <QuizResults score={score} totalQuestions={totalQuestions} onRestart={restartQuiz} onViewAnswers={handleViewAnswers} />
       </div>
     );
   }
@@ -230,16 +331,16 @@ function QuizComponent() {
            </p>
            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
              {currentQuestion.options.map((option, index) => (
-               <Button
-                 key={index}
-                 variant="outline"
-                 size="lg"
-                 className={`h-auto min-h-16 whitespace-normal justify-start text-left relative transition-all duration-300`}
-                 onClick={() => handleAnswerSelect(index)}
-                 disabled={isAnswered}
-               >
-                 {option}
-               </Button>
+                <Button
+                  key={index}
+                  variant={isAnswered && selectedAnswer === index ? 'secondary' : 'outline'}
+                  size="lg"
+                  className={`h-auto min-h-16 whitespace-normal justify-start text-left relative transition-all duration-300`}
+                  onClick={() => handleAnswerSelect(index)}
+                  disabled={isAnswered}
+                >
+                  {option}
+                </Button>
              ))}
            </div>
          </CardContent>
