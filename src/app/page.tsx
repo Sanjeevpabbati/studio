@@ -17,7 +17,7 @@ const initialShapes: CubeShapes = {
     type: 'circle',
     color: '',
     quizFormat: 'IPL',
-    imageUrl: 'https://i.ibb.co/d4FBpHT7/129663845-3387788141330000-4041207386765952109-n.jpg',
+    imageUrl: 'https://i.ibb.co/d4FBpHt7/129663845-3387788141330000-4041207386765952109-n.jpg',
     imageAiHint: 'cricket stadium',
     sponsor: { name: 'Tata', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'conglomerate logo' },
   },
@@ -141,14 +141,6 @@ export default function Home() {
     }, 5000); // 5 seconds
   }, [startAutoRotate, stopAutoRotate]);
 
-  const scrollTo = useCallback((faceName: FaceName) => {
-    handleInteraction();
-    const index = faceOrder.indexOf(faceName);
-    if (api && index !== -1) {
-      api.scrollTo(index);
-    }
-  }, [api, handleInteraction]);
-
   useEffect(() => {
     startAutoRotate();
     return stopAutoRotate;
@@ -248,8 +240,8 @@ export default function Home() {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
+            <CarouselPrevious className="left-4" />
+            <CarouselNext className="right-4" />
           </Carousel>
         </div>
         
@@ -257,7 +249,7 @@ export default function Home() {
             <div className="mb-6">
                 <QuizTimer initialMinutes={15} />
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full mt-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full">
                 {promotedProducts.map((product) => (
                     <Card key={product.id} className="overflow-hidden bg-card/50 border-border/20">
                          <div className="aspect-video relative">
