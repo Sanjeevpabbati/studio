@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Bell, HomeIcon, Trophy, PieChart, User } from 'lucide-react';
 import QuizTimer from '@/components/quiz/QuizTimer';
+import { Card } from '@/components/ui/card';
 
 const initialShapes: CubeShapes = {
   front: {
@@ -80,6 +81,15 @@ const faceRotations: { [key in FaceName]: { x: number, y: number } } = {
 };
 
 const title = 'indcric';
+
+const promotedProducts = [
+    { id: 1, imageUrl: 'https://placehold.co/400x200.png', alt: 'Brand 1', aiHint: 'sports drink' },
+    { id: 2, imageUrl: 'https://placehold.co/400x200.png', alt: 'Brand 2', aiHint: 'cricket equipment' },
+    { id: 3, imageUrl: 'https://placehold.co/400x200.png', alt: 'Brand 3', aiHint: 'mobile phone' },
+    { id: 4, imageUrl: 'https://placehold.co/400x200.png', alt: 'Brand 4', aiHint: 'snack food' },
+    { id: 5, imageUrl: 'https://placehold.co/400x200.png', alt: 'Brand 5', aiHint: 'streaming service' },
+    { id: 6, imageUrl: 'https://placehold.co/400x200.png', alt: 'Brand 6', aiHint: 'athletic shoes' },
+];
 
 export default function Home() {
   const [rotation, setRotation] = useState(faceRotations.front);
@@ -255,6 +265,27 @@ export default function Home() {
             ))}
           </div>
         </div>
+
+        <div className="w-full max-w-4xl mt-16">
+            <h2 className="text-2xl font-bold text-center text-white mb-6">Promoted Products</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {promotedProducts.map((product) => (
+                    <Card key={product.id} className="overflow-hidden bg-card/50 border-border/20">
+                         <div className="aspect-video relative">
+                            <Image
+                                src={product.imageUrl}
+                                alt={product.alt}
+                                fill
+                                sizes="(max-width: 768px) 50vw, 33vw"
+                                className="object-cover"
+                                data-ai-hint={product.aiHint}
+                            />
+                        </div>
+                    </Card>
+                ))}
+            </div>
+        </div>
+
       </div>
        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
           <div className="relative">
