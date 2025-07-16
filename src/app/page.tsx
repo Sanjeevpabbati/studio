@@ -3,11 +3,11 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Cube from '@/components/cube/Cube';
-import type { CubeShapes, FaceName } from '@/lib/types';
+import type { CubeShapes, FaceName, QuizFormat } from '@/lib/types';
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Bell, Home as HomeIcon, Trophy, PieChart, User } from 'lucide-react';
+import { Bell, HomeIcon, Trophy, PieChart, User } from 'lucide-react';
 import QuizTimer from '@/components/quiz/QuizTimer';
 
 const initialShapes: CubeShapes = {
@@ -68,6 +68,7 @@ const initialShapes: CubeShapes = {
 };
 
 const faceOrder: FaceName[] = ['front', 'right', 'back', 'left', 'top', 'bottom'];
+const quizOrder: QuizFormat[] = ['IPL', 'T20', 'ODI', 'WPL', 'Test', 'Core'];
 
 const faceRotations: { [key in FaceName]: { x: number, y: number } } = {
   front: { x: 0, y: 0 },
@@ -85,8 +86,25 @@ export default function Home() {
   const [shapes] = useState<CubeShapes>(initialShapes);
   const [currentFaceIndex, setCurrentFaceIndex] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
+  const [nextQuizFormat, setNextQuizFormat] = useState<QuizFormat>('IPL');
   const interactionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const autoRotateIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    // Determine the next quiz format based on user's progress
+    const completedQuizzesStr = localStorage.getItem('completedQuizzes');
+    const completedQuizzes: QuizFormat[] = completedQuizzesStr ? JSON.parse(completedQuizzesStr) : [];
+    
+    const nextQuiz = quizOrder.find(format => !completedQuizzes.includes(format));
+    
+    if (nextQuiz) {
+      setNextQuizFormat(nextQuiz);
+    } else {
+      // User has completed all mandatory quizzes, allow free selection
+      const currentFaceName = faceOrder[currentFaceIndex];
+      setNextQuizFormat(shapes[currentFaceName].quizFormat);
+    }
+  }, [currentFaceIndex, shapes]);
 
   const stopAutoRotate = useCallback(() => {
     if (autoRotateIntervalRef.current) {
@@ -153,7 +171,6 @@ export default function Home() {
   }, [currentFaceIndex]);
   
   const currentFaceName = faceOrder[currentFaceIndex];
-  const currentQuizFormat = shapes[currentFaceName].quizFormat;
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-background p-4 md:p-8">
@@ -273,7 +290,7 @@ export default function Home() {
                     className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full h-20 w-20 font-bold text-xl shadow-[0_0_12px_hsl(var(--accent))] shimmer-button"
                     asChild
                   >
-                    <Link href={`/start?format=${currentQuizFormat}`}>Start</Link>
+                    <Link href={`/start?format=${nextQuizFormat}`}>Start</Link>
                   </Button>
                 </div>
             </div>

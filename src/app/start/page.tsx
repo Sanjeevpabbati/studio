@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { getQuiz } from '@/lib/quiz-data';
-import type { Question, Quiz } from '@/lib/types';
+import type { Question, Quiz, QuizFormat } from '@/lib/types';
 import { CheckCircle, XCircle } from 'lucide-react';
 
 const timePerQuestion = 20;
@@ -21,9 +22,14 @@ function QuizResults({ score, totalQuestions, onRestart }: { score: number, tota
         <p className="text-xl mb-4">
           You scored <strong className="text-accent">{score}</strong> out of <strong className="text-accent">{totalQuestions}</strong>
         </p>
-        <Button onClick={onRestart} className="mt-4">
-          Start Next Quiz
-        </Button>
+        <div className="flex justify-center gap-4 mt-4">
+            <Button onClick={onRestart}>
+              Start Next Quiz
+            </Button>
+            <Button variant="outline" asChild>
+              <Link href="/">Home Page</Link>
+            </Button>
+        </div>
       </CardContent>
     </Card>
   );
@@ -31,7 +37,8 @@ function QuizResults({ score, totalQuestions, onRestart }: { score: number, tota
 
 function QuizComponent() {
   const searchParams = useSearchParams();
-  const quizFormat = searchParams.get('format') || 'Test';
+  const router = useRouter();
+  const quizFormat = searchParams.get('format') as QuizFormat | null;
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -41,6 +48,11 @@ function QuizComponent() {
   const [isQuizFinished, setIsQuizFinished] = useState(false);
 
   useEffect(() => {
+    if (!quizFormat) {
+        // Redirect to home if no format is specified
+        router.push('/');
+        return;
+    }
     const loadedQuiz = getQuiz(quizFormat);
     if (loadedQuiz) {
       setQuiz(loadedQuiz);
@@ -52,10 +64,22 @@ function QuizComponent() {
       setTimeLeft(timePerQuestion);
       setIsQuizFinished(false);
     }
-  }, [quizFormat]);
+  }, [quizFormat, router]);
 
   const totalQuestions = quiz?.questions.length ?? 0;
   const currentQuestion: Question | undefined = quiz?.questions[currentQuestionIndex];
+
+   const handleQuizCompletion = () => {
+    setIsQuizFinished(true);
+    if (quizFormat) {
+      const completedQuizzesStr = localStorage.getItem('completedQuizzes');
+      const completedQuizzes: QuizFormat[] = completedQuizzesStr ? JSON.parse(completedQuizzesStr) : [];
+      if (!completedQuizzes.includes(quizFormat)) {
+        const updatedQuizzes = [...completedQuizzes, quizFormat];
+        localStorage.setItem('completedQuizzes', JSON.stringify(updatedQuizzes));
+      }
+    }
+  };
 
   useEffect(() => {
     if (isAnswered || isQuizFinished || !quiz) return;
@@ -96,21 +120,13 @@ function QuizComponent() {
       setIsAnswered(false);
       setTimeLeft(timePerQuestion);
     } else {
-      setIsQuizFinished(true);
+      handleQuizCompletion();
     }
   };
 
   const restartQuiz = () => {
-    // For now, this just restarts the current quiz type.
-    // Later, this can be tied to the main quiz flow logic.
-    if (quiz) {
-      setCurrentQuestionIndex(0);
-      setScore(0);
-      setSelectedAnswer(null);
-      setIsAnswered(false);
-      setTimeLeft(timePerQuestion);
-      setIsQuizFinished(false);
-    }
+    // This will redirect to home, and the logic there will pick the next quiz
+    router.push('/');
   };
 
   const getOptionClasses = (optionIndex: number) => {
