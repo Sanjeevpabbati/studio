@@ -344,7 +344,7 @@ function QuizComponent() {
       <footer className="fixed bottom-0 z-10 w-full border-t bg-background/80 p-4 backdrop-blur-sm">
         <div className="mx-auto w-full max-w-2xl flex justify-center">
             <Button variant="outline" size="sm" onClick={() => setShowHint(true)} disabled={showHint}>
-                <Lightbulb className="mr-2 h-4 w-4" />
+                <Lightbulb className="mr-2 h-4 w-4 text-yellow-400 animate-pulse drop-shadow-[0_0_3px_#facc15]" />
                 Show Hint
             </Button>
         </div>
