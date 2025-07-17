@@ -83,7 +83,7 @@ function AnswerReview({ quiz, onBack }: { quiz: Quiz, onBack: () => void }) {
                 ))}
             </main>
             <footer className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-sm border-t">
-                <Button variant="secondary" className="w-full" onClick={onBack}>
+                <Button className="w-full shimmer-button" onClick={onBack}>
                     <Home className="mr-2 h-4 w-4" />
                     Back to Home
                 </Button>
@@ -216,7 +216,7 @@ function QuizComponent() {
 
   const handleAnswerSelect = (optionIndex: number) => {
     if (isAnswered || !currentQuestion) return;
-
+    
     setIsAnswered(true);
     setSelectedAnswer(optionIndex);
 
@@ -226,7 +226,7 @@ function QuizComponent() {
 
     setTimeout(() => {
       handleNextQuestion();
-    }, 1000);
+    }, 300);
   };
 
   const handleNextQuestion = () => {
@@ -283,10 +283,10 @@ function QuizComponent() {
   }
   
   return (
-    <div className="flex min-h-screen flex-col bg-background pt-24 pb-20">
-      <header className="fixed top-0 z-10 bg-background/80 backdrop-blur-sm border-b w-full">
-        <div className="max-w-2xl mx-auto p-4">
-            <div className="flex justify-between items-center gap-4 mb-2">
+    <div className="flex min-h-screen flex-col bg-background pb-20 pt-24">
+      <header className="fixed top-0 z-10 w-full border-b bg-background/80 backdrop-blur-sm">
+        <div className="mx-auto max-w-2xl p-4">
+            <div className="mb-2 flex items-center justify-between gap-4">
                 <div>
                     <p className="text-lg font-bold">{quiz.format} Quiz</p>
                     <p className="text-sm text-muted-foreground">
@@ -301,10 +301,10 @@ function QuizComponent() {
 
       <main className="flex-grow flex flex-col items-center p-4">
         <div className="w-full max-w-2xl text-center">
-            <p className="text-2xl font-semibold mb-8 min-h-[6rem] flex items-center justify-center">
+            <p className="flex min-h-[6rem] items-center justify-center text-2xl font-semibold mb-8">
                 {currentQuestion.question}
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 {currentQuestion.options.map((option, index) => (
                 <Button
                     key={index}
@@ -331,8 +331,8 @@ function QuizComponent() {
         </div>
       </main>
 
-      <footer className="fixed bottom-0 z-10 bg-background/80 backdrop-blur-sm p-4 border-t w-full">
-        <div className="w-full max-w-2xl mx-auto flex justify-center">
+      <footer className="fixed bottom-0 z-10 w-full border-t bg-background/80 p-4 backdrop-blur-sm">
+        <div className="mx-auto w-full max-w-2xl flex justify-center">
             <Button variant="outline" size="sm" onClick={() => setShowHint(true)} disabled={showHint}>
                 <Lightbulb className="mr-2 h-4 w-4" />
                 Show Hint
