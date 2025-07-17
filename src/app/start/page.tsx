@@ -10,7 +10,6 @@ import { Progress } from '@/components/ui/progress';
 import { getQuiz } from '@/lib/quiz-data';
 import type { Question, Quiz, QuizFormat } from '@/lib/types';
 import { CheckCircle, XCircle, Lightbulb, Tv, Circle, Check } from 'lucide-react';
-import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { cn } from '@/lib/utils';
 
 const timePerQuestion = 20;
@@ -147,38 +146,6 @@ function InterstitialAd({ onAdComplete }: { onAdComplete: () => void }) {
     );
 }
 
-
-function HintPopup({ hint, open, onOpenChange }: { hint: string, open: boolean, onOpenChange: (open: boolean) => void }) {
-    useEffect(() => {
-        if (open) {
-            const timer = setTimeout(() => {
-                onOpenChange(false);
-            }, 3000); // Hint shows for 3 seconds
-            return () => clearTimeout(timer);
-        }
-    }, [open, onOpenChange]);
-
-    if (!open) return null;
-
-    return (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-            <Card className="w-full max-w-sm">
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2"><Lightbulb className="text-yellow-400" /> Hint</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <p className="text-center text-lg">{hint}</p>
-                </CardContent>
-                <CardFooter className="flex-col gap-2 pt-4">
-                     <div className="w-full h-12 bg-muted/50 flex items-center justify-center rounded-lg">
-                        <p className="text-xs text-muted-foreground">Small Banner Ad</p>
-                    </div>
-                </CardFooter>
-            </Card>
-        </div>
-    );
-}
-
 function QuizComponent() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -212,6 +179,7 @@ function QuizComponent() {
       setIsLoadingAd(true); // Show ad for each new quiz
       setIsShowingAnswers(false);
       setIsShowingVideoAd(false);
+      setShowHint(false);
     }
   }, [quizFormat, router]);
 
@@ -268,6 +236,7 @@ function QuizComponent() {
       setSelectedAnswer(null);
       setIsAnswered(false);
       setTimeLeft(timePerQuestion);
+      setShowHint(false);
     } else {
       handleQuizCompletion();
     }
@@ -313,12 +282,11 @@ function QuizComponent() {
       </div>
     );
   }
+  
+  const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
 
   return (
     <div className="flex min-h-screen flex-col bg-background pt-24 pb-20">
-      <HintPopup hint={currentQuestion.hint} open={showHint} onOpenChange={setShowHint} />
-      
-      {/* Header */}
       <header className="fixed top-0 z-10 bg-background/80 backdrop-blur-sm border-b w-full">
         <div className="max-w-2xl mx-auto p-4">
             <div className="flex justify-between items-center gap-4 mb-2">
@@ -334,10 +302,9 @@ function QuizComponent() {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="flex-grow flex flex-col items-center p-4">
         <div className="w-full max-w-2xl text-center">
-            <p className="text-xl font-semibold mb-8 min-h-[6rem] flex items-center justify-center">
+            <p className="text-2xl font-semibold mb-8 min-h-[6rem] flex items-center justify-center">
                 {currentQuestion.question}
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -347,34 +314,34 @@ function QuizComponent() {
                     variant="outline"
                     size="lg"
                     className={cn(
-                        "h-auto min-h-16 whitespace-normal justify-center text-center relative transition-all duration-300 py-4",
-                         isAnswered && (selectedAnswer === index
-                            ? (index === currentQuestion.correctAnswer ? 'bg-green-500/20 border-green-500' : 'bg-red-500/20 border-red-500')
-                            : (index === currentQuestion.correctAnswer ? 'bg-green-500/20 border-green-500' : 'border-input'))
+                        "h-auto min-h-16 whitespace-normal justify-start text-left relative transition-all duration-300 py-4 text-base",
+                        "hover:bg-accent/10 hover:border-accent",
+                        isAnswered && selectedAnswer === index && (isCorrect ? 'bg-green-500/20 border-green-500' : 'bg-red-500/20 border-red-500')
                     )}
                     onClick={() => handleAnswerSelect(index)}
                     disabled={isAnswered}
                 >
-                    {option}
-                    {isAnswered && (
-                        selectedAnswer === index ? (
-                            index === currentQuestion.correctAnswer ? 
-                            <CheckCircle className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500" /> :
-                            <XCircle className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-red-500" />
-                        ) : (
-                           index === currentQuestion.correctAnswer && <CheckCircle className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500" />
-                        )
+                    <span className="mr-4 font-bold">{String.fromCharCode(65 + index)}</span>
+                    <span className="flex-1">{option}</span>
+                    {isAnswered && selectedAnswer === index && (
+                        isCorrect ? 
+                        <CheckCircle className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500" /> :
+                        <XCircle className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-red-500" />
                     )}
                 </Button>
                 ))}
             </div>
+            {showHint && (
+              <div className="mt-8 text-center p-4 bg-muted/50 rounded-lg border border-border">
+                <p className="text-sm text-muted-foreground">{currentQuestion.hint}</p>
+              </div>
+            )}
         </div>
       </main>
 
-      {/* Footer */}
       <footer className="fixed bottom-0 z-10 bg-background/80 backdrop-blur-sm p-4 border-t w-full">
         <div className="w-full max-w-2xl mx-auto flex justify-center">
-            <Button variant="outline" size="sm" onClick={() => setShowHint(true)}>
+            <Button variant="outline" size="sm" onClick={() => setShowHint(true)} disabled={showHint}>
                 <Lightbulb className="mr-2 h-4 w-4" />
                 Show Hint
             </Button>
