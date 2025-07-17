@@ -69,7 +69,7 @@ const initialShapes: CubeShapes = {
   },
 };
 
-const faceOrder: FaceName[] = ['front', 'top', 'right', 'bottom', 'back', 'left'];
+const faceOrder: FaceName[] = ['front', 'right', 'back', 'left', 'top', 'bottom'];
 const quizOrder: QuizFormat[] = ['IPL', 'T20', 'ODI', 'WPL', 'Test', 'Core'];
 
 const faceRotations: { [key in FaceName]: { x: number, y: number } } = {
@@ -175,18 +175,6 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-background p-4 md:p-8">
-      <div className="fixed top-4 right-4 z-50">
-        <Button variant="ghost" size="icon" asChild>
-          <Link href="/notifications" prefetch={true} className="relative">
-            <Bell className="h-6 w-6 text-white" />
-            <span className="absolute top-1 right-1 flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-            </span>
-            <span className="sr-only">Notifications</span>
-          </Link>
-        </Button>
-      </div>
 
       <div className="text-center py-4 font-headline mt-12 mb-8">
         <h1
@@ -248,7 +236,7 @@ export default function Home() {
             <div className="mb-6">
                 <QuizTimer initialMinutes={15} />
             </div>
-            <div className="w-full md:grid md:grid-cols-2 gap-4">
+            <div className="w-full md:grid md:grid-cols-2 md:grid-rows-[auto_auto] gap-4">
                 <Card className="md:col-span-2 overflow-hidden bg-card/50 border-border/20 mb-4 md:mb-0">
                     <div className="aspect-video relative">
                         <Image
