@@ -83,7 +83,7 @@ function AnswerReview({ quiz, onBack }: { quiz: Quiz, onBack: () => void }) {
                 ))}
             </main>
             <footer className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-sm border-t">
-                <Button className="w-full shimmer-button" onClick={onBack}>
+                <Button className="w-3/4 mx-auto shimmer-button" onClick={onBack}>
                     <Home className="mr-2 h-4 w-4" />
                     Back to Home
                 </Button>
