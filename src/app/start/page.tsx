@@ -31,7 +31,7 @@ function VideoAd({ onAdComplete }: { onAdComplete: () => void }) {
     }, [countdown, onAdComplete]);
 
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm p-4">
             <Card className="w-full max-w-lg text-center">
                 <CardHeader>
                     <CardTitle>Advertisement</CardTitle>
