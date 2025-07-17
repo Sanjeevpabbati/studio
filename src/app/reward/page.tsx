@@ -51,7 +51,7 @@ function RewardCard({ quizFormat }: { quizFormat: QuizFormat }) {
                     )}
                 </CardContent>
                 <CardFooter className="bg-black/20 p-4 flex flex-col gap-4">
-                    <Button asChild className="w-full shimmer-button">
+                    <Button asChild className="w-full shimmer-button" variant="default">
                         <Link href="/rewards">Claim Reward</Link>
                     </Button>
                     <Button asChild variant="outline" className="w-full">
