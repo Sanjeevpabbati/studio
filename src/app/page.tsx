@@ -201,7 +201,7 @@ export default function Home() {
           <Cube rotation={rotation} shapes={shapes} />
            <p className="text-lg text-accent font-semibold animate-pulse">Click Cube to Play</p>
         </Link>
-        <div className="w-full max-w-sm mt-12">
+        <div className="w-full max-w-sm mt-6">
           <Carousel 
             setApi={setApi} 
             className="w-full"
