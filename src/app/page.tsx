@@ -69,7 +69,7 @@ const initialShapes: CubeShapes = {
   },
 };
 
-const faceOrder: FaceName[] = ['front', 'right', 'back', 'left', 'top', 'bottom'];
+const faceOrder: FaceName[] = ['front', 'top', 'right', 'bottom', 'back', 'left'];
 const quizOrder: QuizFormat[] = ['IPL', 'T20', 'ODI', 'WPL', 'Test', 'Core'];
 
 const faceRotations: { [key in FaceName]: { x: number, y: number } } = {
@@ -82,13 +82,6 @@ const faceRotations: { [key in FaceName]: { x: number, y: number } } = {
 };
 
 const title = 'indcric';
-
-const promotedProducts = [
-    { id: 1, imageUrl: 'https://placehold.co/400x200.png', alt: 'Brand 1', aiHint: 'sports drink' },
-    { id: 2, imageUrl: 'https://placehold.co/400x200.png', alt: 'Brand 2', aiHint: 'cricket equipment' },
-    { id: 3, imageUrl: 'https://placehold.co/400x200.png', alt: 'Brand 3', aiHint: 'mobile phone' },
-    { id: 4, imageUrl: 'https://placehold.co/400x200.png', alt: 'Brand 4', aiHint: 'snack food' },
-];
 
 export default function Home() {
   const [rotation, setRotation] = useState(faceRotations.front);
@@ -235,34 +228,6 @@ export default function Home() {
         <div className="w-full max-w-4xl mt-32 flex flex-col items-center">
             <div className="mb-6">
                 <QuizTimer initialMinutes={15} />
-            </div>
-            <div className="w-full md:grid md:grid-cols-2 md:grid-rows-[auto_auto] gap-4">
-                <Card className="md:col-span-2 overflow-hidden bg-card/50 border-border/20 mb-4 md:mb-0">
-                    <div className="aspect-video relative">
-                        <Image
-                            src={promotedProducts[0].imageUrl}
-                            alt={promotedProducts[0].alt}
-                            fill
-                            sizes="(max-width: 768px) 100vw, 50vw"
-                            className="object-cover"
-                            data-ai-hint={promotedProducts[0].aiHint}
-                        />
-                    </div>
-                </Card>
-                {promotedProducts.slice(1).map((product) => (
-                    <Card key={product.id} className="overflow-hidden bg-card/50 border-border/20 mb-4 md:mb-0">
-                         <div className="aspect-square relative">
-                            <Image
-                                src={product.imageUrl}
-                                alt={product.alt}
-                                fill
-                                sizes="(max-width: 768px) 50vw, 33vw"
-                                className="object-cover"
-                                data-ai-hint={product.aiHint}
-                            />
-                        </div>
-                    </Card>
-                ))}
             </div>
         </div>
       </div>
