@@ -199,7 +199,7 @@ export default function Home() {
       <div className="w-full flex flex-col items-center justify-center mt-0">
         <Link href={`/start?format=${shapes[currentFaceName].quizFormat}`} className="cursor-pointer flex flex-col items-center gap-4 text-decoration-none" prefetch={true}>
           <Cube rotation={rotation} shapes={shapes} />
-           <p className="text-lg text-muted-foreground animate-pulse opacity-50">Click Cube to Play</p>
+           <p className="text-lg text-muted-foreground animate-pulse opacity-50">Tap the Cube &amp; Begin</p>
         </Link>
         <div className="w-full max-w-sm mt-6">
           <Carousel 
