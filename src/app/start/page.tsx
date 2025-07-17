@@ -51,13 +51,13 @@ function VideoAd({ onAdComplete }: { onAdComplete: () => void }) {
 
 function AnswerReview({ quiz, onBack }: { quiz: Quiz, onBack: () => void }) {
     return (
-        <div className="flex flex-col h-screen bg-background">
-            <div className="p-4 border-b">
-                <p className="text-lg font-bold">{quiz.format} Quiz - Answers</p>
-                <p className="text-sm text-muted-foreground">Review the correct answers below.</p>
+        <div className="relative bg-background min-h-screen">
+            <div className="fixed top-0 left-0 right-0 z-10 p-4 border-b bg-background/80 backdrop-blur-sm">
+                <p className="text-lg font-bold text-center">{quiz.format} Quiz - Answers</p>
+                <p className="text-sm text-muted-foreground text-center">Review the correct answers below.</p>
             </div>
-            <main className="flex-1 overflow-y-auto">
-                <div className="p-4 space-y-6 pb-24">
+            <main className="pt-24 pb-24">
+                <div className="p-4 space-y-6">
                     {quiz.questions.map((question, qIndex) => (
                         <React.Fragment key={qIndex}>
                             <div>
