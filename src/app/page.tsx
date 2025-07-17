@@ -83,6 +83,14 @@ const faceRotations: { [key in FaceName]: { x: number, y: number } } = {
 
 const title = 'indcric';
 
+const navItems = [
+  { href: '/', icon: HomeIcon, label: 'Home', isActive: true },
+  { href: '/rewards', icon: Trophy, label: 'Rewards' },
+  { href: '/insights', icon: PieChart, label: 'Insights' },
+  { href: '/notifications', icon: Bell, label: 'Notifications' },
+  { href: '/profile', icon: User, label: 'Profile' },
+];
+
 export default function Home() {
   const [rotation, setRotation] = useState(faceRotations.front);
   const [shapes] = useState<CubeShapes>(initialShapes);
@@ -236,27 +244,23 @@ export default function Home() {
       </div>
        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
           <nav className="flex items-center justify-center gap-4 rounded-full bg-card/80 backdrop-blur-md px-4 py-2 shadow-lg">
-            <Link href="/" prefetch={true} className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-accent group">
-              <HomeIcon className="relative z-10" />
-              <div className="absolute bottom-1 h-1 w-4 bg-accent rounded-full" />
-              <span className="sr-only">Home</span>
-            </Link>
-            <Link href="/rewards" prefetch={true} className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-muted-foreground hover:text-accent group">
-              <Trophy className="relative z-10" />
-              <span className="sr-only">Rewards</span>
-            </Link>
-             <Link href="/insights" prefetch={true} className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-muted-foreground hover:text-accent group">
-              <PieChart className="relative z-10" />
-              <span className="sr-only">Insights</span>
-            </Link>
-            <Link href="/notifications" prefetch={true} className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-muted-foreground hover:text-accent group">
-              <Bell className="relative z-10" />
-              <span className="sr-only">Notifications</span>
-            </Link>
-             <Link href="/profile" prefetch={true} className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-muted-foreground hover:text-accent group">
-              <User className="relative z-10" />
-              <span className="sr-only">Profile</span>
-            </Link>
+            {navItems.map(({ href, icon: Icon, label, isActive }) => (
+              <Link
+                key={href}
+                href={href}
+                prefetch={true}
+                className={cn(
+                  "relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 group",
+                  isActive ? "text-accent" : "text-muted-foreground hover:text-accent"
+                )}
+              >
+                <Icon className="relative z-10" />
+                {isActive && (
+                  <div className="absolute bottom-1 h-1 w-4 bg-accent rounded-full" />
+                )}
+                <span className="sr-only">{label}</span>
+              </Link>
+            ))}
           </nav>
         </div>
     </div>
