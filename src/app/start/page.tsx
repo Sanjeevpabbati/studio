@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -182,16 +183,16 @@ function InterstitialAd({ onAdComplete }: { onAdComplete: () => void }) {
 function HintPopup({ hint, onClose }: { hint: string; onClose: () => void }) {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-            <Card className="w-full max-w-md">
+            <Card className="w-full max-w-md text-center">
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                        <Lightbulb className="w-6 h-6 text-yellow-400" />
-                        Hint
-                    </CardTitle>
+                    <div className="flex justify-center mb-2">
+                        <Lightbulb className="w-12 h-12 text-yellow-400 animate-pulse drop-shadow-[0_0_8px_#facc15]" />
+                    </div>
+                    <CardTitle>Hint</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                    <p className="text-lg text-center text-card-foreground">{hint}</p>
-                    <div className="my-4 p-4 rounded-lg bg-muted/50 border border-border text-center">
+                <CardContent className="space-y-6">
+                    <p className="text-lg text-card-foreground">{hint}</p>
+                    <div className="p-4 rounded-lg bg-muted/50 border border-border">
                         <p className="text-sm font-semibold text-muted-foreground">Advertisement</p>
                         <p className="text-xs text-muted-foreground/80">Your ad banner goes here</p>
                     </div>
@@ -199,7 +200,7 @@ function HintPopup({ hint, onClose }: { hint: string; onClose: () => void }) {
                 <CardFooter className="flex justify-center">
                     <Button onClick={onClose}>
                         <X className="mr-2 h-4 w-4" />
-                        Close
+                        Got it, thanks!
                     </Button>
                 </CardFooter>
             </Card>
