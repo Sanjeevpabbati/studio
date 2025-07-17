@@ -182,28 +182,33 @@ function InterstitialAd({ onAdComplete }: { onAdComplete: () => void }) {
 
 function HintPopup({ hint, onClose }: { hint: string; onClose: () => void }) {
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-            <Card className="w-full max-w-md text-center">
-                <CardHeader>
-                    <div className="flex justify-center mb-2">
-                        <Lightbulb className="w-12 h-12 text-yellow-400 animate-pulse drop-shadow-[0_0_8px_#facc15]" />
-                    </div>
-                    <CardTitle>Hint</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                    <p className="text-lg text-card-foreground">{hint}</p>
-                    <div className="p-4 rounded-lg bg-muted/50 border border-border">
-                        <p className="text-sm font-semibold text-muted-foreground">Advertisement</p>
-                        <p className="text-xs text-muted-foreground/80">Your ad banner goes here</p>
-                    </div>
-                </CardContent>
-                <CardFooter className="flex justify-center">
-                    <Button onClick={onClose}>
-                        <X className="mr-2 h-4 w-4" />
-                        Got it, thanks!
-                    </Button>
-                </CardFooter>
-            </Card>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+            <div className="relative w-full max-w-md p-1 rounded-lg bg-gradient-to-br from-accent via-primary to-accent bg-[length:200%_200%] animate-gradient-flow">
+                <div className="bg-card rounded-md">
+                    <CardHeader className="items-center text-center">
+                        <div className="flex justify-center mb-2">
+                            <Lightbulb className="w-12 h-12 text-yellow-400 drop-shadow-[0_0_8px_#facc15]" />
+                        </div>
+                        <CardTitle>Hint</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4 text-center">
+                        <p className="text-lg text-card-foreground">{hint}</p>
+                        <div className="py-4 px-2 rounded-lg bg-muted/50 border border-border">
+                            <p className="text-sm font-semibold text-muted-foreground">Advertisement</p>
+                            <p className="text-xs text-muted-foreground/80">Your ad banner goes here</p>
+                        </div>
+                    </CardContent>
+                </div>
+            </div>
+             <Button
+                variant="ghost"
+                size="icon"
+                onClick={onClose}
+                className="absolute top-4 right-4 h-8 w-8 rounded-full bg-black/50 text-white hover:bg-black/75 hover:text-white"
+            >
+                <X className="h-5 w-5" />
+                <span className="sr-only">Close hint</span>
+            </Button>
         </div>
     );
 }
