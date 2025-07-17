@@ -244,11 +244,11 @@ export default function Home() {
           </Carousel>
         </div>
         
-        <div className="w-full max-w-4xl mt-16 flex flex-col items-center">
+        <div className="w-full max-w-4xl mt-32 flex flex-col items-center">
             <div className="mb-6">
                 <QuizTimer initialMinutes={15} />
             </div>
-             <div className="grid md:grid-cols-2 gap-4 w-full">
+             <div className="w-full grid md:grid-cols-2 gap-4">
                 <Card className="md:col-span-2 overflow-hidden bg-card/50 border-border/20">
                     <div className="aspect-video relative">
                         <Image
