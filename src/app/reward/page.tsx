@@ -9,48 +9,49 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Trophy } from 'lucide-react';
 import { type QuizFormat } from '@/lib/types';
-import { getSponsor, type Sponsor } from '@/lib/sponsors';
+import { getSponsor } from '@/lib/sponsors';
+import { Separator } from '@/components/ui/separator';
 
 
 function RewardCard({ quizFormat }: { quizFormat: QuizFormat }) {
     const sponsor = getSponsor(quizFormat);
 
     return (
-        <div
-            className="w-full max-w-md"
-        >
-            <Card className="text-center bg-gradient-to-br from-accent/20 to-card border-accent shadow-lg shadow-accent/20">
-                <CardHeader>
-                    <div className="flex justify-center mb-4">
-                        <Trophy className="w-16 h-16 text-yellow-400 drop-shadow-[0_0_8px_#facc15]" />
+        <div className="w-full max-w-md">
+            <Card className="overflow-hidden text-center shadow-lg shadow-accent/20 border-accent/30 bg-gradient-to-br from-card to-accent/10">
+                <div className="bg-accent/20 p-8">
+                    <div className="flex justify-center">
+                        <Trophy className="w-24 h-24 text-yellow-400 drop-shadow-[0_0_15px_#facc15]" />
                     </div>
+                </div>
+                <CardHeader className="pt-6">
                     <CardTitle className="text-3xl font-bold">Congratulations!</CardTitle>
-                    <CardDescription>You mastered the {quizFormat} Quiz!</CardDescription>
+                    <CardDescription className="text-md">You've mastered the {quizFormat} Quiz!</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                    <div className="bg-card/50 rounded-lg p-6 my-4 border border-border/50">
-                        <p className="text-xl font-bold text-accent-foreground mb-4">Special Reward Unlocked!</p>
-                        
-                        {sponsor && (
-                             <div className="flex flex-col items-center justify-center gap-2">
-                                <span className="text-sm text-muted-foreground">This achievement is proudly sponsored by</span>
-                                <div className="flex items-center justify-center gap-3 mt-2">
-                                    <Image 
-                                        src={sponsor.logoUrl} 
-                                        alt={`${sponsor.name} logo`}
-                                        width={40}
-                                        height={40}
-                                        className="object-contain rounded-full bg-white p-1"
-                                        data-ai-hint={sponsor.aiHint}
-                                    />
-                                </div>
-                            </div>
-                        )}
+                <CardContent className="space-y-6 px-6 pb-6">
+                    <div className="space-y-2">
+                         <p className="text-xl font-bold text-accent-foreground">Special Reward Unlocked!</p>
+                         <p className="text-sm text-muted-foreground">Thank you for playing!</p>
                     </div>
-                     <p className="text-sm text-muted-foreground mt-2">Thank you for playing!</p>
+                    
+                    <Separator className="bg-border/50" />
+
+                    {sponsor && (
+                         <div className="flex flex-col items-center justify-center gap-3">
+                            <span className="text-xs text-muted-foreground uppercase tracking-wider">Proudly Sponsored By</span>
+                            <Image 
+                                src={sponsor.logoUrl} 
+                                alt={`${sponsor.name} logo`}
+                                width={48}
+                                height={48}
+                                className="object-contain rounded-full bg-white p-1.5 shadow-md"
+                                data-ai-hint={sponsor.aiHint}
+                            />
+                        </div>
+                    )}
                 </CardContent>
-                <CardFooter className="flex-col gap-4">
-                    <Button asChild className="w-3/4 shimmer-button">
+                <CardFooter className="bg-black/20 p-4">
+                    <Button asChild className="w-full shimmer-button">
                         <Link href="/">Back to Home</Link>
                     </Button>
                 </CardFooter>
