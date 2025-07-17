@@ -69,7 +69,7 @@ const initialShapes: CubeShapes = {
   },
 };
 
-const faceOrder: FaceName[] = ['front', 'right', 'back', 'left', 'top', 'bottom'];
+const faceOrder: FaceName[] = ['front', 'top', 'right', 'bottom', 'back', 'left'];
 const quizOrder: QuizFormat[] = ['IPL', 'T20', 'ODI', 'WPL', 'Test', 'Core'];
 
 const faceRotations: { [key in FaceName]: { x: number, y: number } } = {
