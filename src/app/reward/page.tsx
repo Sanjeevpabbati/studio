@@ -22,33 +22,36 @@ function RewardCard({ quizFormat }: { quizFormat: QuizFormat }) {
             <Card className="text-center bg-gradient-to-br from-accent/20 to-card border-accent shadow-lg shadow-accent/20">
                 <CardHeader>
                     <div className="flex justify-center mb-4">
-                        <Trophy className="w-16 h-16 text-yellow-400" />
+                        <Trophy className="w-16 h-16 text-yellow-400 drop-shadow-[0_0_8px_#facc15]" />
                     </div>
-                    <CardTitle className="text-2xl">Congratulations!</CardTitle>
+                    <CardTitle className="text-3xl font-bold">Congratulations!</CardTitle>
                     <CardDescription>You mastered the {quizFormat} Quiz!</CardDescription>
                 </CardHeader>
-                <CardContent>
-                    <div className="bg-card/50 rounded-lg p-6 my-4">
-                        <p className="text-lg font-bold">Special Reward Unlocked!</p>
+                <CardContent className="space-y-6">
+                    <div className="bg-card/50 rounded-lg p-6 my-4 border border-border/50">
+                        <p className="text-xl font-bold text-accent-foreground mb-4">Special Reward Unlocked!</p>
+                        
                         {sponsor && (
-                             <div className="mt-4 flex items-center justify-center gap-3">
-                                <span className="text-sm text-muted-foreground">Sponsored by</span>
-                                <Image 
-                                    src={sponsor.logoUrl} 
-                                    alt={`${sponsor.name} logo`}
-                                    width={28}
-                                    height={28}
-                                    className="object-contain rounded-full bg-white p-0.5"
-                                    data-ai-hint={sponsor.aiHint}
-                                />
-                                <span className="font-semibold">{sponsor.name}</span>
+                             <div className="flex flex-col items-center justify-center gap-2">
+                                <span className="text-sm text-muted-foreground">This achievement is proudly sponsored by</span>
+                                <div className="flex items-center gap-3 mt-2">
+                                    <Image 
+                                        src={sponsor.logoUrl} 
+                                        alt={`${sponsor.name} logo`}
+                                        width={40}
+                                        height={40}
+                                        className="object-contain rounded-full bg-white p-1"
+                                        data-ai-hint={sponsor.aiHint}
+                                    />
+                                    <span className="text-2xl font-semibold">{sponsor.name}</span>
+                                </div>
                             </div>
                         )}
-                        <p className="text-sm text-muted-foreground mt-2">Thank you for playing!</p>
                     </div>
+                     <p className="text-sm text-muted-foreground mt-2">Thank you for playing!</p>
                 </CardContent>
                 <CardFooter className="flex-col gap-4">
-                    <Button asChild>
+                    <Button asChild className="w-3/4 shimmer-button">
                         <Link href="/">Back to Home</Link>
                     </Button>
                 </CardFooter>
