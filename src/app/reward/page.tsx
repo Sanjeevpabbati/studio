@@ -69,7 +69,7 @@ function RewardPageComponent() {
     const quizFormat = (searchParams.get('format') as QuizFormat) || 'IPL'; // Default to IPL if not provided
 
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
+        <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4 pb-16">
             <RewardCard quizFormat={quizFormat} />
         </div>
     );
