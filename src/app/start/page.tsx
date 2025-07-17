@@ -319,21 +319,23 @@ function QuizComponent() {
       <HintPopup hint={currentQuestion.hint} open={showHint} onOpenChange={setShowHint} />
       
       {/* Header */}
-      <header className="fixed top-0 z-10 bg-background/80 backdrop-blur-sm p-4 border-b w-full">
-        <div className="flex justify-between items-center mb-2 max-w-2xl mx-auto">
-          <CardTitle className="text-lg">{quiz.format} Quiz</CardTitle>
-          <div className="text-lg font-bold text-accent">{timeLeft}s</div>
-        </div>
-        <Progress value={(timeLeft / timePerQuestion) * 100} className="h-2 max-w-2xl mx-auto" />
-        <div className="text-center pt-2 max-w-2xl mx-auto">
-          <p className="text-muted-foreground text-sm">
-            Question {currentQuestionIndex + 1} of {totalQuestions}
-          </p>
+      <header className="fixed top-0 z-10 bg-background/80 backdrop-blur-sm border-b w-full">
+        <div className="max-w-2xl mx-auto p-4">
+            <div className="flex justify-between items-center gap-4 mb-2">
+                <div>
+                    <p className="text-lg font-bold">{quiz.format} Quiz</p>
+                    <p className="text-sm text-muted-foreground">
+                        Question {currentQuestionIndex + 1} of {totalQuestions}
+                    </p>
+                </div>
+                <div className="text-2xl font-bold text-accent">{timeLeft}s</div>
+            </div>
+            <Progress value={(timeLeft / timePerQuestion) * 100} className="h-2 w-full" />
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="flex-grow flex flex-col items-center p-4 overflow-y-auto">
+      <main className="flex-grow flex flex-col items-center p-4">
         <div className="w-full max-w-2xl text-center">
             <p className="text-xl font-semibold mb-8 min-h-[6rem] flex items-center justify-center">
                 {currentQuestion.question}
