@@ -51,46 +51,44 @@ function VideoAd({ onAdComplete }: { onAdComplete: () => void }) {
 
 function AnswerReview({ quiz, onBack }: { quiz: Quiz, onBack: () => void }) {
     return (
-        <div className="relative bg-background min-h-screen">
+        <div className="relative bg-background min-h-screen pt-20 pb-24">
             <div className="fixed top-0 left-0 right-0 z-10 p-4 border-b bg-background/80 backdrop-blur-sm">
                 <p className="text-lg font-bold text-center">{quiz.format} Quiz - Answers</p>
                 <p className="text-sm text-muted-foreground text-center">Review the correct answers below.</p>
             </div>
-            <div className="pt-24 pb-24">
-                <div className="p-4 space-y-6">
-                    {quiz.questions.map((question, qIndex) => (
-                        <React.Fragment key={qIndex}>
-                            <div>
-                                <p className="font-semibold mb-2 text-lg">{qIndex + 1}. {question.question}</p>
-                                <div className="space-y-2">
-                                    {question.options.map((option, oIndex) => {
-                                        const isCorrect = oIndex === question.correctAnswer;
-                                        return (
-                                            <div
-                                                key={oIndex}
-                                                className={cn(
-                                                    "flex items-center gap-3 p-3 rounded-md border",
-                                                    isCorrect
-                                                        ? "bg-green-500/20 border-green-500/40 text-white"
-                                                        : "bg-card"
-                                                )}
-                                            >
-                                                {isCorrect ? <CheckCircle className="h-5 w-5 text-green-400" /> : <Circle className="h-5 w-5 text-muted-foreground" />}
-                                                <span>{option}</span>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
+            <div className="p-4 space-y-6">
+                {quiz.questions.map((question, qIndex) => (
+                    <React.Fragment key={qIndex}>
+                        <div>
+                            <p className="font-semibold mb-2 text-lg">{qIndex + 1}. {question.question}</p>
+                            <div className="space-y-2">
+                                {question.options.map((option, oIndex) => {
+                                    const isCorrect = oIndex === question.correctAnswer;
+                                    return (
+                                        <div
+                                            key={oIndex}
+                                            className={cn(
+                                                "flex items-center gap-3 p-3 rounded-md border",
+                                                isCorrect
+                                                    ? "bg-green-500/20 border-green-500/40 text-white"
+                                                    : "bg-card"
+                                            )}
+                                        >
+                                            {isCorrect ? <CheckCircle className="h-5 w-5 text-green-400" /> : <Circle className="h-5 w-5 text-muted-foreground" />}
+                                            <span>{option}</span>
+                                        </div>
+                                    );
+                                })}
                             </div>
-                            {qIndex === 4 && (
-                               <div className="my-6 p-4 rounded-lg bg-muted/50 border border-border text-center">
-                                    <p className="text-sm font-semibold text-muted-foreground">Advertisement</p>
-                                    <p className="text-xs text-muted-foreground/80">Your ad banner goes here</p>
-                               </div>
-                            )}
-                        </React.Fragment>
-                    ))}
-                </div>
+                        </div>
+                        {qIndex === 4 && (
+                           <div className="my-6 p-4 rounded-lg bg-muted/50 border border-border text-center">
+                                <p className="text-sm font-semibold text-muted-foreground">Advertisement</p>
+                                <p className="text-xs text-muted-foreground/80">Your ad banner goes here</p>
+                           </div>
+                        )}
+                    </React.Fragment>
+                ))}
             </div>
             <footer className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-sm border-t flex justify-center">
                 <Button className="w-3/4 shimmer-button" onClick={onBack}>
@@ -102,7 +100,7 @@ function AnswerReview({ quiz, onBack }: { quiz: Quiz, onBack: () => void }) {
     );
 }
 
-function QuizResults({ score, totalQuestions, onRestart, onViewAnswers }: { score: number, totalQuestions: number, onRestart: () => void, onViewAnswers: () => void }) {
+function QuizResults({ score, totalQuestions, quizFormat, onRestart, onViewAnswers }: { score: number, totalQuestions: number, quizFormat: QuizFormat, onRestart: () => void, onViewAnswers: () => void }) {
   const isPerfectScore = score === totalQuestions;
     
   return (
@@ -120,7 +118,7 @@ function QuizResults({ score, totalQuestions, onRestart, onViewAnswers }: { scor
         <div className="flex justify-center gap-4 mt-4">
             {isPerfectScore ? (
               <Button asChild>
-                <Link href="/reward">Claim Reward</Link>
+                <Link href={`/reward?format=${quizFormat}`}>Claim Reward</Link>
               </Button>
             ) : (
                <Button onClick={onViewAnswers}>
@@ -327,7 +325,7 @@ function QuizComponent() {
   if (isQuizFinished) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
-        <QuizResults score={score} totalQuestions={totalQuestions} onRestart={restartQuiz} onViewAnswers={handleViewAnswers} />
+        <QuizResults score={score} totalQuestions={totalQuestions} quizFormat={quiz.format} onRestart={restartQuiz} onViewAnswers={handleViewAnswers} />
       </div>
     );
   }

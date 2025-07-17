@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Bell, HomeIcon, Trophy, PieChart, User } from 'lucide-react';
 import QuizTimer from '@/components/quiz/QuizTimer';
 import { Card } from '@/components/ui/card';
+import { sponsors } from '@/lib/sponsors';
 
 const initialShapes: CubeShapes = {
   front: {
@@ -20,7 +21,7 @@ const initialShapes: CubeShapes = {
     quizFormat: 'IPL',
     imageUrl: 'https://placehold.co/260x260.png',
     imageAiHint: 'cricket stadium',
-    sponsor: { name: 'Tata', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'conglomerate logo' },
+    sponsor: sponsors['IPL'],
   },
   top: {
     name: 'top',
@@ -29,7 +30,7 @@ const initialShapes: CubeShapes = {
     quizFormat: 'T20',
     imageUrl: 'https://placehold.co/260x260.png',
     imageAiHint: 'cricket ball',
-    sponsor: { name: 'Pepsi', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'soda brand logo' },
+    sponsor: sponsors['T20'],
   },
   right: {
     name: 'right',
@@ -38,7 +39,7 @@ const initialShapes: CubeShapes = {
     quizFormat: 'ODI',
     imageUrl: 'https://placehold.co/260x260.png',
     imageAiHint: 'cricket bat',
-    sponsor: { name: 'Adidas', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'sports apparel logo' },
+    sponsor: sponsors['ODI'],
   },
   bottom: {
     name: 'bottom',
@@ -47,7 +48,7 @@ const initialShapes: CubeShapes = {
     quizFormat: 'WPL',
     imageUrl: 'https://placehold.co/260x260.png',
     imageAiHint: 'trophy',
-    sponsor: { name: 'My11Circle', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'fantasy sports logo' },
+    sponsor: sponsors['WPL'],
   },
   back: {
     name: 'back',
@@ -56,7 +57,7 @@ const initialShapes: CubeShapes = {
     quizFormat: 'Test',
     imageUrl: 'https://placehold.co/260x260.png',
     imageAiHint: 'team logo',
-    sponsor: { name: 'MRF', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'tire company logo' },
+    sponsor: sponsors['Test'],
   },
   left: {
     name: 'left',
@@ -65,7 +66,7 @@ const initialShapes: CubeShapes = {
     quizFormat: 'Core',
     imageUrl: 'https://placehold.co/260x260.png',
     imageAiHint: 'abstract graphic',
-    sponsor: { name: 'Puma', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'athletic brand logo' },
+    sponsor: sponsors['Core'],
   },
 };
 

@@ -1,6 +1,13 @@
+
 export type ShapeType = 'circle' | 'square' | 'triangle' | 'diamond' | 'plus' | 'star';
 export type FaceName = 'front' | 'back' | 'left' | 'right' | 'top' | 'bottom';
 export type QuizFormat = 'T20' | 'ODI' | 'IPL' | 'WPL' | 'Test' | 'Core';
+
+export interface Sponsor {
+  name: string;
+  logoUrl: string;
+  aiHint: string;
+}
 
 export interface ShapeDef {
   name: FaceName;
@@ -9,11 +16,7 @@ export interface ShapeDef {
   quizFormat: QuizFormat;
   imageUrl: string;
   imageAiHint: string;
-  sponsor: {
-    name: string;
-    logoUrl: string;
-    aiHint: string;
-  };
+  sponsor: Sponsor;
 }
 
 export type CubeShapes = {
