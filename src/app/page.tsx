@@ -189,7 +189,7 @@ export default function Home() {
       </div>
       
       <div className="w-full flex flex-col items-center justify-center mt-0">
-        <Link href={`/start?format=${shapes[currentFaceName].quizFormat}`} className="cursor-pointer">
+        <Link href={`/start?format=${shapes[currentFaceName].quizFormat}`} className="cursor-pointer" prefetch={true}>
           <Cube rotation={rotation} shapes={shapes} />
         </Link>
         <div className="w-full max-w-sm mt-12">
