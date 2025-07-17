@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Progress } from '@/components/ui/progress';
 import { getQuiz } from '@/lib/quiz-data';
 import type { Question, Quiz, QuizFormat } from '@/lib/types';
-import { CheckCircle, XCircle, Lightbulb, Tv, Circle, Check } from 'lucide-react';
+import { CheckCircle, XCircle, Lightbulb, Tv, Circle, Check, Home } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const timePerQuestion = 20;
@@ -82,13 +82,20 @@ function AnswerReview({ quiz, onBack }: { quiz: Quiz, onBack: () => void }) {
                     </div>
                 ))}
             </main>
-            <footer className="fixed bottom-0 left-0 w-full p-4 bg-background/80 backdrop-blur-sm border-t">
-                <div className="max-w-2xl mx-auto">
-                    <Button onClick={onBack} className="w-full">
-                        Back to Home
-                    </Button>
-                </div>
-            </footer>
+            <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
+                <nav className="flex items-center justify-center gap-4 rounded-full bg-card/80 backdrop-blur-md px-4 py-2 shadow-lg">
+                    <button
+                        onClick={onBack}
+                        className={cn(
+                            "relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 group text-accent"
+                        )}
+                    >
+                        <Home className="relative z-10" />
+                        <div className="absolute bottom-1 h-1 w-4 bg-accent rounded-full" />
+                        <span className="sr-only">Back to Home</span>
+                    </button>
+                </nav>
+            </div>
         </div>
     );
 }
