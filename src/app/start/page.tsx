@@ -227,7 +227,7 @@ function QuizComponent() {
 
     setTimeout(() => {
       handleNextQuestion();
-    }, 1500);
+    }, 1000);
   };
 
   const handleNextQuestion = () => {
@@ -283,8 +283,6 @@ function QuizComponent() {
     );
   }
   
-  const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
-
   return (
     <div className="flex min-h-screen flex-col bg-background pt-24 pb-20">
       <header className="fixed top-0 z-10 bg-background/80 backdrop-blur-sm border-b w-full">
@@ -316,18 +314,13 @@ function QuizComponent() {
                     className={cn(
                         "h-auto min-h-16 whitespace-normal justify-start text-left relative transition-all duration-300 py-4 text-base",
                         "hover:bg-accent/10 hover:border-accent",
-                        isAnswered && selectedAnswer === index && (isCorrect ? 'bg-green-500/20 border-green-500' : 'bg-red-500/20 border-red-500')
+                        isAnswered && selectedAnswer === index && "border-accent bg-accent/10"
                     )}
                     onClick={() => handleAnswerSelect(index)}
                     disabled={isAnswered}
                 >
                     <span className="mr-4 font-bold">{String.fromCharCode(65 + index)}</span>
                     <span className="flex-1">{option}</span>
-                    {isAnswered && selectedAnswer === index && (
-                        isCorrect ? 
-                        <CheckCircle className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500" /> :
-                        <XCircle className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-red-500" />
-                    )}
                 </Button>
                 ))}
             </div>
