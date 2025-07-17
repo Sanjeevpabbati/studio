@@ -42,7 +42,7 @@ const NavLink = ({ href, icon: Icon, label }: { href: string; icon: React.Elemen
 
 const FloatingNavBar: React.FC = () => {
     const pathname = usePathname();
-    if (pathname === '/') {
+    if (pathname === '/' || pathname === '/start') {
         return null;
     }
 
