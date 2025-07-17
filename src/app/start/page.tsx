@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Progress } from '@/components/ui/progress';
 import { getQuiz } from '@/lib/quiz-data';
 import type { Question, Quiz, QuizFormat } from '@/lib/types';
-import { CheckCircle, XCircle, Lightbulb, Tv, Circle, Check, Home, X, ShieldAlert } from 'lucide-react';
+import { CheckCircle, XCircle, Lightbulb, Tv, Circle, Check, Home, X, Focus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 
@@ -134,8 +134,8 @@ function QuizResults({ score, totalQuestions, quizFormat, onRestart, onViewAnswe
       <CardHeader>
         {terminated ? (
             <>
-                <CardTitle className="flex items-center justify-center gap-2"><ShieldAlert className="w-8 h-8 text-destructive" />Quiz Terminated</CardTitle>
-                <CardDescription>Activity outside the quiz was detected.</CardDescription>
+                <CardTitle className="flex items-center justify-center gap-2"><Focus className="w-8 h-8 text-accent" />Stay Focused!</CardTitle>
+                <CardDescription>Please remain in the quiz window to ensure fair play.</CardDescription>
             </>
         ) : (
             <CardTitle>Quiz Complete!</CardTitle>
@@ -256,8 +256,8 @@ function QuizComponent() {
     if (terminated) {
       toast({
         variant: 'destructive',
-        title: 'Quiz Terminated',
-        description: 'You cannot switch tabs during the quiz.',
+        title: 'Let\'s keep it fair!',
+        description: 'Please stay in the quiz to continue.',
       });
     }
 
@@ -273,7 +273,7 @@ function QuizComponent() {
 
   useEffect(() => {
     const handleVisibilityChange = () => {
-      if (document.hidden && !isQuizFinished && !isLoadingAd) {
+      if (document.hidden && !isQuizFinished && !isLoadingAd && !isTimerPaused) {
         handleQuizCompletion(true);
       }
     };
@@ -293,7 +293,7 @@ function QuizComponent() {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('keyup', handleScreenshot);
     };
-  }, [isQuizFinished, isLoadingAd]);
+  }, [isQuizFinished, isLoadingAd, isTimerPaused]);
 
   const totalQuestions = quiz?.questions.length ?? 0;
   const currentQuestion: Question | undefined = quiz?.questions[currentQuestionIndex];
@@ -477,5 +477,3 @@ export default function StartPage() {
     </React.Suspense>
   );
 }
-
-    
