@@ -82,20 +82,12 @@ function AnswerReview({ quiz, onBack }: { quiz: Quiz, onBack: () => void }) {
                     </div>
                 ))}
             </main>
-            <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
-                <nav className="flex items-center justify-center gap-4 rounded-full bg-card/80 backdrop-blur-md px-4 py-2 shadow-lg">
-                    <button
-                        onClick={onBack}
-                        className={cn(
-                            "relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 group text-accent"
-                        )}
-                    >
-                        <Home className="relative z-10" />
-                        <div className="absolute bottom-1 h-1 w-4 bg-accent rounded-full" />
-                        <span className="sr-only">Back to Home</span>
-                    </button>
-                </nav>
-            </div>
+            <footer className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-sm border-t">
+                <Button className="w-full" onClick={onBack}>
+                    <Home className="mr-2 h-4 w-4" />
+                    Back to Home
+                </Button>
+            </footer>
         </div>
     );
 }
