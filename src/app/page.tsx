@@ -248,8 +248,8 @@ export default function Home() {
             <div className="mb-6">
                 <QuizTimer initialMinutes={15} />
             </div>
-             <div className="w-full grid md:grid-cols-2 gap-4">
-                <Card className="md:col-span-2 overflow-hidden bg-card/50 border-border/20">
+            <div className="w-full md:grid md:grid-cols-2 gap-4">
+                <Card className="md:col-span-2 overflow-hidden bg-card/50 border-border/20 mb-4 md:mb-0">
                     <div className="aspect-video relative">
                         <Image
                             src={promotedProducts[0].imageUrl}
@@ -262,7 +262,7 @@ export default function Home() {
                     </div>
                 </Card>
                 {promotedProducts.slice(1).map((product) => (
-                    <Card key={product.id} className="overflow-hidden bg-card/50 border-border/20">
+                    <Card key={product.id} className="overflow-hidden bg-card/50 border-border/20 mb-4 md:mb-0">
                          <div className="aspect-square relative">
                             <Image
                                 src={product.imageUrl}
@@ -277,7 +277,6 @@ export default function Home() {
                 ))}
             </div>
         </div>
-
       </div>
        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
           <nav className="flex items-center justify-center gap-4 rounded-full bg-card/80 backdrop-blur-md px-4 py-2 shadow-lg">
@@ -293,6 +292,10 @@ export default function Home() {
              <Link href="/insights" prefetch={true} className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-muted-foreground hover:text-accent group">
               <PieChart className="relative z-10" />
               <span className="sr-only">Insights</span>
+            </Link>
+            <Link href="/notifications" prefetch={true} className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-muted-foreground hover:text-accent group">
+              <Bell className="relative z-10" />
+              <span className="sr-only">Notifications</span>
             </Link>
              <Link href="/profile" prefetch={true} className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-muted-foreground hover:text-accent group">
               <User className="relative z-10" />

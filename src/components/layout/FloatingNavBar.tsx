@@ -1,6 +1,6 @@
 'use client';
 
-import { Home, User, Trophy, PieChart } from 'lucide-react';
+import { Home, User, Trophy, PieChart, Bell } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -10,6 +10,7 @@ const navItems = [
   { href: '/', icon: Home, label: 'Home' },
   { href: '/rewards', icon: Trophy, label: 'Rewards' },
   { href: '/insights', icon: PieChart, label: 'Insights' },
+  { href: '/notifications', icon: Bell, label: 'Notifications' },
   { href: '/profile', icon: User, label: 'Profile' },
 ];
 
@@ -20,6 +21,7 @@ const NavLink = ({ href, icon: Icon, label }: { href: string; icon: React.Elemen
   return (
     <Link
       href={href}
+      prefetch={true}
       className={cn(
         "relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 group",
         isActive ? 'text-accent' : 'text-muted-foreground hover:text-accent'
