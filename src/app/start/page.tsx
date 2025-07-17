@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Progress } from '@/components/ui/progress';
 import { getQuiz } from '@/lib/quiz-data';
 import type { Question, Quiz, QuizFormat } from '@/lib/types';
-import { CheckCircle, XCircle, Lightbulb, Tv, Circle, Check, Home } from 'lucide-react';
+import { CheckCircle, XCircle, Lightbulb, Tv, Circle, Check, Home, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const timePerQuestion = 20;
@@ -56,7 +56,7 @@ function AnswerReview({ quiz, onBack }: { quiz: Quiz, onBack: () => void }) {
                 <p className="text-lg font-bold text-center">{quiz.format} Quiz - Answers</p>
                 <p className="text-sm text-muted-foreground text-center">Review the correct answers below.</p>
             </div>
-            <main className="pt-24 pb-24">
+            <div className="pt-24 pb-24">
                 <div className="p-4 space-y-6">
                     {quiz.questions.map((question, qIndex) => (
                         <React.Fragment key={qIndex}>
@@ -91,7 +91,7 @@ function AnswerReview({ quiz, onBack }: { quiz: Quiz, onBack: () => void }) {
                         </React.Fragment>
                     ))}
                 </div>
-            </main>
+            </div>
             <footer className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-sm border-t flex justify-center">
                 <Button className="w-3/4 shimmer-button" onClick={onBack}>
                     <Home className="mr-2 h-4 w-4" />
@@ -155,6 +155,34 @@ function InterstitialAd({ onAdComplete }: { onAdComplete: () => void }) {
     );
 }
 
+function HintPopup({ hint, onClose }: { hint: string; onClose: () => void }) {
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+            <Card className="w-full max-w-md">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                        <Lightbulb className="w-6 h-6 text-yellow-400" />
+                        Hint
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <p className="text-lg text-center text-card-foreground">{hint}</p>
+                    <div className="my-4 p-4 rounded-lg bg-muted/50 border border-border text-center">
+                        <p className="text-sm font-semibold text-muted-foreground">Advertisement</p>
+                        <p className="text-xs text-muted-foreground/80">Your ad banner goes here</p>
+                    </div>
+                </CardContent>
+                <CardFooter className="flex justify-center">
+                    <Button onClick={onClose}>
+                        <X className="mr-2 h-4 w-4" />
+                        Close
+                    </Button>
+                </CardFooter>
+            </Card>
+        </div>
+    );
+}
+
 function QuizComponent() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -170,6 +198,7 @@ function QuizComponent() {
   const [showHint, setShowHint] = useState(false);
   const [isShowingAnswers, setIsShowingAnswers] = useState(false);
   const [isShowingVideoAd, setIsShowingVideoAd] = useState(false);
+  const [isTimerPaused, setIsTimerPaused] = useState(false);
 
   useEffect(() => {
     if (!quizFormat) {
@@ -189,6 +218,7 @@ function QuizComponent() {
       setIsShowingAnswers(false);
       setIsShowingVideoAd(false);
       setShowHint(false);
+      setIsTimerPaused(false);
     }
   }, [quizFormat, router]);
 
@@ -208,7 +238,7 @@ function QuizComponent() {
   };
 
   useEffect(() => {
-    if (isLoadingAd || isAnswered || isQuizFinished || !quiz) return;
+    if (isLoadingAd || isAnswered || isQuizFinished || !quiz || isTimerPaused) return;
 
     const timer = setInterval(() => {
       setTimeLeft((prevTime) => {
@@ -222,7 +252,7 @@ function QuizComponent() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [isLoadingAd, isAnswered, currentQuestionIndex, isQuizFinished, quiz]);
+  }, [isLoadingAd, isAnswered, currentQuestionIndex, isQuizFinished, quiz, isTimerPaused]);
 
   const handleAnswerSelect = (optionIndex: number) => {
     if (isAnswered || !currentQuestion) return;
@@ -262,6 +292,16 @@ function QuizComponent() {
   const handleVideoAdComplete = () => {
     setIsShowingVideoAd(false);
     setIsShowingAnswers(true);
+  };
+
+  const handleShowHint = () => {
+      setShowHint(true);
+      setIsTimerPaused(true);
+  };
+
+  const handleCloseHint = () => {
+      setShowHint(false);
+      setIsTimerPaused(false);
   };
   
   if (isLoadingAd) {
@@ -333,17 +373,16 @@ function QuizComponent() {
                 </Button>
                 ))}
             </div>
-            {showHint && (
-              <div className="mt-8 text-center p-4 bg-muted/50 rounded-lg border border-border">
-                <p className="text-sm text-muted-foreground">{currentQuestion.hint}</p>
-              </div>
-            )}
         </div>
       </main>
 
+      {showHint && currentQuestion.hint && (
+          <HintPopup hint={currentQuestion.hint} onClose={handleCloseHint} />
+      )}
+
       <footer className="fixed bottom-0 z-10 w-full border-t bg-background/80 p-4 backdrop-blur-sm">
         <div className="mx-auto w-full max-w-2xl flex justify-center">
-            <Button variant="outline" size="sm" onClick={() => setShowHint(true)} disabled={showHint}>
+            <Button variant="outline" size="sm" onClick={handleShowHint} disabled={showHint}>
                 <Lightbulb className="mr-2 h-4 w-4 text-yellow-400 animate-pulse drop-shadow-[0_0_3px_#facc15]" />
                 Show Hint
             </Button>
