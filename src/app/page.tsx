@@ -179,7 +179,7 @@ export default function Home() {
     <div className="flex min-h-screen flex-col items-center bg-background p-4 md:p-8">
       <div className="fixed top-4 right-4 z-50">
         <Button variant="ghost" size="icon" asChild>
-          <Link href="/notifications" className="relative">
+          <Link href="/notifications" prefetch={true} className="relative">
             <Bell className="h-6 w-6 text-white" />
             <span className="absolute top-1 right-1 flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
@@ -273,23 +273,23 @@ export default function Home() {
           <div className="relative">
             <nav className="relative flex items-center justify-between gap-32 rounded-full bg-card/80 backdrop-blur-md p-2 shadow-lg">
               <div className="flex gap-2">
-                <Link href="/" className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-accent group">
+                <Link href="/" prefetch={true} className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-accent group">
                   <HomeIcon className="relative z-10" />
                   <div className="absolute bottom-1 h-1 w-4 bg-accent rounded-full" />
                   <span className="sr-only">Home</span>
                 </Link>
-                <Link href="/rewards" className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-muted-foreground hover:text-accent group">
+                <Link href="/rewards" prefetch={true} className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-muted-foreground hover:text-accent group">
                   <Trophy className="relative z-10" />
                   <span className="sr-only">Rewards</span>
                 </Link>
               </div>
               
               <div className="flex gap-2">
-                 <Link href="/insights" className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-muted-foreground hover:text-accent group">
+                 <Link href="/insights" prefetch={true} className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-muted-foreground hover:text-accent group">
                   <PieChart className="relative z-10" />
                   <span className="sr-only">Insights</span>
                 </Link>
-                 <Link href="/profile" className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-muted-foreground hover:text-accent group">
+                 <Link href="/profile" prefetch={true} className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-muted-foreground hover:text-accent group">
                   <User className="relative z-10" />
                   <span className="sr-only">Profile</span>
                 </Link>
@@ -303,7 +303,7 @@ export default function Home() {
                     className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full h-20 w-20 font-bold text-xl shadow-[0_0_12px_hsl(var(--accent))] shimmer-button"
                     asChild
                   >
-                    <Link href={`/start?format=${nextQuizFormat}`}>Start</Link>
+                    <Link href={`/start?format=${nextQuizFormat}`} prefetch={true}>Start</Link>
                   </Button>
                 </div>
             </div>
