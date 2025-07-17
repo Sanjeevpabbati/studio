@@ -9,7 +9,6 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Bell, HomeIcon, Trophy, PieChart, User } from 'lucide-react';
-import QuizTimer from '@/components/quiz/QuizTimer';
 import { Card } from '@/components/ui/card';
 import { sponsors } from '@/lib/sponsors';
 
@@ -249,12 +248,6 @@ export default function Home() {
             <CarouselPrevious className="left-4 bg-transparent border-none" />
             <CarouselNext className="right-4 bg-transparent border-none" />
           </Carousel>
-        </div>
-        
-        <div className="w-full max-w-4xl mt-12 flex flex-col items-center">
-            <div className="mb-6 mt-20">
-                <QuizTimer initialMinutes={15} />
-            </div>
         </div>
       </div>
        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
