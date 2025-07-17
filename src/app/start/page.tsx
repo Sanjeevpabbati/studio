@@ -354,6 +354,15 @@ function QuizComponent() {
       setIsTimerPaused(false);
   };
   
+  const handleCopy = (e: React.ClipboardEvent) => {
+    e.preventDefault();
+    toast({
+        variant: 'destructive',
+        title: 'Copying is disabled',
+        description: 'Please answer the questions without assistance.',
+    });
+  };
+
   if (isLoadingAd) {
       return <InterstitialAd onAdComplete={() => setIsLoadingAd(false)} />;
   }
@@ -384,7 +393,7 @@ function QuizComponent() {
   
   return (
     <>
-      <div className="flex min-h-screen flex-col bg-background pb-20 pt-24">
+      <div className="flex min-h-screen flex-col bg-background pb-20 pt-24" onCopy={handleCopy}>
         <header className="fixed top-0 z-10 w-full border-b bg-background/80 backdrop-blur-sm">
           <div className="mx-auto flex h-16 max-w-2xl items-center justify-between p-4">
               <div className="flex items-baseline gap-2">
@@ -402,7 +411,7 @@ function QuizComponent() {
 
         <main className="flex-grow p-4">
           <div className="mx-auto w-full max-w-2xl text-center">
-              <p className="flex min-h-[6rem] items-center justify-center text-2xl font-semibold mb-8">
+              <p className="flex min-h-[6rem] items-center justify-center text-2xl font-semibold mb-8 select-none">
                   {currentQuestion.question}
               </p>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -412,7 +421,7 @@ function QuizComponent() {
                       variant="outline"
                       size="lg"
                       className={cn(
-                          "h-auto min-h-16 whitespace-normal justify-start text-left relative transition-all duration-300 py-4 text-base",
+                          "h-auto min-h-16 whitespace-normal justify-start text-left relative transition-all duration-300 py-4 text-base select-none",
                           "hover:bg-accent/10 hover:border-accent",
                           selectedAnswer === index && "border-accent bg-accent/10"
                       )}
