@@ -237,7 +237,7 @@ export default function Home() {
         </div>
         
         <div className="w-full max-w-4xl mt-12 flex flex-col items-center">
-            <div className="mb-6">
+            <div className="mb-6 mt-8">
                 <QuizTimer initialMinutes={15} />
             </div>
         </div>
