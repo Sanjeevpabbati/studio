@@ -169,7 +169,7 @@ export default function Home() {
   return (
     <div className="flex min-h-screen flex-col items-center bg-background p-4 md:p-8">
 
-      <div className="text-center py-4 font-headline mt-12 mb-8">
+      <div className="text-center py-4 font-headline mt-2 mb-8">
         <h1
           className="text-5xl font-bold text-primary-foreground tracking-tight sm:text-6xl md:text-7xl text-white"
           aria-label={title}
