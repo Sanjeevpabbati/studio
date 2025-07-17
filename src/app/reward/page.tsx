@@ -17,9 +17,9 @@ function RewardCard({ quizFormat }: { quizFormat: QuizFormat }) {
     const sponsor = getSponsor(quizFormat);
 
     return (
-        <div className="w-full max-w-md">
-            <Card className="overflow-hidden text-center shadow-lg shadow-accent/20 border-accent/30 bg-gradient-to-br from-card to-accent/10">
-                <div className="bg-accent/20 p-8">
+        <div className="w-full max-w-md p-1 rounded-lg bg-gradient-to-br from-accent via-primary to-accent bg-[length:200%_200%] animate-gradient-flow">
+            <Card className="overflow-hidden text-center bg-card/95 backdrop-blur-sm">
+                <div className="bg-black p-8">
                     <div className="flex justify-center">
                         <Trophy className="w-24 h-24 text-yellow-400 drop-shadow-[0_0_15px_#facc15]" />
                     </div>
