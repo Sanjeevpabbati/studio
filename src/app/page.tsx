@@ -131,7 +131,7 @@ export default function Home() {
   const startAutoRotate = useCallback(() => {
     stopAutoRotate();
     autoRotateIntervalRef.current = setInterval(() => {
-      api?.scrollNext();
+      api?.scrollNext(undefined, { preventScrollOnTouch: 'keep' });
     }, 4000);
   }, [api, stopAutoRotate]);
 
