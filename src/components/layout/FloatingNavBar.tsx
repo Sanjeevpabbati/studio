@@ -9,9 +9,6 @@ import { Button } from '@/components/ui/button';
 const navItems = [
   { href: '/', icon: Home, label: 'Home' },
   { href: '/rewards', icon: Trophy, label: 'Rewards' },
-];
-
-const rightNavItems = [
   { href: '/insights', icon: PieChart, label: 'Insights' },
   { href: '/profile', icon: User, label: 'Profile' },
 ];
@@ -49,33 +46,11 @@ const FloatingNavBar: React.FC = () => {
 
   return (
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
-      <div className="relative">
-        <nav className="relative flex items-center justify-between gap-32 rounded-full bg-card/80 backdrop-blur-md p-2 shadow-lg">
-          <div className="flex gap-2">
-            {navItems.map((item) => (
-              <NavLink key={item.href} {...item} />
-            ))}
-          </div>
-          
-          <div className="flex gap-2">
-            {rightNavItems.map((item) => (
-              <NavLink key={item.href} {...item} />
-            ))}
-          </div>
-        </nav>
-
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-            <div className='rounded-full'>
-              <Button 
-                variant="default" 
-                className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full h-20 w-20 font-bold text-xl shadow-[0_0_12px_hsl(var(--accent))] shimmer-button"
-                asChild
-              >
-                <Link href="/start">Start</Link>
-              </Button>
-            </div>
-        </div>
-      </div>
+      <nav className="relative flex items-center justify-center gap-4 rounded-full bg-card/80 backdrop-blur-md px-4 py-2 shadow-lg">
+        {navItems.map((item) => (
+          <NavLink key={item.href} {...item} />
+        ))}
+      </nav>
     </div>
   );
 };

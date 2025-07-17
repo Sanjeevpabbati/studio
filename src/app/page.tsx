@@ -88,8 +88,6 @@ const promotedProducts = [
     { id: 2, imageUrl: 'https://placehold.co/400x200.png', alt: 'Brand 2', aiHint: 'cricket equipment' },
     { id: 3, imageUrl: 'https://placehold.co/400x200.png', alt: 'Brand 3', aiHint: 'mobile phone' },
     { id: 4, imageUrl: 'https://placehold.co/400x200.png', alt: 'Brand 4', aiHint: 'snack food' },
-    { id: 5, imageUrl: 'https://placehold.co/400x200.png', alt: 'Brand 5', aiHint: 'streaming service' },
-    { id: 6, imageUrl: 'https://placehold.co/400x200.png', alt: 'Brand 6', aiHint: 'athletic shoes' },
 ];
 
 export default function Home() {
@@ -250,10 +248,22 @@ export default function Home() {
             <div className="mb-6">
                 <QuizTimer initialMinutes={15} />
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full">
-                {promotedProducts.map((product) => (
+             <div className="grid md:grid-cols-2 gap-4 w-full">
+                <Card className="md:col-span-2 overflow-hidden bg-card/50 border-border/20">
+                    <div className="aspect-video relative">
+                        <Image
+                            src={promotedProducts[0].imageUrl}
+                            alt={promotedProducts[0].alt}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                            className="object-cover"
+                            data-ai-hint={promotedProducts[0].aiHint}
+                        />
+                    </div>
+                </Card>
+                {promotedProducts.slice(1).map((product) => (
                     <Card key={product.id} className="overflow-hidden bg-card/50 border-border/20">
-                         <div className="aspect-video relative">
+                         <div className="aspect-square relative">
                             <Image
                                 src={product.imageUrl}
                                 alt={product.alt}
@@ -270,44 +280,25 @@ export default function Home() {
 
       </div>
        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
-          <div className="relative">
-            <nav className="relative flex items-center justify-between gap-32 rounded-full bg-card/80 backdrop-blur-md p-2 shadow-lg">
-              <div className="flex gap-2">
-                <Link href="/" prefetch={true} className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-accent group">
-                  <HomeIcon className="relative z-10" />
-                  <div className="absolute bottom-1 h-1 w-4 bg-accent rounded-full" />
-                  <span className="sr-only">Home</span>
-                </Link>
-                <Link href="/rewards" prefetch={true} className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-muted-foreground hover:text-accent group">
-                  <Trophy className="relative z-10" />
-                  <span className="sr-only">Rewards</span>
-                </Link>
-              </div>
-              
-              <div className="flex gap-2">
-                 <Link href="/insights" prefetch={true} className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-muted-foreground hover:text-accent group">
-                  <PieChart className="relative z-10" />
-                  <span className="sr-only">Insights</span>
-                </Link>
-                 <Link href="/profile" prefetch={true} className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-muted-foreground hover:text-accent group">
-                  <User className="relative z-10" />
-                  <span className="sr-only">Profile</span>
-                </Link>
-              </div>
-            </nav>
-
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-                <div className='rounded-full'>
-                  <Button 
-                    variant="default" 
-                    className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full h-20 w-20 font-bold text-xl shadow-[0_0_12px_hsl(var(--accent))] shimmer-button"
-                    asChild
-                  >
-                    <Link href={`/start?format=${nextQuizFormat}`} prefetch={true}>Start</Link>
-                  </Button>
-                </div>
-            </div>
-          </div>
+          <nav className="flex items-center justify-center gap-4 rounded-full bg-card/80 backdrop-blur-md px-4 py-2 shadow-lg">
+            <Link href="/" prefetch={true} className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-accent group">
+              <HomeIcon className="relative z-10" />
+              <div className="absolute bottom-1 h-1 w-4 bg-accent rounded-full" />
+              <span className="sr-only">Home</span>
+            </Link>
+            <Link href="/rewards" prefetch={true} className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-muted-foreground hover:text-accent group">
+              <Trophy className="relative z-10" />
+              <span className="sr-only">Rewards</span>
+            </Link>
+             <Link href="/insights" prefetch={true} className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-muted-foreground hover:text-accent group">
+              <PieChart className="relative z-10" />
+              <span className="sr-only">Insights</span>
+            </Link>
+             <Link href="/profile" prefetch={true} className="relative flex flex-col items-center justify-center w-14 h-12 rounded-full cursor-pointer transition-colors duration-300 text-muted-foreground hover:text-accent group">
+              <User className="relative z-10" />
+              <span className="sr-only">Profile</span>
+            </Link>
+          </nav>
         </div>
     </div>
   );
