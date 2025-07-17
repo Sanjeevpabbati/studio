@@ -9,8 +9,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Progress } from '@/components/ui/progress';
 import { getQuiz } from '@/lib/quiz-data';
 import type { Question, Quiz, QuizFormat } from '@/lib/types';
-import { CheckCircle, XCircle, Lightbulb, Tv, Circle, Check, Home, X } from 'lucide-react';
+import { CheckCircle, XCircle, Lightbulb, Tv, Circle, Check, Home, X, ShieldAlert } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 const timePerQuestion = 20;
 
@@ -100,9 +101,9 @@ function AnswerReview({ quiz, onBack }: { quiz: Quiz, onBack: () => void }) {
     );
 }
 
-function QuizResults({ score, totalQuestions, quizFormat, onRestart, onViewAnswers }: { score: number, totalQuestions: number, quizFormat: QuizFormat, onRestart: () => void, onViewAnswers: () => void }) {
+function QuizResults({ score, totalQuestions, quizFormat, onRestart, onViewAnswers, terminated }: { score: number, totalQuestions: number, quizFormat: QuizFormat, onRestart: () => void, onViewAnswers: () => void, terminated?: boolean }) {
   const router = useRouter();
-  const isPerfectScore = score === totalQuestions;
+  const isPerfectScore = score === totalQuestions && !terminated;
     
   useEffect(() => {
     if (isPerfectScore) {
@@ -131,16 +132,25 @@ function QuizResults({ score, totalQuestions, quizFormat, onRestart, onViewAnswe
   return (
     <Card className="w-full max-w-lg text-center">
       <CardHeader>
-        <CardTitle>Quiz Complete!</CardTitle>
+        {terminated ? (
+            <>
+                <CardTitle className="flex items-center justify-center gap-2"><ShieldAlert className="w-8 h-8 text-destructive" />Quiz Terminated</CardTitle>
+                <CardDescription>Activity outside the quiz was detected.</CardDescription>
+            </>
+        ) : (
+            <CardTitle>Quiz Complete!</CardTitle>
+        )}
       </CardHeader>
       <CardContent>
         <p className="text-xl mb-4">
           You scored <strong className="text-accent">{score}</strong> out of <strong className="text-accent">{totalQuestions}</strong>
         </p>
         <div className="flex justify-center gap-4 mt-4">
-            <Button onClick={onViewAnswers}>
-              View Answers
-            </Button>
+            {!terminated && (
+                <Button onClick={onViewAnswers}>
+                View Answers
+                </Button>
+            )}
             <Button variant="outline" onClick={onRestart}>
               Home Page
             </Button>
@@ -200,6 +210,7 @@ function HintPopup({ hint, onClose }: { hint: string; onClose: () => void }) {
 function QuizComponent() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { toast } = useToast();
   const quizFormat = searchParams.get('format') as QuizFormat | null;
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -213,6 +224,8 @@ function QuizComponent() {
   const [isShowingAnswers, setIsShowingAnswers] = useState(false);
   const [isShowingVideoAd, setIsShowingVideoAd] = useState(false);
   const [isTimerPaused, setIsTimerPaused] = useState(false);
+  const [quizTerminated, setQuizTerminated] = useState(false);
+  const [showScreenshotBlocker, setShowScreenshotBlocker] = useState(false);
 
   useEffect(() => {
     if (!quizFormat) {
@@ -233,15 +246,22 @@ function QuizComponent() {
       setIsShowingVideoAd(false);
       setShowHint(false);
       setIsTimerPaused(false);
+      setQuizTerminated(false);
     }
   }, [quizFormat, router]);
 
-  const totalQuestions = quiz?.questions.length ?? 0;
-  const currentQuestion: Question | undefined = quiz?.questions[currentQuestionIndex];
-
-   const handleQuizCompletion = () => {
+  const handleQuizCompletion = (terminated = false) => {
     setIsQuizFinished(true);
-    if (quizFormat) {
+    setQuizTerminated(terminated);
+    if (terminated) {
+      toast({
+        variant: 'destructive',
+        title: 'Quiz Terminated',
+        description: 'You cannot switch tabs during the quiz.',
+      });
+    }
+
+    if (quizFormat && !terminated) {
       const completedQuizzesStr = localStorage.getItem('completedQuizzes');
       const completedQuizzes: QuizFormat[] = completedQuizzesStr ? JSON.parse(completedQuizzesStr) : [];
       if (!completedQuizzes.includes(quizFormat)) {
@@ -250,6 +270,33 @@ function QuizComponent() {
       }
     }
   };
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden && !isQuizFinished && !isLoadingAd) {
+        handleQuizCompletion(true);
+      }
+    };
+    
+    const handleScreenshot = (e: KeyboardEvent) => {
+      if (e.key === 'PrintScreen') {
+        e.preventDefault();
+        setShowScreenshotBlocker(true);
+        setTimeout(() => setShowScreenshotBlocker(false), 200);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('keyup', handleScreenshot);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('keyup', handleScreenshot);
+    };
+  }, [isQuizFinished, isLoadingAd]);
+
+  const totalQuestions = quiz?.questions.length ?? 0;
+  const currentQuestion: Question | undefined = quiz?.questions[currentQuestionIndex];
 
   useEffect(() => {
     if (isLoadingAd || isAnswered || isQuizFinished || !quiz || isTimerPaused) return;
@@ -341,68 +388,75 @@ function QuizComponent() {
   if (isQuizFinished) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
-        <QuizResults score={score} totalQuestions={totalQuestions} quizFormat={quiz.format} onRestart={restartQuiz} onViewAnswers={handleViewAnswers} />
+        <QuizResults score={score} totalQuestions={totalQuestions} quizFormat={quiz.format} onRestart={restartQuiz} onViewAnswers={handleViewAnswers} terminated={quizTerminated} />
       </div>
     );
   }
   
   return (
-    <div className="flex min-h-screen flex-col bg-background pb-20 pt-24">
-      <header className="fixed top-0 z-10 w-full border-b bg-background/80 backdrop-blur-sm">
-        <div className="mx-auto flex h-16 max-w-2xl items-center justify-between p-4">
-            <div className="flex items-baseline gap-2">
-                <p className="text-lg font-bold">{quiz.format} Quiz</p>
-                <p className="text-sm text-muted-foreground">
-                    {currentQuestionIndex + 1}/{totalQuestions}
-                </p>
-            </div>
-            <div className="flex items-center gap-4">
-                <div className="text-2xl font-bold text-accent">{timeLeft}s</div>
-            </div>
+    <>
+      {showScreenshotBlocker && (
+        <div className="fixed inset-0 z-[999] bg-black flex items-center justify-center">
+            <p className="text-white text-2xl font-bold">Screenshots are not allowed.</p>
         </div>
-        <Progress value={(timeLeft / timePerQuestion) * 100} className="h-1 w-full" />
-      </header>
-
-      <main className="flex-grow p-4">
-        <div className="mx-auto w-full max-w-2xl text-center">
-            <p className="flex min-h-[6rem] items-center justify-center text-2xl font-semibold mb-8">
-                {currentQuestion.question}
-            </p>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                {currentQuestion.options.map((option, index) => (
-                <Button
-                    key={index}
-                    variant="outline"
-                    size="lg"
-                    className={cn(
-                        "h-auto min-h-16 whitespace-normal justify-start text-left relative transition-all duration-300 py-4 text-base",
-                        "hover:bg-accent/10 hover:border-accent",
-                        selectedAnswer === index && "border-accent bg-accent/10"
-                    )}
-                    onClick={() => handleAnswerSelect(index)}
-                    disabled={isAnswered}
-                >
-                    <span className="mr-4 font-bold">{String.fromCharCode(65 + index)}</span>
-                    <span className="flex-1">{option}</span>
-                </Button>
-                ))}
-            </div>
-        </div>
-      </main>
-
-      {showHint && currentQuestion.hint && (
-          <HintPopup hint={currentQuestion.hint} onClose={handleCloseHint} />
       )}
+      <div className="flex min-h-screen flex-col bg-background pb-20 pt-24">
+        <header className="fixed top-0 z-10 w-full border-b bg-background/80 backdrop-blur-sm">
+          <div className="mx-auto flex h-16 max-w-2xl items-center justify-between p-4">
+              <div className="flex items-baseline gap-2">
+                  <p className="text-lg font-bold">{quiz.format} Quiz</p>
+                  <p className="text-sm text-muted-foreground">
+                      {currentQuestionIndex + 1}/{totalQuestions}
+                  </p>
+              </div>
+              <div className="flex items-center gap-4">
+                  <div className="text-2xl font-bold text-accent">{timeLeft}s</div>
+              </div>
+          </div>
+          <Progress value={(timeLeft / timePerQuestion) * 100} className="h-1 w-full" />
+        </header>
 
-      <footer className="fixed bottom-0 z-10 w-full border-t bg-background/80 p-4 backdrop-blur-sm">
-        <div className="mx-auto w-full max-w-2xl flex justify-center">
-            <Button variant="outline" size="sm" onClick={handleShowHint} disabled={showHint}>
-                <Lightbulb className="mr-2 h-4 w-4 text-yellow-400 animate-pulse drop-shadow-[0_0_3px_#facc15]" />
-                Show Hint
-            </Button>
-        </div>
-      </footer>
-    </div>
+        <main className="flex-grow p-4">
+          <div className="mx-auto w-full max-w-2xl text-center">
+              <p className="flex min-h-[6rem] items-center justify-center text-2xl font-semibold mb-8">
+                  {currentQuestion.question}
+              </p>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  {currentQuestion.options.map((option, index) => (
+                  <Button
+                      key={index}
+                      variant="outline"
+                      size="lg"
+                      className={cn(
+                          "h-auto min-h-16 whitespace-normal justify-start text-left relative transition-all duration-300 py-4 text-base",
+                          "hover:bg-accent/10 hover:border-accent",
+                          selectedAnswer === index && "border-accent bg-accent/10"
+                      )}
+                      onClick={() => handleAnswerSelect(index)}
+                      disabled={isAnswered}
+                  >
+                      <span className="mr-4 font-bold">{String.fromCharCode(65 + index)}</span>
+                      <span className="flex-1">{option}</span>
+                  </Button>
+                  ))}
+              </div>
+          </div>
+        </main>
+
+        {showHint && currentQuestion.hint && (
+            <HintPopup hint={currentQuestion.hint} onClose={handleCloseHint} />
+        )}
+
+        <footer className="fixed bottom-0 z-10 w-full border-t bg-background/80 p-4 backdrop-blur-sm">
+          <div className="mx-auto w-full max-w-2xl flex justify-center">
+              <Button variant="outline" size="sm" onClick={handleShowHint} disabled={showHint}>
+                  <Lightbulb className="mr-2 h-4 w-4 text-yellow-400 animate-pulse drop-shadow-[0_0_3px_#facc15]" />
+                  Show Hint
+              </Button>
+          </div>
+        </footer>
+      </div>
+    </>
   );
 }
 
@@ -423,3 +477,5 @@ export default function StartPage() {
     </React.Suspense>
   );
 }
+
+    
