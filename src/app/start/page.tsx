@@ -51,44 +51,44 @@ function VideoAd({ onAdComplete }: { onAdComplete: () => void }) {
 
 function AnswerReview({ quiz, onBack }: { quiz: Quiz, onBack: () => void }) {
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
-            <Card className="w-full max-w-2xl">
-                <CardHeader>
-                    <CardTitle>{quiz.format} Quiz - Answers</CardTitle>
-                    <CardDescription>Review the correct answers below.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                    {quiz.questions.map((question, qIndex) => (
-                        <div key={qIndex}>
-                            <p className="font-semibold mb-2">{qIndex + 1}. {question.question}</p>
-                            <div className="space-y-2">
-                                {question.options.map((option, oIndex) => {
-                                    const isCorrect = oIndex === question.correctAnswer;
-                                    return (
-                                        <div
-                                            key={oIndex}
-                                            className={cn(
-                                                "flex items-center gap-3 p-3 rounded-md border",
-                                                isCorrect
-                                                    ? "bg-green-500/20 border-green-500/40 text-white"
-                                                    : "bg-card"
-                                            )}
-                                        >
-                                            {isCorrect ? <CheckCircle className="h-5 w-5 text-green-400" /> : <Circle className="h-5 w-5 text-muted-foreground" />}
-                                            <span>{option}</span>
-                                        </div>
-                                    );
-                                })}
-                            </div>
+        <div className="flex flex-col h-screen bg-background">
+            <header className="p-4 border-b">
+                <CardTitle>{quiz.format} Quiz - Answers</CardTitle>
+                <CardDescription>Review the correct answers below.</CardDescription>
+            </header>
+            <main className="flex-1 overflow-y-auto p-4 space-y-6 pb-24">
+                {quiz.questions.map((question, qIndex) => (
+                    <div key={qIndex}>
+                        <p className="font-semibold mb-2 text-lg">{qIndex + 1}. {question.question}</p>
+                        <div className="space-y-2">
+                            {question.options.map((option, oIndex) => {
+                                const isCorrect = oIndex === question.correctAnswer;
+                                return (
+                                    <div
+                                        key={oIndex}
+                                        className={cn(
+                                            "flex items-center gap-3 p-3 rounded-md border",
+                                            isCorrect
+                                                ? "bg-green-500/20 border-green-500/40 text-white"
+                                                : "bg-card"
+                                        )}
+                                    >
+                                        {isCorrect ? <CheckCircle className="h-5 w-5 text-green-400" /> : <Circle className="h-5 w-5 text-muted-foreground" />}
+                                        <span>{option}</span>
+                                    </div>
+                                );
+                            })}
                         </div>
-                    ))}
-                </CardContent>
-                <CardFooter>
-                     <Button onClick={onBack}>
+                    </div>
+                ))}
+            </main>
+            <footer className="fixed bottom-0 left-0 w-full p-4 bg-background/80 backdrop-blur-sm border-t">
+                <div className="max-w-2xl mx-auto">
+                    <Button onClick={onBack} className="w-full">
                         Back to Home
                     </Button>
-                </CardFooter>
-            </Card>
+                </div>
+            </footer>
         </div>
     );
 }
@@ -314,7 +314,7 @@ function QuizComponent() {
                     className={cn(
                         "h-auto min-h-16 whitespace-normal justify-start text-left relative transition-all duration-300 py-4 text-base",
                         "hover:bg-accent/10 hover:border-accent",
-                        isAnswered && selectedAnswer === index && "border-accent bg-accent/10"
+                        selectedAnswer === index && "border-accent bg-accent/10"
                     )}
                     onClick={() => handleAnswerSelect(index)}
                     disabled={isAnswered}
