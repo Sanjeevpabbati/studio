@@ -82,7 +82,7 @@ function AnswerReview({ quiz, onBack }: { quiz: Quiz, onBack: () => void }) {
                     </div>
                 ))}
             </main>
-            <footer className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-sm border-t">
+            <footer className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-sm border-t flex justify-center">
                 <Button className="w-3/4 mx-auto shimmer-button" onClick={onBack}>
                     <Home className="mr-2 h-4 w-4" />
                     Back to Home
@@ -285,22 +285,22 @@ function QuizComponent() {
   return (
     <div className="flex min-h-screen flex-col bg-background pb-20 pt-24">
       <header className="fixed top-0 z-10 w-full border-b bg-background/80 backdrop-blur-sm">
-        <div className="mx-auto max-w-2xl p-4">
-            <div className="mb-2 flex items-center justify-between gap-4">
-                <div>
-                    <p className="text-lg font-bold">{quiz.format} Quiz</p>
-                    <p className="text-sm text-muted-foreground">
-                        Question {currentQuestionIndex + 1} of {totalQuestions}
-                    </p>
-                </div>
+        <div className="mx-auto flex h-16 max-w-2xl items-center justify-between p-4">
+            <div className="flex items-baseline gap-2">
+                <p className="text-lg font-bold">{quiz.format} Quiz</p>
+                <p className="text-sm text-muted-foreground">
+                    {currentQuestionIndex + 1}/{totalQuestions}
+                </p>
+            </div>
+            <div className="flex items-center gap-4">
                 <div className="text-2xl font-bold text-accent">{timeLeft}s</div>
             </div>
-            <Progress value={(timeLeft / timePerQuestion) * 100} className="h-2 w-full" />
         </div>
+        <Progress value={(timeLeft / timePerQuestion) * 100} className="h-1 w-full" />
       </header>
 
-      <main className="flex-grow flex flex-col items-center p-4">
-        <div className="w-full max-w-2xl text-center">
+      <main className="flex-grow p-4">
+        <div className="mx-auto w-full max-w-2xl text-center">
             <p className="flex min-h-[6rem] items-center justify-center text-2xl font-semibold mb-8">
                 {currentQuestion.question}
             </p>
