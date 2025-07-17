@@ -101,7 +101,32 @@ function AnswerReview({ quiz, onBack }: { quiz: Quiz, onBack: () => void }) {
 }
 
 function QuizResults({ score, totalQuestions, quizFormat, onRestart, onViewAnswers }: { score: number, totalQuestions: number, quizFormat: QuizFormat, onRestart: () => void, onViewAnswers: () => void }) {
+  const router = useRouter();
   const isPerfectScore = score === totalQuestions;
+    
+  useEffect(() => {
+    if (isPerfectScore) {
+      router.push(`/reward?format=${quizFormat}`);
+    }
+  }, [isPerfectScore, quizFormat, router]);
+
+  if (isPerfectScore) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
+        <Card className="w-full max-w-lg text-center">
+          <CardHeader>
+            <CardTitle>Quiz Complete!</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-xl mb-4">
+              You scored <strong className="text-accent">{score}</strong> out of <strong className="text-accent">{totalQuestions}</strong>
+            </p>
+            <p className="text-green-400 font-bold mb-4">Perfect Score! Redirecting to your reward...</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
     
   return (
     <Card className="w-full max-w-lg text-center">
@@ -112,19 +137,10 @@ function QuizResults({ score, totalQuestions, quizFormat, onRestart, onViewAnswe
         <p className="text-xl mb-4">
           You scored <strong className="text-accent">{score}</strong> out of <strong className="text-accent">{totalQuestions}</strong>
         </p>
-        {isPerfectScore && (
-          <p className="text-green-400 font-bold mb-4">Perfect Score! You've unlocked a reward!</p>
-        )}
         <div className="flex justify-center gap-4 mt-4">
-            {isPerfectScore ? (
-              <Button asChild>
-                <Link href={`/reward?format=${quizFormat}`}>Claim Reward</Link>
-              </Button>
-            ) : (
-               <Button onClick={onViewAnswers}>
-                View Answers
-              </Button>
-            )}
+            <Button onClick={onViewAnswers}>
+              View Answers
+            </Button>
             <Button variant="outline" onClick={onRestart}>
               Home Page
             </Button>

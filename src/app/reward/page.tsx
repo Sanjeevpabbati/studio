@@ -1,36 +1,16 @@
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { Tv, Trophy } from 'lucide-react';
+import { Trophy } from 'lucide-react';
 import { type QuizFormat } from '@/lib/types';
 import { getSponsor, type Sponsor } from '@/lib/sponsors';
 
-
-function SponsoredAd({ onAdComplete }: { onAdComplete: () => void }) {
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            onAdComplete();
-        }, 5000); // 5-second ad
-
-        return () => clearTimeout(timer);
-    }, [onAdComplete]);
-
-    return (
-        <div
-            className="fixed inset-0 bg-black/90 z-50 flex flex-col items-center justify-center text-white"
-        >
-            <Tv className="w-24 h-24 mb-8 text-accent" />
-            <h2 className="text-3xl font-bold mb-4">Sponsored Advertisement</h2>
-            <p className="text-lg text-muted-foreground">Your reward will be available after this message.</p>
-        </div>
-    );
-}
 
 function RewardCard({ quizFormat }: { quizFormat: QuizFormat }) {
     const sponsor = getSponsor(quizFormat);
@@ -79,25 +59,20 @@ function RewardCard({ quizFormat }: { quizFormat: QuizFormat }) {
 
 
 function RewardPageComponent() {
-    const [isAdWatched, setIsAdWatched] = useState(false);
     const searchParams = useSearchParams();
     const quizFormat = (searchParams.get('format') as QuizFormat) || 'IPL'; // Default to IPL if not provided
 
     return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
-            {!isAdWatched ? (
-                <SponsoredAd onAdComplete={() => setIsAdWatched(true)} />
-            ) : (
-                <RewardCard quizFormat={quizFormat} />
-            )}
+            <RewardCard quizFormat={quizFormat} />
         </div>
     );
 }
 
 export default function RewardPage() {
   return (
-    <React.Suspense fallback={<div>Loading Reward...</div>}>
+    <Suspense fallback={<div>Loading Reward...</div>}>
       <RewardPageComponent />
-    </React.Suspense>
+    </Suspense>
   )
 }
