@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -160,7 +161,7 @@ function HintPopup({ hint, open, onOpenChange }: { hint: string, open: boolean, 
     if (!open) return null;
 
     return (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
             <Card className="w-full max-w-sm">
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2"><Lightbulb className="text-yellow-400" /> Hint</CardTitle>
@@ -314,49 +315,70 @@ function QuizComponent() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
-       <HintPopup hint={currentQuestion.hint} open={showHint} onOpenChange={setShowHint} />
-       <Card className="w-full max-w-2xl">
-         <CardHeader className="pb-4">
-           <div className="w-full h-16 bg-muted/50 flex items-center justify-center rounded-lg mb-4">
-              <p className="text-sm text-muted-foreground">Top Banner Ad</p>
-           </div>
-           <div className="flex justify-between items-center mb-4">
-             <CardTitle>{quiz.format} Quiz</CardTitle>
-             <div className="text-lg font-bold text-accent">{timeLeft}s</div>
-           </div>
-           <Progress value={(timeLeft / timePerQuestion) * 100} className="h-2" />
-           <div className="flex justify-between items-center pt-4">
-                <p className="text-muted-foreground text-center">
-                    Question {currentQuestionIndex + 1} of {totalQuestions}
-                </p>
-                <Button variant="outline" size="sm" onClick={() => setShowHint(true)}>
-                    <Lightbulb className="mr-2 h-4 w-4" />
-                    Hint
-                </Button>
-           </div>
-         </CardHeader>
-         <CardContent>
-           <p className="text-xl font-semibold mb-6 text-center h-20 flex items-center justify-center">
-             {currentQuestion.question}
-           </p>
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-             {currentQuestion.options.map((option, index) => (
+    <div className="flex min-h-screen flex-col bg-background">
+      <HintPopup hint={currentQuestion.hint} open={showHint} onOpenChange={setShowHint} />
+      
+      {/* Header */}
+      <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm p-4 border-b">
+        <div className="flex justify-between items-center mb-2">
+          <CardTitle className="text-lg">{quiz.format} Quiz</CardTitle>
+          <div className="text-lg font-bold text-accent">{timeLeft}s</div>
+        </div>
+        <Progress value={(timeLeft / timePerQuestion) * 100} className="h-2" />
+        <div className="text-center pt-2">
+          <p className="text-muted-foreground text-sm">
+            Question {currentQuestionIndex + 1} of {totalQuestions}
+          </p>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="flex-grow flex flex-col items-center justify-center p-4">
+        <div className="w-full max-w-2xl text-center">
+            <p className="text-xl font-semibold mb-8 min-h-[6rem] flex items-center justify-center">
+                {currentQuestion.question}
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {currentQuestion.options.map((option, index) => (
                 <Button
-                  key={index}
-                  variant={isAnswered && selectedAnswer === index ? 'secondary' : 'outline'}
-                  size="lg"
-                  className={`h-auto min-h-16 whitespace-normal justify-start text-left relative transition-all duration-300`}
-                  onClick={() => handleAnswerSelect(index)}
-                  disabled={isAnswered}
+                    key={index}
+                    variant="outline"
+                    size="lg"
+                    className={cn(
+                        "h-auto min-h-16 whitespace-normal justify-center text-center relative transition-all duration-300 py-4",
+                         isAnswered && (selectedAnswer === index
+                            ? (index === currentQuestion.correctAnswer ? 'bg-green-500/20 border-green-500' : 'bg-red-500/20 border-red-500')
+                            : (index === currentQuestion.correctAnswer ? 'bg-green-500/20 border-green-500' : 'border-input'))
+                    )}
+                    onClick={() => handleAnswerSelect(index)}
+                    disabled={isAnswered}
                 >
-                  {option}
+                    {option}
+                    {isAnswered && (
+                        selectedAnswer === index ? (
+                            index === currentQuestion.correctAnswer ? 
+                            <CheckCircle className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500" /> :
+                            <XCircle className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-red-500" />
+                        ) : (
+                           index === currentQuestion.correctAnswer && <CheckCircle className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500" />
+                        )
+                    )}
                 </Button>
-             ))}
-           </div>
-         </CardContent>
-       </Card>
-     </div>
+                ))}
+            </div>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="sticky bottom-0 z-10 bg-background/80 backdrop-blur-sm p-4 border-t">
+        <div className="w-full max-w-2xl mx-auto flex justify-center">
+            <Button variant="outline" size="sm" onClick={() => setShowHint(true)}>
+                <Lightbulb className="mr-2 h-4 w-4" />
+                Show Hint
+            </Button>
+        </div>
+      </footer>
+    </div>
   );
 }
 
@@ -377,3 +399,5 @@ export default function StartPage() {
     </React.Suspense>
   );
 }
+
+    
