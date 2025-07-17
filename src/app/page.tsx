@@ -1,3 +1,4 @@
+
 'use client';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
@@ -17,7 +18,7 @@ const initialShapes: CubeShapes = {
     type: 'circle',
     color: '',
     quizFormat: 'IPL',
-    imageUrl: 'https://i.ibb.co/d4FBpHt7/129663845-3387788141330000-4041207386765952109-n.jpg',
+    imageUrl: 'https://placehold.co/260x260.png',
     imageAiHint: 'cricket stadium',
     sponsor: { name: 'Tata', logoUrl: 'https://placehold.co/32x32.png', aiHint: 'conglomerate logo' },
   },
