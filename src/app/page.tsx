@@ -101,6 +101,38 @@ export default function Home() {
   const interactionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const autoRotateIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
+  const stopAutoRotate = useCallback(() => {
+    if (autoRotateIntervalRef.current) {
+      clearInterval(autoRotateIntervalRef.current);
+      autoRotateIntervalRef.current = null;
+    }
+    if (interactionTimeoutRef.current) {
+      clearTimeout(interactionTimeoutRef.current);
+      interactionTimeoutRef.current = null;
+    }
+  }, []);
+
+  const startAutoRotate = useCallback(() => {
+    stopAutoRotate();
+    autoRotateIntervalRef.current = setInterval(() => {
+      api?.scrollNext(true); // true for snap
+    }, 4000);
+  }, [api, stopAutoRotate]);
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      // Stop auto-rotation permanently on any user scroll
+      stopAutoRotate();
+      window.removeEventListener('scroll', handleScroll);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [stopAutoRotate]);
+
   useEffect(() => {
     // Determine the next quiz format based on user's progress
     const completedQuizzesStr = localStorage.getItem('completedQuizzes');
@@ -116,24 +148,6 @@ export default function Home() {
       setNextQuizFormat(shapes[currentFaceName].quizFormat);
     }
   }, [currentFaceIndex, shapes]);
-
-  const stopAutoRotate = useCallback(() => {
-    if (autoRotateIntervalRef.current) {
-      clearInterval(autoRotateIntervalRef.current);
-      autoRotateIntervalRef.current = null;
-    }
-    if (interactionTimeoutRef.current) {
-      clearTimeout(interactionTimeoutRef.current);
-      interactionTimeoutRef.current = null;
-    }
-  }, []);
-
-  const startAutoRotate = useCallback(() => {
-    stopAutoRotate();
-    autoRotateIntervalRef.current = setInterval(() => {
-      api?.scrollNext(undefined, { preventScrollOnTouch: 'keep' });
-    }, 4000);
-  }, [api, stopAutoRotate]);
 
   const handleInteraction = useCallback(() => {
     stopAutoRotate();
