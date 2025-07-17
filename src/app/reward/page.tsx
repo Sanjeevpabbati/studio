@@ -34,7 +34,7 @@ function RewardCard({ quizFormat }: { quizFormat: QuizFormat }) {
                         {sponsor && (
                              <div className="flex flex-col items-center justify-center gap-2">
                                 <span className="text-sm text-muted-foreground">This achievement is proudly sponsored by</span>
-                                <div className="flex items-center gap-3 mt-2">
+                                <div className="flex items-center justify-center gap-3 mt-2">
                                     <Image 
                                         src={sponsor.logoUrl} 
                                         alt={`${sponsor.name} logo`}
@@ -43,7 +43,6 @@ function RewardCard({ quizFormat }: { quizFormat: QuizFormat }) {
                                         className="object-contain rounded-full bg-white p-1"
                                         data-ai-hint={sponsor.aiHint}
                                     />
-                                    <span className="text-2xl font-semibold">{sponsor.name}</span>
                                 </div>
                             </div>
                         )}
