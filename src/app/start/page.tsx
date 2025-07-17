@@ -52,10 +52,10 @@ function VideoAd({ onAdComplete }: { onAdComplete: () => void }) {
 function AnswerReview({ quiz, onBack }: { quiz: Quiz, onBack: () => void }) {
     return (
         <div className="flex flex-col h-screen bg-background">
-            <header className="p-4 border-b">
-                <CardTitle>{quiz.format} Quiz - Answers</CardTitle>
-                <CardDescription>Review the correct answers below.</CardDescription>
-            </header>
+            <div className="p-4 border-b">
+                <p className="text-lg font-bold">{quiz.format} Quiz - Answers</p>
+                <p className="text-sm text-muted-foreground">Review the correct answers below.</p>
+            </div>
             <main className="flex-1 overflow-y-auto p-4 space-y-6 pb-24">
                 {quiz.questions.map((question, qIndex) => (
                     <div key={qIndex}>
