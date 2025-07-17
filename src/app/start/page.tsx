@@ -58,28 +58,36 @@ function AnswerReview({ quiz, onBack }: { quiz: Quiz, onBack: () => void }) {
             </div>
             <main className="flex-1 overflow-y-auto p-4 space-y-6 pb-24">
                 {quiz.questions.map((question, qIndex) => (
-                    <div key={qIndex}>
-                        <p className="font-semibold mb-2 text-lg">{qIndex + 1}. {question.question}</p>
-                        <div className="space-y-2">
-                            {question.options.map((option, oIndex) => {
-                                const isCorrect = oIndex === question.correctAnswer;
-                                return (
-                                    <div
-                                        key={oIndex}
-                                        className={cn(
-                                            "flex items-center gap-3 p-3 rounded-md border",
-                                            isCorrect
-                                                ? "bg-green-500/20 border-green-500/40 text-white"
-                                                : "bg-card"
-                                        )}
-                                    >
-                                        {isCorrect ? <CheckCircle className="h-5 w-5 text-green-400" /> : <Circle className="h-5 w-5 text-muted-foreground" />}
-                                        <span>{option}</span>
-                                    </div>
-                                );
-                            })}
+                    <React.Fragment key={qIndex}>
+                        <div>
+                            <p className="font-semibold mb-2 text-lg">{qIndex + 1}. {question.question}</p>
+                            <div className="space-y-2">
+                                {question.options.map((option, oIndex) => {
+                                    const isCorrect = oIndex === question.correctAnswer;
+                                    return (
+                                        <div
+                                            key={oIndex}
+                                            className={cn(
+                                                "flex items-center gap-3 p-3 rounded-md border",
+                                                isCorrect
+                                                    ? "bg-green-500/20 border-green-500/40 text-white"
+                                                    : "bg-card"
+                                            )}
+                                        >
+                                            {isCorrect ? <CheckCircle className="h-5 w-5 text-green-400" /> : <Circle className="h-5 w-5 text-muted-foreground" />}
+                                            <span>{option}</span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
                         </div>
-                    </div>
+                        {qIndex === 4 && (
+                           <div className="my-6 p-4 rounded-lg bg-muted/50 border border-border text-center">
+                                <p className="text-sm font-semibold text-muted-foreground">Advertisement</p>
+                                <p className="text-xs text-muted-foreground/80">Your ad banner goes here</p>
+                           </div>
+                        )}
+                    </React.Fragment>
                 ))}
             </main>
             <footer className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-sm border-t flex justify-center">
