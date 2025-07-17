@@ -225,7 +225,6 @@ function QuizComponent() {
   const [isShowingVideoAd, setIsShowingVideoAd] = useState(false);
   const [isTimerPaused, setIsTimerPaused] = useState(false);
   const [quizTerminated, setQuizTerminated] = useState(false);
-  const [showScreenshotBlocker, setShowScreenshotBlocker] = useState(false);
 
   useEffect(() => {
     if (!quizFormat) {
@@ -278,20 +277,10 @@ function QuizComponent() {
       }
     };
     
-    const handleScreenshot = (e: KeyboardEvent) => {
-      if (e.key === 'PrintScreen') {
-        e.preventDefault();
-        setShowScreenshotBlocker(true);
-        setTimeout(() => setShowScreenshotBlocker(false), 200);
-      }
-    };
-
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    window.addEventListener('keyup', handleScreenshot);
 
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
-      window.removeEventListener('keyup', handleScreenshot);
     };
   }, [isQuizFinished, isLoadingAd, isTimerPaused]);
 
@@ -395,11 +384,6 @@ function QuizComponent() {
   
   return (
     <>
-      {showScreenshotBlocker && (
-        <div className="fixed inset-0 z-[999] bg-black flex items-center justify-center">
-            <p className="text-white text-2xl font-bold">Screenshots are not allowed.</p>
-        </div>
-      )}
       <div className="flex min-h-screen flex-col bg-background pb-20 pt-24">
         <header className="fixed top-0 z-10 w-full border-b bg-background/80 backdrop-blur-sm">
           <div className="mx-auto flex h-16 max-w-2xl items-center justify-between p-4">
