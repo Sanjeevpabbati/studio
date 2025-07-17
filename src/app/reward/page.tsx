@@ -50,8 +50,11 @@ function RewardCard({ quizFormat }: { quizFormat: QuizFormat }) {
                         </div>
                     )}
                 </CardContent>
-                <CardFooter className="bg-black/20 p-4">
+                <CardFooter className="bg-black/20 p-4 flex flex-col sm:flex-row gap-4">
                     <Button asChild className="w-full shimmer-button">
+                        <Link href="/rewards">Claim Reward</Link>
+                    </Button>
+                    <Button asChild variant="outline" className="w-full">
                         <Link href="/">Back to Home</Link>
                     </Button>
                 </CardFooter>
