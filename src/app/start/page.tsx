@@ -144,7 +144,7 @@ function QuizResults({ score, totalQuestions, quizFormat, onRestart, onViewAnswe
   }
     
   return (
-    <div className="w-full max-w-md p-1 rounded-lg bg-gradient-to-br from-accent via-primary to-accent bg-[length:200%_200%] animate-gradient-flow -mb-8">
+    <div className="w-full max-w-md p-1 rounded-lg bg-gradient-to-br from-accent via-primary to-accent bg-[length:200%_200%] animate-gradient-flow">
         <Card className="overflow-hidden text-center bg-card/95 backdrop-blur-sm">
              <div className="bg-black/20 p-8">
                 <div className="flex justify-center">
@@ -454,7 +454,7 @@ function QuizComponent() {
 
   if (isQuizFinished) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
+      <div className="flex min-h-screen flex-col items-center justify-start bg-background p-4 pt-20">
         <QuizResults score={score} totalQuestions={totalQuestions} quizFormat={quiz.format} onRestart={restartQuiz} onViewAnswers={handleViewAnswers} terminated={quizTerminated} />
       </div>
     );
@@ -557,6 +557,7 @@ export default function StartPage() {
 }
 
     
+
 
 
 
