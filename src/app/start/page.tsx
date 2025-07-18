@@ -14,6 +14,7 @@ import type { Question, Quiz, QuizFormat } from '@/lib/types';
 import { CheckCircle, XCircle, Lightbulb, Tv, Circle, Check, Home, X, Focus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import { Separator } from '@/components/ui/separator';
 
 const timePerQuestion = 20;
 
@@ -154,11 +155,19 @@ function QuizResults({ score, totalQuestions, quizFormat, onRestart, onViewAnswe
             <CardTitle>Quiz Complete!</CardTitle>
         )}
       </CardHeader>
-      <CardContent>
-        <p className="text-xl mb-4">
+      <CardContent className="space-y-6">
+        <p className="text-xl">
           You scored <strong className="text-accent">{score}</strong> out of <strong className="text-accent">{totalQuestions}</strong>
         </p>
-        <div className="flex justify-center gap-4 mt-4">
+
+        <Separator className="bg-border/50" />
+        
+        <div className="p-4 rounded-lg bg-muted/50 border border-border">
+            <p className="text-sm font-semibold text-muted-foreground">Advertisement</p>
+            <p className="text-xs text-muted-foreground/80">Your ad banner goes here</p>
+        </div>
+        
+        <div className="flex justify-center gap-4">
             {!terminated && (
                 <Button onClick={onViewAnswers}>
                 View Answers
@@ -234,7 +243,7 @@ function DifficultyIndicator({ level }: { level: 'easy' | 'medium' | 'hard' }) {
     const levelText = level.charAt(0).toUpperCase() + level.slice(1);
 
     return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2" title={`${levelText} Difficulty`}>
             <div className="flex items-end gap-1 h-4">
                 {bars.map((bar, index) => (
                     <div
@@ -249,16 +258,6 @@ function DifficultyIndicator({ level }: { level: 'easy' | 'medium' | 'hard' }) {
                     />
                 ))}
             </div>
-            <span
-              className={cn(
-                "text-xs font-medium",
-                level === 'easy' && 'text-green-500',
-                level === 'medium' && 'text-yellow-500',
-                level === 'hard' && 'text-red-500',
-              )}
-            >
-              {levelText}
-            </span>
         </div>
     );
 }
