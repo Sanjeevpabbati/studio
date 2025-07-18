@@ -144,7 +144,7 @@ function QuizResults({ score, totalQuestions, quizFormat, onRestart, onViewAnswe
   }
     
   return (
-    <div className="w-full max-w-md p-1 rounded-lg bg-gradient-to-br from-accent via-primary to-accent bg-[length:200%_200%] animate-gradient-flow">
+    <div className="w-full max-w-md p-1 rounded-lg bg-gradient-to-br from-accent via-primary to-accent bg-[length:200%_200%] animate-gradient-flow -mb-8">
         <Card className="overflow-hidden text-center bg-card/95 backdrop-blur-sm">
              <div className="bg-black/20 p-8">
                 <div className="flex justify-center">
@@ -557,5 +557,6 @@ export default function StartPage() {
 }
 
     
+
 
 
