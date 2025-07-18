@@ -233,7 +233,7 @@ function DifficultyIndicator({ level }: { level: 'easy' | 'medium' | 'hard' }) {
     ];
 
     return (
-        <div className="flex items-end gap-1 h-4" title={`Difficulty: ${level}`}>
+        <div className="flex items-end gap-1 h-4" title={`Difficulty: ${level.charAt(0).toUpperCase() + level.slice(1)}`}>
             {bars.map((bar, index) => (
                 <div
                     key={index}
