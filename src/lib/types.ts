@@ -29,6 +29,8 @@ export interface Question {
   options: string[];
   correctAnswer: number;
   hint: string;
+  imageUrl?: string;
+  imageAiHint?: string;
 }
 
 export interface Quiz {

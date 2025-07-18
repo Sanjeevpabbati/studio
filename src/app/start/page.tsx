@@ -5,6 +5,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -62,6 +63,17 @@ function AnswerReview({ quiz, onBack }: { quiz: Quiz, onBack: () => void }) {
                 {quiz.questions.map((question, qIndex) => (
                     <React.Fragment key={qIndex}>
                         <div>
+                             {question.imageUrl && (
+                                <div className="relative w-full h-48 mb-4 rounded-lg overflow-hidden">
+                                    <Image
+                                        src={question.imageUrl}
+                                        alt={`Quiz image for question ${qIndex + 1}`}
+                                        fill
+                                        className="object-cover"
+                                        data-ai-hint={question.imageAiHint}
+                                    />
+                                </div>
+                            )}
                             <p className="font-semibold mb-2 text-lg">{qIndex + 1}. {question.question}</p>
                             <div className="space-y-2">
                                 {question.options.map((option, oIndex) => {
@@ -417,6 +429,19 @@ function QuizComponent() {
 
         <main className="flex-grow p-4">
           <div className="mx-auto w-full max-w-2xl text-center">
+              {currentQuestion.imageUrl && (
+                <div className="relative w-full h-48 mb-6 rounded-lg overflow-hidden shadow-lg">
+                  <Image
+                    src={currentQuestion.imageUrl}
+                    alt={`Quiz image for question ${currentQuestionIndex + 1}`}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover"
+                    data-ai-hint={currentQuestion.imageAiHint}
+                    priority={true}
+                  />
+                </div>
+              )}
               <p className="flex min-h-[6rem] items-center justify-center text-2xl font-semibold mb-8 select-none">
                   {currentQuestion.question}
               </p>
