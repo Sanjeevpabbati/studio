@@ -225,6 +225,31 @@ function HintPopup({ hint, onClose }: { hint: string; onClose: () => void }) {
     );
 }
 
+function DifficultyIndicator({ level }: { level: 'easy' | 'medium' | 'hard' }) {
+    const bars = [
+        { level: 'easy', color: 'bg-green-500', active: level === 'easy' || level === 'medium' || level === 'hard' },
+        { level: 'medium', color: 'bg-yellow-500', active: level === 'medium' || level === 'hard' },
+        { level: 'hard', color: 'bg-red-500', active: level === 'hard' },
+    ];
+
+    return (
+        <div className="flex items-end gap-1 h-4" title={`Difficulty: ${level}`}>
+            {bars.map((bar, index) => (
+                <div
+                    key={index}
+                    className={cn(
+                        'w-1.5 rounded-full transition-all duration-300',
+                        bar.active ? bar.color : 'bg-muted/30',
+                        index === 0 && 'h-2',
+                        index === 1 && 'h-3',
+                        index === 2 && 'h-4'
+                    )}
+                />
+            ))}
+        </div>
+    );
+}
+
 function QuizComponent() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -304,6 +329,7 @@ function QuizComponent() {
 
   const totalQuestions = quiz?.questions.length ?? 0;
   const currentQuestion: Question | undefined = quiz?.questions[currentQuestionIndex];
+  const difficulty: 'easy' | 'medium' | 'hard' = currentQuestionIndex < 3 ? 'easy' : currentQuestionIndex === 3 ? 'medium' : 'hard';
 
   useEffect(() => {
     if (isLoadingAd || isAnswered || isQuizFinished || !quiz || isTimerPaused) return;
@@ -414,11 +440,14 @@ function QuizComponent() {
       <div className="flex min-h-screen flex-col bg-background pb-20 pt-24" onCopy={handleCopy}>
         <header className="fixed top-0 z-10 w-full border-b bg-background/80 backdrop-blur-sm">
           <div className="mx-auto flex h-16 max-w-2xl items-center justify-between p-4">
-              <div className="flex items-baseline gap-2">
-                  <p className="text-lg font-bold">{quiz.format} Quiz</p>
-                  <p className="text-sm text-muted-foreground">
-                      {currentQuestionIndex + 1}/{totalQuestions}
-                  </p>
+              <div className="flex items-center gap-3">
+                  <div className="flex items-baseline gap-2">
+                    <p className="text-lg font-bold">{quiz.format} Quiz</p>
+                    <p className="text-sm text-muted-foreground">
+                        {currentQuestionIndex + 1}/{totalQuestions}
+                    </p>
+                  </div>
+                  <DifficultyIndicator level={difficulty} />
               </div>
               <div className="flex items-center gap-4">
                   <div className="text-2xl font-bold text-accent">{timeLeft}s</div>
