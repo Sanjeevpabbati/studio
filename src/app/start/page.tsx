@@ -231,21 +231,25 @@ function DifficultyIndicator({ level }: { level: 'easy' | 'medium' | 'hard' }) {
         { level: 'medium', color: 'bg-yellow-500', active: level === 'medium' || level === 'hard' },
         { level: 'hard', color: 'bg-red-500', active: level === 'hard' },
     ];
+    const levelText = level.charAt(0).toUpperCase() + level.slice(1);
 
     return (
-        <div className="flex items-end gap-1 h-4" title={`Difficulty: ${level.charAt(0).toUpperCase() + level.slice(1)}`}>
-            {bars.map((bar, index) => (
-                <div
-                    key={index}
-                    className={cn(
-                        'w-1.5 rounded-full transition-all duration-300',
-                        bar.active ? bar.color : 'bg-muted/30',
-                        index === 0 && 'h-2',
-                        index === 1 && 'h-3',
-                        index === 2 && 'h-4'
-                    )}
-                />
-            ))}
+        <div className="flex items-center gap-2">
+            <div className="flex items-end gap-1 h-4">
+                {bars.map((bar, index) => (
+                    <div
+                        key={index}
+                        className={cn(
+                            'w-1.5 rounded-full transition-all duration-300',
+                            bar.active ? bar.color : 'bg-muted/30',
+                            index === 0 && 'h-2',
+                            index === 1 && 'h-3',
+                            index === 2 && 'h-4'
+                        )}
+                    />
+                ))}
+            </div>
+            <span className="text-xs text-muted-foreground font-medium">{levelText}</span>
         </div>
     );
 }
@@ -329,7 +333,8 @@ function QuizComponent() {
 
   const totalQuestions = quiz?.questions.length ?? 0;
   const currentQuestion: Question | undefined = quiz?.questions[currentQuestionIndex];
-  const difficulty: 'easy' | 'medium' | 'hard' = currentQuestionIndex < 3 ? 'easy' : currentQuestionIndex === 3 ? 'medium' : 'hard';
+  const difficulty: 'easy' | 'medium' | 'hard' = currentQuestionIndex < 3 ? 'easy' : currentQuestionIndex < 4 ? 'medium' : 'hard';
+
 
   useEffect(() => {
     if (isLoadingAd || isAnswered || isQuizFinished || !quiz || isTimerPaused) return;
@@ -530,3 +535,5 @@ export default function StartPage() {
     </React.Suspense>
   );
 }
+
+    
