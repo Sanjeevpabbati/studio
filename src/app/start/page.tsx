@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Progress } from '@/components/ui/progress';
 import { getQuiz } from '@/lib/quiz-data';
 import type { Question, Quiz, QuizFormat } from '@/lib/types';
-import { CheckCircle, XCircle, Lightbulb, Tv, Circle, Check, Home, X, Focus } from 'lucide-react';
+import { CheckCircle, XCircle, Lightbulb, Tv, Circle, Check, Home, X, Focus, CheckSquare } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
@@ -144,41 +144,51 @@ function QuizResults({ score, totalQuestions, quizFormat, onRestart, onViewAnswe
   }
     
   return (
-    <Card className="w-full max-w-lg text-center">
-      <CardHeader>
-        {terminated ? (
-            <>
-                <CardTitle className="flex items-center justify-center gap-2"><Focus className="w-8 h-8 text-accent" />Stay Focused!</CardTitle>
-                <CardDescription>Please remain in the quiz window to ensure fair play.</CardDescription>
-            </>
-        ) : (
-            <CardTitle>Quiz Complete!</CardTitle>
-        )}
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <p className="text-xl">
-          You scored <strong className="text-accent">{score}</strong> out of <strong className="text-accent">{totalQuestions}</strong>
-        </p>
+    <div className="w-full max-w-md p-1 rounded-lg bg-gradient-to-br from-accent via-primary to-accent bg-[length:200%_200%] animate-gradient-flow">
+        <Card className="overflow-hidden text-center bg-card/95 backdrop-blur-sm">
+             <div className="bg-black/20 p-8">
+                <div className="flex justify-center">
+                    {terminated ? (
+                        <Focus className="w-24 h-24 text-accent drop-shadow-[0_0_15px_hsl(var(--accent))]" />
+                    ) : (
+                        <CheckSquare className="w-24 h-24 text-accent drop-shadow-[0_0_15px_hsl(var(--accent))]" />
+                    )}
+                </div>
+            </div>
+            <CardHeader className="pt-6">
+                {terminated ? (
+                    <>
+                        <CardTitle className="text-3xl font-bold">Stay Focused!</CardTitle>
+                        <CardDescription className="text-md">Please remain in the quiz window to ensure fair play.</CardDescription>
+                    </>
+                ) : (
+                    <CardTitle className="text-3xl font-bold">Quiz Complete!</CardTitle>
+                )}
+            </CardHeader>
+            <CardContent className="space-y-6 px-6 pb-6">
+                <p className="text-2xl font-bold">
+                    You scored <strong className="text-accent">{score}</strong> out of <strong className="text-accent">{totalQuestions}</strong>
+                </p>
 
-        <Separator className="bg-border/50" />
-        
-        <div className="p-4 rounded-lg bg-muted/50 border border-border">
-            <p className="text-sm font-semibold text-muted-foreground">Advertisement</p>
-            <p className="text-xs text-muted-foreground/80">Your ad banner goes here</p>
-        </div>
-        
-        <div className="flex justify-center gap-4">
-            {!terminated && (
-                <Button onClick={onViewAnswers}>
-                View Answers
+                <Separator className="bg-border/50" />
+                
+                <div className="p-4 rounded-lg bg-muted/50 border border-border">
+                    <p className="text-sm font-semibold text-muted-foreground">Advertisement</p>
+                    <p className="text-xs text-muted-foreground/80">Your ad banner goes here</p>
+                </div>
+            </CardContent>
+            <CardFooter className="bg-black/20 p-4 flex flex-col gap-4">
+                {!terminated && (
+                    <Button onClick={onViewAnswers} className="w-full">
+                        View Answers
+                    </Button>
+                )}
+                <Button variant="outline" onClick={onRestart} className="w-full">
+                    Home Page
                 </Button>
-            )}
-            <Button variant="outline" onClick={onRestart}>
-              Home Page
-            </Button>
-        </div>
-      </CardContent>
-    </Card>
+            </CardFooter>
+        </Card>
+    </div>
   );
 }
 
@@ -241,10 +251,11 @@ function DifficultyIndicator({ level }: { level: 'easy' | 'medium' | 'hard' }) {
         { level: 'hard', color: 'bg-red-500', active: level === 'hard' },
     ];
     const levelText = level.charAt(0).toUpperCase() + level.slice(1);
+    const levelColor = level === 'easy' ? 'text-green-400' : level === 'medium' ? 'text-yellow-400' : 'text-red-400';
 
     return (
-        <div className="flex items-center gap-2" title={`${levelText} Difficulty`}>
-            <div className="flex items-end gap-1 h-4">
+        <div className="flex items-center gap-2">
+             <div className="flex items-end gap-1 h-4">
                 {bars.map((bar, index) => (
                     <div
                         key={index}
@@ -258,6 +269,7 @@ function DifficultyIndicator({ level }: { level: 'easy' | 'medium' | 'hard' }) {
                     />
                 ))}
             </div>
+            <span className={cn("text-xs font-semibold tracking-wider", levelColor)}>{levelText}</span>
         </div>
     );
 }
@@ -545,3 +557,4 @@ export default function StartPage() {
 }
 
     
+
