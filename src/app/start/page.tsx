@@ -249,7 +249,16 @@ function DifficultyIndicator({ level }: { level: 'easy' | 'medium' | 'hard' }) {
                     />
                 ))}
             </div>
-            <span className="text-xs text-muted-foreground font-medium">{levelText}</span>
+            <span
+              className={cn(
+                "text-xs font-medium",
+                level === 'easy' && 'text-green-500',
+                level === 'medium' && 'text-yellow-500',
+                level === 'hard' && 'text-red-500',
+              )}
+            >
+              {levelText}
+            </span>
         </div>
     );
 }
