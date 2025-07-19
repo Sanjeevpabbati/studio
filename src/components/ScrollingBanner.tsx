@@ -15,10 +15,14 @@ const ScrollingBanner: React.FC<ScrollingBannerProps> = ({
   return (
     <div className={cn("scrolling-banner-container", className)}>
       <div className="scrolling-banner-content">
-        <Sparkles className="h-6 w-6 text-yellow-400 inline-block mr-4 flex-shrink-0" />
-        <span className="scrolling-text">{text}</span>
-        <Sparkles className="h-6 w-6 text-yellow-400 inline-block ml-4 flex-shrink-0" />
-        <span className="scrolling-text" aria-hidden="true">{text}</span>
+        <span className="scrolling-text">
+            <Sparkles className="h-6 w-6 text-yellow-400 inline-block mx-4 flex-shrink-0" />
+            {text}
+        </span>
+        <span className="scrolling-text" aria-hidden="true">
+            <Sparkles className="h-6 w-6 text-yellow-400 inline-block mx-4 flex-shrink-0" />
+            {text}
+        </span>
       </div>
     </div>
   );
