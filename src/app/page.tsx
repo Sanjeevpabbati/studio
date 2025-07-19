@@ -8,9 +8,10 @@ import type { CubeShapes, FaceName, QuizFormat } from '@/lib/types';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Bell, HomeIcon, Trophy, PieChart, User, Shield } from 'lucide-react';
+import { Bell, HomeIcon, Trophy, PieChart, User } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { sponsors } from '@/lib/sponsors';
+import Logo from '@/components/Logo';
 
 const initialShapes: CubeShapes = {
   front: {
@@ -193,7 +194,7 @@ export default function Home() {
 
       <div className="font-headline mb-8 w-full">
         <div className="flex items-center gap-3">
-          <Shield className="w-8 h-8 text-accent"/>
+          <Logo className="w-8 h-8 text-white" />
           <h1
             className="text-3xl font-bold text-white tracking-tight"
             aria-label={title}
