@@ -17,6 +17,7 @@ const CubeFaceContent: React.FC<CubeFaceContentProps> = ({ face }) => {
         sizes="(max-width: 768px) 100vw, 50vw"
         className="object-cover"
         data-ai-hint={face.imageAiHint}
+        priority={face.name === 'front'}
       />
     </div>
   );
