@@ -201,17 +201,19 @@ function InterstitialAd({ onAdComplete }: { onAdComplete: () => void }) {
     }, [onAdComplete]);
 
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
-            <div className="w-full max-w-md p-1 rounded-lg bg-gradient-to-br from-accent/50 via-primary to-accent/50 mb-8">
-                <Card className="bg-card/90 backdrop-blur-sm">
-                    <CardContent className="p-8 text-center">
-                        <div className="flex flex-col items-center gap-4">
-                            <Loader2 className="h-12 w-12 animate-spin text-accent" />
-                            <p className="text-lg font-semibold text-card-foreground">Loading sponsored content...</p>
-                            <p className="text-sm text-muted-foreground">Please wait a moment.</p>
-                        </div>
-                    </CardContent>
-                </Card>
+        <div className="flex min-h-screen items-center justify-center bg-background p-4">
+            <div className="w-full max-w-md mb-16">
+                <div className="p-1 rounded-lg bg-gradient-to-br from-accent/50 via-primary to-accent/50">
+                    <Card className="bg-card/90 backdrop-blur-sm">
+                        <CardContent className="p-8 text-center">
+                            <div className="flex flex-col items-center gap-4">
+                                <Loader2 className="h-12 w-12 animate-spin text-accent" />
+                                <p className="text-lg font-semibold text-card-foreground">Loading sponsored content...</p>
+                                <p className="text-sm text-muted-foreground">Please wait a moment.</p>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
             </div>
         </div>
     );
@@ -563,6 +565,7 @@ export default function StartPage() {
 }
 
     
+
 
 
 
