@@ -9,7 +9,7 @@ interface ScrollingBannerProps {
 }
 
 const ScrollingBanner: React.FC<ScrollingBannerProps> = ({
-  text = "WELCOME TO INDCRIC! - TEST YOUR CRICKET KNOWLEDGE AND WIN REWARDS! - ARE YOU READY? -",
+  text = "WIN ₹100 IN 100 SECONDS! - ARE YOU UP FOR THE CHALLENGE? - TEST YOUR KNOWLEDGE NOW! -",
   className,
 }) => {
   return (
