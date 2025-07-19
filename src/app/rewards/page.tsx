@@ -14,9 +14,6 @@ export default function RewardsPage() {
         </CardHeader>
         <CardContent className="text-center space-y-4">
           <p className="text-muted-foreground">You have no rewards yet. Get a perfect score in a quiz to earn one!</p>
-          <Button asChild variant="secondary">
-            <Link href="/reward?format=IPL">View Sample Reward</Link>
-          </Button>
         </CardContent>
       </Card>
     </div>
