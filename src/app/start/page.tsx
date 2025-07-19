@@ -2,7 +2,7 @@
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -322,22 +322,33 @@ function QuizComponent() {
     const validFormat = validation.data;
     setQuizFormat(validFormat);
 
-    const loadedQuiz = getQuiz(validFormat);
-    if (loadedQuiz) {
-      setQuiz(loadedQuiz);
-      setCurrentQuestionIndex(0);
-      setScore(0);
-      setSelectedAnswer(null);
-      setIsAnswered(false);
-      setTimeLeft(timePerQuestion);
-      setIsQuizFinished(false);
-      setIsLoadingAd(true); // Show ad for each new quiz
-      setIsShowingAnswers(false);
-      setIsShowingVideoAd(false);
-      setShowHint(false);
-      setIsTimerPaused(false);
-      setQuizTerminated(false);
-    }
+    const loadQuiz = async () => {
+      const loadedQuiz = await getQuiz(validFormat);
+      if (loadedQuiz) {
+        setQuiz(loadedQuiz);
+        setCurrentQuestionIndex(0);
+        setScore(0);
+        setSelectedAnswer(null);
+        setIsAnswered(false);
+        setTimeLeft(timePerQuestion);
+        setIsQuizFinished(false);
+        setIsLoadingAd(true); // Show ad for each new quiz
+        setIsShowingAnswers(false);
+        setIsShowingVideoAd(false);
+        setShowHint(false);
+        setIsTimerPaused(false);
+        setQuizTerminated(false);
+      } else {
+         toast({
+            variant: 'destructive',
+            title: 'Quiz not found',
+            description: `Could not load the ${validFormat} quiz.`,
+        });
+        router.push('/');
+      }
+    };
+
+    loadQuiz();
   }, [searchParams, router, toast]);
 
   const handleQuizCompletion = (terminated = false) => {
@@ -463,7 +474,8 @@ function QuizComponent() {
   if (!quiz || !currentQuestion || !quizFormat) {
     return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
-            <p>Loading quiz...</p>
+            <Loader2 className="w-8 h-8 animate-spin text-accent" />
+            <p className="mt-4 text-muted-foreground">Loading quiz...</p>
         </div>
     );
   }
@@ -562,31 +574,15 @@ function QuizComponent() {
   );
 }
 
-export default function StartPage() {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) {
-    return null;
-  }
-
+function StartPageComponent() {
   return (
-    <React.Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className="flex min-h-screen flex-col items-center justify-center bg-background p-4"><Loader2 className="w-8 h-8 animate-spin text-accent" /><p className="mt-4 text-muted-foreground">Loading...</p></div>}>
       <QuizComponent />
-    </React.Suspense>
-  );
+    </Suspense>
+  )
 }
 
-    
 
-
-
-
-
-
-
-
-
+export default function StartPage() {
+  return <StartPageComponent />;
+}
