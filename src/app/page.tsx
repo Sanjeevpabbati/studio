@@ -205,6 +205,16 @@ export default function Home() {
       </div>
       
       <div className="w-full flex flex-col items-center justify-center mt-0">
+        <div className="mb-8 w-full max-w-lg">
+          <Image
+            src="https://placehold.co/600x150.png"
+            alt="Pixel art banner"
+            width={600}
+            height={150}
+            className="w-full h-auto rounded-lg shadow-lg"
+            data-ai-hint="pixel art banner"
+          />
+        </div>
         <Link href={`/start?format=${shapes[currentFaceName].quizFormat}`} className="cursor-pointer flex flex-col items-center gap-4 text-decoration-none" prefetch={true}>
           <Cube rotation={rotation} shapes={shapes} />
            <p className="text-lg text-muted-foreground animate-pulse opacity-50">Tap the Cube &amp; Begin</p>
