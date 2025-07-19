@@ -460,7 +460,7 @@ function QuizComponent() {
 
   if (isQuizFinished) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-start bg-background p-4 pt-20">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
         <QuizResults score={score} totalQuestions={totalQuestions} quizFormat={quiz.format} onRestart={restartQuiz} onViewAnswers={handleViewAnswers} terminated={quizTerminated} />
       </div>
     );
@@ -563,6 +563,7 @@ export default function StartPage() {
 }
 
     
+
 
 
 
