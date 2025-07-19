@@ -6,15 +6,37 @@ interface LogoProps extends React.SVGProps<SVGSVGElement> {}
 const Logo: React.FC<LogoProps> = ({ className, ...props }) => {
   return (
     <svg
-      viewBox="0 0 100 100"
+      fill="currentColor"
+      viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
       className={cn(className)}
       {...props}
     >
-      <g fill="currentColor">
-        <path d="M50,0A50,50,0,1,0,50,100A50,50,0,0,0,50,0ZM50,92A42,42,0,1,1,50,8,42,42,0,0,1,50,92Z" />
-        <path d="M50,15.5A34.5,34.5,0,0,0,26,74.7,4,4,0,1,0,32,71,26.5,26.5,0,1,1,50,82.5a4,4,0,0,0,0,8A34.5,34.5,0,0,0,50,15.5Z" />
-        <circle cx="50" cy="34" r="10" />
+      <g id="SVGRepo_iconCarrier">
+        <g data-name="Layer 2" id="Layer_2">
+          <path d="M8,15a7,7,0,1,0,7-7A7,7,0,0,0,8,15Zm2.45,2A5,5,0,0,1,14.54,20,5,5,0,0,1,10.45,17Zm9.41-3.18a5,5,0,0,1-3.71-3.71A5,5,0,0,1,19.86,13.86Zm-5.76-3.76a7,7,0,0,0,5.81,5.81,5,5,0,0,1-3.31,3.81A7,7,0,0,0,10,15,5,5,0,0,1,14.09,10.09Z"></path>
+          <rect
+            height="9.9"
+            transform="translate(-2.28 5.5) rotate(-45)"
+            width="2"
+            x="4.5"
+            y="0.55"
+          ></rect>
+          <rect
+            height="5.66"
+            transform="translate(0.1 8.24) rotate(-45)"
+            width="2"
+            x="9"
+            y="1.17"
+          ></rect>
+          <rect
+            height="5.66"
+            transform="translate(-5.9 5.76) rotate(-45)"
+            width="2"
+            x="3"
+            y="7.17"
+          ></rect>
+        </g>
       </g>
     </svg>
   );
