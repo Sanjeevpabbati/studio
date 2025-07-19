@@ -15,8 +15,11 @@ import { CheckCircle, XCircle, Lightbulb, Tv, Circle, Check, Home, X, Focus, Che
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
+import { z } from 'zod';
 
 const timePerQuestion = 20;
+
+const QuizFormatSchema = z.enum(['T20', 'ODI', 'IPL', 'WPL', 'Test', 'Core']);
 
 function VideoAd({ onAdComplete }: { onAdComplete: () => void }) {
     const [countdown, setCountdown] = useState(10);
@@ -286,7 +289,7 @@ function QuizComponent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { toast } = useToast();
-  const quizFormat = searchParams.get('format') as QuizFormat | null;
+  
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -300,13 +303,26 @@ function QuizComponent() {
   const [isShowingVideoAd, setIsShowingVideoAd] = useState(false);
   const [isTimerPaused, setIsTimerPaused] = useState(false);
   const [quizTerminated, setQuizTerminated] = useState(false);
+  const [quizFormat, setQuizFormat] = useState<QuizFormat | null>(null);
 
   useEffect(() => {
-    if (!quizFormat) {
+    const format = searchParams.get('format');
+    const validation = QuizFormatSchema.safeParse(format);
+    
+    if (!validation.success) {
+        toast({
+            variant: 'destructive',
+            title: 'Invalid Quiz Format',
+            description: 'The selected quiz format is not valid. Returning home.',
+        });
         router.push('/');
         return;
     }
-    const loadedQuiz = getQuiz(quizFormat);
+
+    const validFormat = validation.data;
+    setQuizFormat(validFormat);
+
+    const loadedQuiz = getQuiz(validFormat);
     if (loadedQuiz) {
       setQuiz(loadedQuiz);
       setCurrentQuestionIndex(0);
@@ -322,7 +338,7 @@ function QuizComponent() {
       setIsTimerPaused(false);
       setQuizTerminated(false);
     }
-  }, [quizFormat, router]);
+  }, [searchParams, router, toast]);
 
   const handleQuizCompletion = (terminated = false) => {
     setIsQuizFinished(true);
@@ -444,7 +460,7 @@ function QuizComponent() {
       return <InterstitialAd onAdComplete={() => setIsLoadingAd(false)} />;
   }
 
-  if (!quiz || !currentQuestion) {
+  if (!quiz || !currentQuestion || !quizFormat) {
     return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
             <p>Loading quiz...</p>
@@ -565,6 +581,7 @@ export default function StartPage() {
 }
 
     
+
 
 
 
