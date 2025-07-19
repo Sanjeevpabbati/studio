@@ -1,11 +1,14 @@
 .scrolling-banner-container {
     width: 100%;
     overflow: hidden;
-    background: #0a0a0a;
-    border: 1px solid hsl(var(--border));
+    background: hsl(var(--background));
     border-radius: var(--radius);
     padding: 0.75rem 0;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(0,0,0,0.5);
+    box-shadow: 
+        5px 5px 10px #000000,
+        -5px -5px 10px #1a1a1a,
+        inset 5px 5px 10px #000000,
+        inset -5px -5px 10px #1a1a1a;
 }
 
 .scrolling-banner-content {
