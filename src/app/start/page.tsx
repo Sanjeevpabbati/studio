@@ -202,7 +202,7 @@ function InterstitialAd({ onAdComplete }: { onAdComplete: () => void }) {
 
     return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
-            <div className="w-full max-w-md p-1 rounded-lg bg-gradient-to-br from-accent/50 via-primary to-accent/50">
+            <div className="w-full max-w-md p-1 rounded-lg bg-gradient-to-br from-accent/50 via-primary to-accent/50 mb-8">
                 <Card className="bg-card/90 backdrop-blur-sm">
                     <CardContent className="p-8 text-center">
                         <div className="flex flex-col items-center gap-4">
@@ -563,6 +563,7 @@ export default function StartPage() {
 }
 
     
+
 
 
 
