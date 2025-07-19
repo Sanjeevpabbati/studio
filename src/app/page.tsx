@@ -12,6 +12,7 @@ import { Bell, HomeIcon, Trophy, PieChart, User } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { sponsors } from '@/lib/sponsors';
 import Logo from '@/components/Logo';
+import ScrollingBanner from '@/components/ScrollingBanner';
 
 const initialShapes: CubeShapes = {
   front: {
@@ -206,14 +207,7 @@ export default function Home() {
       
       <div className="w-full flex flex-col items-center justify-center mt-0">
         <div className="mb-8 w-full max-w-lg">
-          <Image
-            src="https://placehold.co/600x150.png"
-            alt="Pixel art banner"
-            width={600}
-            height={150}
-            className="w-full h-auto rounded-lg shadow-lg"
-            data-ai-hint="pixel art banner"
-          />
+          <ScrollingBanner />
         </div>
         <Link href={`/start?format=${shapes[currentFaceName].quizFormat}`} className="cursor-pointer flex flex-col items-center gap-4 text-decoration-none" prefetch={true}>
           <Cube rotation={rotation} shapes={shapes} />

@@ -1,0 +1,38 @@
+.scrolling-banner-container {
+    width: 100%;
+    overflow: hidden;
+    background: #0a0a0a;
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    padding: 0.75rem 0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.scrolling-banner-content {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    animation: scroll 30s linear infinite;
+    white-space: nowrap;
+}
+
+.scrolling-text {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: hsl(var(--accent));
+    text-shadow: 0 0 5px hsl(var(--accent)), 0 0 10px hsl(var(--accent));
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+}
+
+@keyframes scroll {
+    from {
+        transform: translateX(0%);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
