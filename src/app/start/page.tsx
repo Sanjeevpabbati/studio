@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Progress } from '@/components/ui/progress';
 import { getQuiz } from '@/lib/quiz-data';
 import type { Question, Quiz, QuizFormat } from '@/lib/types';
-import { CheckCircle, XCircle, Lightbulb, Tv, Circle, Check, Home, X, Focus, CheckSquare } from 'lucide-react';
+import { CheckCircle, XCircle, Lightbulb, Tv, Circle, Check, Home, X, Focus, CheckSquare, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
@@ -196,17 +196,23 @@ function InterstitialAd({ onAdComplete }: { onAdComplete: () => void }) {
     useEffect(() => {
         const timer = setTimeout(() => {
             onAdComplete();
-        }, 1000); // 1-second ad
+        }, 1500); // 1.5-second ad
         return () => clearTimeout(timer);
     }, [onAdComplete]);
 
     return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
-            <Card className="w-full max-w-md text-center">
-                <CardContent className="p-6">
-                    <p className="text-lg">Loading Ad...</p>
-                </CardContent>
-            </Card>
+            <div className="w-full max-w-md p-1 rounded-lg bg-gradient-to-br from-accent/50 via-primary to-accent/50">
+                <Card className="bg-card/90 backdrop-blur-sm">
+                    <CardContent className="p-8 text-center">
+                        <div className="flex flex-col items-center gap-4">
+                            <Loader2 className="h-12 w-12 animate-spin text-accent" />
+                            <p className="text-lg font-semibold text-card-foreground">Loading sponsored content...</p>
+                            <p className="text-sm text-muted-foreground">Please wait a moment.</p>
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
         </div>
     );
 }
@@ -557,6 +563,7 @@ export default function StartPage() {
 }
 
     
+
 
 
 
