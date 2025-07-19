@@ -193,7 +193,7 @@ export default function Home() {
     <div className="flex min-h-screen flex-col items-start bg-background p-4 md:p-8">
 
       <div className="font-headline mb-8 w-full">
-        <div className="flex items-center gap-3">
+        <div className="flex gap-3">
           <Logo className="w-8 h-8 text-white" />
           <h1
             className="text-3xl font-bold text-white tracking-tight"
