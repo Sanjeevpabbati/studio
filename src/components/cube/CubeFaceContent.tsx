@@ -1,3 +1,4 @@
+
 'use client';
 import React from 'react';
 import type { ShapeDef } from '@/lib/types';
@@ -17,7 +18,7 @@ const CubeFaceContent: React.FC<CubeFaceContentProps> = ({ face }) => {
         sizes="(max-width: 768px) 100vw, 50vw"
         className="object-cover"
         data-ai-hint={face.imageAiHint}
-        priority={face.name === 'front'}
+        priority={true}
       />
     </div>
   );
